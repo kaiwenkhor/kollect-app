@@ -6,3 +6,12 @@
 //
 
 import Foundation
+import FirebaseFirestoreSwift
+
+class Photocard: NSObject, Codable {
+    @DocumentID var id: String?
+    var artist: Artist?
+    var group: Group?
+    var album: String?
+    var price: String?
+}
