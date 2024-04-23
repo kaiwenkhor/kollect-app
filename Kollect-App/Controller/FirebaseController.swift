@@ -39,11 +39,11 @@ class FirebaseController: NSObject, DatabaseProtocol {
     }
     
     func logInAccount(email: String, password: String, completion: @escaping ((any Error)?) -> Void) {
-        
+        //
     }
     
     func createAccount(email: String, password: String, completion: @escaping ((any Error)?) -> Void) {
-        
+        //
     }
     
     func cleanup() {
