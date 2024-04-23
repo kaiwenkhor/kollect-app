@@ -12,6 +12,7 @@ class Group: NSObject, Codable {
     @DocumentID var id: String?
     var name: String?
     var members = [Artist]()
+//    var image: String?
 //    var debutDate: Date?
 //    var company: String?
 //    var isActive: Bool?

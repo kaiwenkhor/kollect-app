@@ -11,7 +11,8 @@ import FirebaseFirestoreSwift
 class Artist: NSObject, Codable {
     @DocumentID var id: String?
     var name: String?
-    // Only using birthday to display (future: sort by age)
+    // Only using birthday to display (future: sort by age?)
     var birthday: String?
+//    var image: String?
 //    var country: String?
 }
