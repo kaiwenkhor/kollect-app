@@ -71,6 +71,6 @@ protocol DatabaseProtocol: AnyObject {
     func removePhotocardFromWishlist(photocard: Photocard, user: User)
     
     // Authentication
-    func logInAccount(email: String, password: String, completion: @escaping (Error?) -> Void)
-    func createAccount(email: String, password: String, completion: @escaping (Error?) -> Void)
+    func logInAccount(email: String, password: String) async
+    func createAccount(email: String, password: String) async
 }

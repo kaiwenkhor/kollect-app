@@ -34,16 +34,39 @@ class FirebaseController: NSObject, DatabaseProtocol {
         currentUser = User()
         
         super.init()
+    }
+    
+    func logInAccount(email: String, password: String) async {
+        do {
+            let authResult = try await authController.signIn(withEmail: email, password: password)
+            currentUser.id = authResult.user.uid
+            print("Log in: \(authResult.user.uid)")
+        } catch {
+            print("Authentication failed with error:: \(error.localizedDescription)")
+        }
         
-        // Set up listeners
+        if artistsRef == nil {
+            self.setupArtistListener()
+        }
+        
+        // Change user
+        self.setupUserListener()
     }
     
-    func logInAccount(email: String, password: String, completion: @escaping ((any Error)?) -> Void) {
-        //
-    }
-    
-    func createAccount(email: String, password: String, completion: @escaping ((any Error)?) -> Void) {
-        //
+    func createAccount(email: String, password: String) async {
+        do {
+            let authResult = try await authController.createUser(withEmail: email, password: password)
+            currentUser = addUser(userID: authResult.user.uid)
+        } catch {
+            print("User creation failed with error: \(error.localizedDescription)")
+        }
+        
+        if artistsRef == nil {
+            self.setupArtistListener()
+        }
+        
+        // Change user
+        self.setupUserListener()
     }
     
     func cleanup() {
@@ -165,6 +188,7 @@ class FirebaseController: NSObject, DatabaseProtocol {
     }
     
     func addUser(userID: String) -> User {
+        usersRef = database.collection("users")
         let user = User()
         user.id = userID
         
@@ -270,6 +294,7 @@ class FirebaseController: NSObject, DatabaseProtocol {
             
             self.parseArtistSnapshot(snapshot: querySnapshot)
             
+            // First-time calls
             if self.groupsRef == nil {
                 self.setupGroupListener()
             }
