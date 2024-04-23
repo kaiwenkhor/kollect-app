@@ -24,6 +24,7 @@
 		4737A90F2BD4EFDA003D23BA /* DatabaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4737A90E2BD4EFDA003D23BA /* DatabaseController.swift */; };
 		4737A9112BD4FCA9003D23BA /* MulticastDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4737A9102BD4FCA9003D23BA /* MulticastDelegate.swift */; };
 		4743DEE12BD79B22000B3E45 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4743DEE02BD79B22000B3E45 /* User.swift */; };
+		4743DEE52BD7CF83000B3E45 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4743DEE42BD7CF83000B3E45 /* LogInViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		4737A90E2BD4EFDA003D23BA /* DatabaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseController.swift; sourceTree = "<group>"; };
 		4737A9102BD4FCA9003D23BA /* MulticastDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MulticastDelegate.swift; sourceTree = "<group>"; };
 		4743DEE02BD79B22000B3E45 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		4743DEE42BD7CF83000B3E45 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 		4737A8E22BD4CA3B003D23BA /* Kollect-App */ = {
 			isa = PBXGroup;
 			children = (
+				4743DEE32BD7CF5A000B3E45 /* Database */,
 				4737A90B2BD4EF21003D23BA /* Controller */,
 				4737A9022BD4D5E3003D23BA /* Model */,
 				4737A8E32BD4CA3B003D23BA /* AppDelegate.swift */,
@@ -106,11 +109,19 @@
 		4737A90B2BD4EF21003D23BA /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				4743DEE42BD7CF83000B3E45 /* LogInViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		4743DEE32BD7CF5A000B3E45 /* Database */ = {
+			isa = PBXGroup;
+			children = (
 				4737A9102BD4FCA9003D23BA /* MulticastDelegate.swift */,
 				4737A9092BD4EF18003D23BA /* FirebaseController.swift */,
 				4737A90E2BD4EFDA003D23BA /* DatabaseController.swift */,
 			);
-			path = Controller;
+			path = Database;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -195,6 +206,7 @@
 			files = (
 				4737A90A2BD4EF18003D23BA /* FirebaseController.swift in Sources */,
 				4737A8E82BD4CA3B003D23BA /* ViewController.swift in Sources */,
+				4743DEE52BD7CF83000B3E45 /* LogInViewController.swift in Sources */,
 				4737A8E42BD4CA3B003D23BA /* AppDelegate.swift in Sources */,
 				4737A9012BD4D553003D23BA /* Artist.swift in Sources */,
 				4737A9042BD4D600003D23BA /* Group.swift in Sources */,
