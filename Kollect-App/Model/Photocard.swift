@@ -10,9 +10,9 @@ import FirebaseFirestoreSwift
 
 class Photocard: NSObject, Codable {
     @DocumentID var id: String?
-//    var image: String?
+    var image: String?
     var artist: Artist?
     var group: Group?
-    var album: String?
+    var album: Album?
 //    var price: String?
 }
