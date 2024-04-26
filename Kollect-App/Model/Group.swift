@@ -13,6 +13,7 @@ class Group: NSObject, Codable {
     var name: String?
     var members = [Artist]()
 //    var image: String?
+    var albums = [Album]()
 //    var debutDate: Date?
 //    var company: String?
 //    var isActive: Bool?
