@@ -10,7 +10,9 @@ import FirebaseFirestoreSwift
 
 class User: NSObject, Codable {
     @DocumentID var id: String?
+    var name: String?
     var all = [Photocard]()
     var favourites = [Photocard]()
     var wishlist = [Photocard]()
+    var isAnonymous: Bool?
 }
