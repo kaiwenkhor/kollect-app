@@ -16,6 +16,7 @@ enum DatabaseChange {
 enum ListenerType {
     case artist
     case group
+    case album
     case photocard
     case user
     case all
@@ -31,11 +32,14 @@ protocol DatabaseListener: AnyObject {
 //    func onGroupMemberChange(change: DatabaseChange, groupMembers: [Artist])
     func onAllGroupsChange(change: DatabaseChange, groups: [Group])
     
+    // Album
+    func onAllAlbumsChange(change: DatabaseChange, albums: [Album])
+    
     // Photocard
     func onAllPhotocardsChange(change: DatabaseChange, photocards: [Photocard])
     
     // User
-    func onUserChange(change: DatabaseChange, userCollection: [Photocard], userFavourites: [Photocard], userWishlist: [Photocard])
+    func onUserChange(change: DatabaseChange, user: User)
 }
 
 protocol DatabaseProtocol: AnyObject {
@@ -53,15 +57,23 @@ protocol DatabaseProtocol: AnyObject {
     func deleteGroup(group: Group)
     func addArtistToGroup(artist: Artist, group: Group) -> Bool
     func removeArtistFromGroup(artist: Artist, group: Group)
+    func addAlbumToGroup(album: Album, group: Group) -> Bool
+    func removeAlbumFromGroup(album: Album, group: Group)
+    
+    // Album
+    func addAlbum(albumName: String, albumImage: String) -> Album
+    func deleteAlbum(album: Album)
+    func addPhotocardToAlbum(photocard: Photocard, album: Album) -> Bool
+    func removePhotocardFromAlbum(photocard: Photocard, album: Album)
     
     // Photocard
-    func addPhotocard(artist: Artist, group: Group, album: String) -> Photocard
+    func addPhotocard(artist: Artist, group: Group, album: Album, image: String) -> Photocard
     func deletePhotocard(photocard: Photocard)
     
     // User
     var currentUser: User {get set}
     
-    func addUser(userID: String) -> User
+    func addUser(userID: String, username: String, isAnonymous: Bool) -> User
     func deleteUser(user: User)
     func addPhotocardToCollection(photocard: Photocard, user: User) -> Bool
     func addPhotocardToFavourites(photocard: Photocard, user: User) -> Bool
@@ -72,5 +84,5 @@ protocol DatabaseProtocol: AnyObject {
     
     // Authentication
     func logInAccount(email: String, password: String) async
-    func createAccount(email: String, password: String) async
+    func createAccount(email: String, username: String, password: String) async
 }
