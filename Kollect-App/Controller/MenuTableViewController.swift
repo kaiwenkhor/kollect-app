@@ -165,7 +165,7 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
         //
     }
     
-    func onAllArtistsChange(change: DatabaseChange, artists: [Artist]) {
+    func onAllIdolsChange(change: DatabaseChange, idols: [Idol]) {
         // Do nothing
     }
     

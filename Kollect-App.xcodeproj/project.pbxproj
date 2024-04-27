@@ -18,7 +18,7 @@
 		4737A8FB2BD4CF3F003D23BA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 4737A8FA2BD4CF3F003D23BA /* FirebaseFirestore */; };
 		4737A8FD2BD4CF3F003D23BA /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 4737A8FC2BD4CF3F003D23BA /* FirebaseFirestoreSwift */; };
 		4737A8FF2BD4D395003D23BA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4737A8FE2BD4D395003D23BA /* GoogleService-Info.plist */; };
-		4737A9012BD4D553003D23BA /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4737A9002BD4D553003D23BA /* Artist.swift */; };
+		4737A9012BD4D553003D23BA /* Idol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4737A9002BD4D553003D23BA /* Idol.swift */; };
 		4737A9042BD4D600003D23BA /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4737A9032BD4D600003D23BA /* Group.swift */; };
 		4737A9062BD4DF00003D23BA /* Photocard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4737A9052BD4DF00003D23BA /* Photocard.swift */; };
 		4737A90A2BD4EF18003D23BA /* FirebaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4737A9092BD4EF18003D23BA /* FirebaseController.swift */; };
@@ -45,7 +45,7 @@
 		4737A8EF2BD4CA3C003D23BA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4737A8F12BD4CA3C003D23BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4737A8FE2BD4D395003D23BA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		4737A9002BD4D553003D23BA /* Artist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
+		4737A9002BD4D553003D23BA /* Idol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Idol.swift; sourceTree = "<group>"; };
 		4737A9032BD4D600003D23BA /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		4737A9052BD4DF00003D23BA /* Photocard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photocard.swift; sourceTree = "<group>"; };
 		4737A9092BD4EF18003D23BA /* FirebaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseController.swift; sourceTree = "<group>"; };
@@ -111,7 +111,7 @@
 		4737A9022BD4D5E3003D23BA /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4737A9002BD4D553003D23BA /* Artist.swift */,
+				4737A9002BD4D553003D23BA /* Idol.swift */,
 				4737A9032BD4D600003D23BA /* Group.swift */,
 				4737A9052BD4DF00003D23BA /* Photocard.swift */,
 				4743DEE02BD79B22000B3E45 /* User.swift */,
@@ -230,7 +230,7 @@
 				4743DEE52BD7CF83000B3E45 /* LogInViewController.swift in Sources */,
 				47955ABA2BDBCB440048F38F /* Album.swift in Sources */,
 				4737A8E42BD4CA3B003D23BA /* AppDelegate.swift in Sources */,
-				4737A9012BD4D553003D23BA /* Artist.swift in Sources */,
+				4737A9012BD4D553003D23BA /* Idol.swift in Sources */,
 				47955AB82BDBC5DB0048F38F /* PhotocardCollectionViewCell.swift in Sources */,
 				4737A9042BD4D600003D23BA /* Group.swift in Sources */,
 				4737A90F2BD4EFDA003D23BA /* DatabaseController.swift in Sources */,

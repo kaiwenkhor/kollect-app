@@ -59,7 +59,7 @@ class DetailsViewController: UIViewController {
         
         // Setup photocard details
         photocardImageView.image = UIImage(named: photocard.image!)
-        memberLabel.text = photocard.artist?.name
+        memberLabel.text = photocard.idol?.name
         albumLabel.text = photocard.album?.name
         groupLabel.text = photocard.group?.name
     }

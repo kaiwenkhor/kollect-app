@@ -14,7 +14,7 @@ enum DatabaseChange {
 }
 
 enum ListenerType {
-    case artist
+    case idol
     case group
     case album
     case photocard
@@ -25,11 +25,11 @@ enum ListenerType {
 protocol DatabaseListener: AnyObject {
     var listenerType: ListenerType {get set}
     
-    // Artist
-    func onAllArtistsChange(change: DatabaseChange, artists: [Artist])
+    // Idol
+    func onAllIdolsChange(change: DatabaseChange, idols: [Idol])
     
     // Group
-//    func onGroupMemberChange(change: DatabaseChange, groupMembers: [Artist])
+//    func onGroupMemberChange(change: DatabaseChange, groupMembers: [Idol])
     func onAllGroupsChange(change: DatabaseChange, groups: [Group])
     
     // Album
@@ -48,15 +48,15 @@ protocol DatabaseProtocol: AnyObject {
     func addListener(listener: DatabaseListener)
     func removeListener(listener: DatabaseListener)
     
-    // Artist
-    func addArtist(artistName: String, artistBirthday: String) -> Artist
-    func deleteArtist(artist: Artist)
+    // Idol
+    func addIdol(idolName: String, idolBirthday: String) -> Idol
+    func deleteIdol(idol: Idol)
     
     // Group
     func addGroup(groupName: String) -> Group
     func deleteGroup(group: Group)
-    func addArtistToGroup(artist: Artist, group: Group) -> Bool
-    func removeArtistFromGroup(artist: Artist, group: Group)
+    func addIdolToGroup(idol: Idol, group: Group) -> Bool
+    func removeIdolFromGroup(idol: Idol, group: Group)
     func addAlbumToGroup(album: Album, group: Group) -> Bool
     func removeAlbumFromGroup(album: Album, group: Group)
     
@@ -67,7 +67,7 @@ protocol DatabaseProtocol: AnyObject {
     func removePhotocardFromAlbum(photocard: Photocard, album: Album)
     
     // Photocard
-    func addPhotocard(artist: Artist, group: Group, album: Album, image: String) -> Photocard
+    func addPhotocard(idol: Idol, group: Group, album: Album, image: String) -> Photocard
     func deletePhotocard(photocard: Photocard)
     
     // User
