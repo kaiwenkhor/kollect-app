@@ -31,6 +31,7 @@
 		47955ABA2BDBCB440048F38F /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47955AB92BDBCB440048F38F /* Album.swift */; };
 		47B079802BD8D28400E79EB4 /* UIViewController+displayMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B0797F2BD8D28400E79EB4 /* UIViewController+displayMessage.swift */; };
 		47B079822BD8DA7200E79EB4 /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B079812BD8DA7200E79EB4 /* MenuTableViewController.swift */; };
+		47DE26E52BDCCC00008D3D4E /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DE26E42BDCCC00008D3D4E /* DetailsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +58,7 @@
 		47955AB92BDBCB440048F38F /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		47B0797F2BD8D28400E79EB4 /* UIViewController+displayMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+displayMessage.swift"; sourceTree = "<group>"; };
 		47B079812BD8DA7200E79EB4 /* MenuTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewController.swift; sourceTree = "<group>"; };
+		47DE26E42BDCCC00008D3D4E /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 				4733127B2BD9233E00BB9070 /* SettingsTableViewController.swift */,
 				47955AB52BDBC55C0048F38F /* WishlistCollectionViewController.swift */,
 				47955AB72BDBC5DB0048F38F /* PhotocardCollectionViewCell.swift */,
+				47DE26E42BDCCC00008D3D4E /* DetailsViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -233,6 +236,7 @@
 				4737A90F2BD4EFDA003D23BA /* DatabaseController.swift in Sources */,
 				4737A9062BD4DF00003D23BA /* Photocard.swift in Sources */,
 				4733127E2BDA504300BB9070 /* SignUpViewController.swift in Sources */,
+				47DE26E52BDCCC00008D3D4E /* DetailsViewController.swift in Sources */,
 				4737A9112BD4FCA9003D23BA /* MulticastDelegate.swift in Sources */,
 				47B079822BD8DA7200E79EB4 /* MenuTableViewController.swift in Sources */,
 				4737A8E62BD4CA3B003D23BA /* SceneDelegate.swift in Sources */,
