@@ -12,14 +12,12 @@ private let reuseIdentifier = "PhotocardCollectionViewCell"
 class WishlistCollectionViewController: UICollectionViewController, DatabaseListener {
     
     var wishList = [Photocard]()
+    var photocard = Photocard()
     var listenerType: ListenerType = .user
     weak var databaseController: DatabaseProtocol?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
 
         // Register cell classes
         self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
@@ -29,15 +27,16 @@ class WishlistCollectionViewController: UICollectionViewController, DatabaseList
         databaseController = appDelegate?.databaseController
     }
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "photocardDetailsFromWishlistSegue" {
+            let destination = segue.destination as! DetailsViewController
+            // Pass selected photocard to view details
+            destination.photocard = photocard
+        }
     }
-    */
 
     // MARK: UICollectionViewDataSource
 
@@ -45,7 +44,6 @@ class WishlistCollectionViewController: UICollectionViewController, DatabaseList
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
@@ -61,52 +59,29 @@ class WishlistCollectionViewController: UICollectionViewController, DatabaseList
     }
 
     // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        photocard = wishList[indexPath.row]
+        performSegue(withIdentifier: "photocardDetailsFromWishlistSegue", sender: self)
+        collectionView.deselectItem(at: indexPath, animated: true)
     }
-    */
     
     // MARK: DatabaseListener
     
     func onAllArtistsChange(change: DatabaseChange, artists: [Artist]) {
-        //
+        // Do nothing
     }
     
     func onAllGroupsChange(change: DatabaseChange, groups: [Group]) {
-        //
+        // Do nothing
     }
     
     func onAllAlbumsChange(change: DatabaseChange, albums: [Album]) {
-        //
+        // Do nothing
     }
     
     func onAllPhotocardsChange(change: DatabaseChange, photocards: [Photocard]) {
-        //
+        // Do nothing
     }
     
     func onUserChange(change: DatabaseChange, user: User) {
