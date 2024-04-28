@@ -59,13 +59,13 @@ class WishlistCollectionViewController: UICollectionViewController, UISearchResu
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return wishList.count
+        return filteredList.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let photocardCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PhotocardCollectionViewCell
         
-        photocardCell.setup(with: wishList[indexPath.row])
+        photocardCell.setup(with: filteredList[indexPath.row])
         
         return photocardCell
     }
@@ -73,7 +73,7 @@ class WishlistCollectionViewController: UICollectionViewController, UISearchResu
     // MARK: UICollectionViewDelegate
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        photocard = wishList[indexPath.row]
+        photocard = filteredList[indexPath.row]
         performSegue(withIdentifier: "photocardDetailsFromWishlistSegue", sender: self)
         collectionView.deselectItem(at: indexPath, animated: true)
     }
@@ -81,12 +81,22 @@ class WishlistCollectionViewController: UICollectionViewController, UISearchResu
     // MARK: UISearchResultsUpdating
     
     func updateSearchResults(for searchController: UISearchController) {
-        guard let searchText = searchController.searchBar.text?.lowercased() else { return
+        guard let searchText = searchController.searchBar.text?.lowercased() else {
+            return
         }
         
-        // Search artist
-        // Search idol
-        // Search member
+        if searchText.count > 0 {
+            filteredList = wishList.filter({ (photocard: Photocard) -> Bool in
+                let searchArtist = photocard.artist?.name?.lowercased().contains(searchText) ?? false
+                let searchIdol = photocard.idol?.name?.lowercased().contains(searchText) ?? false
+                let searchAlbum =  photocard.album?.name?.lowercased().contains(searchText) ?? false
+                return searchArtist || searchIdol || searchAlbum
+            })
+        } else {
+            filteredList = wishList
+        }
+        
+        collectionView.reloadData()
     }
     
     // MARK: DatabaseListener
