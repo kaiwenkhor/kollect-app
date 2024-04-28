@@ -169,7 +169,7 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
         // Do nothing
     }
     
-    func onAllGroupsChange(change: DatabaseChange, groups: [Group]) {
+    func onAllArtistsChange(change: DatabaseChange, artists: [Artist]) {
         // Do nothing
     }
     

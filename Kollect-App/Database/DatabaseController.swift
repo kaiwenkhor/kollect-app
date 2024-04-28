@@ -15,7 +15,7 @@ enum DatabaseChange {
 
 enum ListenerType {
     case idol
-    case group
+    case artist
     case album
     case photocard
     case user
@@ -28,9 +28,9 @@ protocol DatabaseListener: AnyObject {
     // Idol
     func onAllIdolsChange(change: DatabaseChange, idols: [Idol])
     
-    // Group
-//    func onGroupMemberChange(change: DatabaseChange, groupMembers: [Idol])
-    func onAllGroupsChange(change: DatabaseChange, groups: [Group])
+    // Artist
+//    func onArtistMemberChange(change: DatabaseChange, artistMembers: [Idol])
+    func onAllArtistsChange(change: DatabaseChange, artists: [Artist])
     
     // Album
     func onAllAlbumsChange(change: DatabaseChange, albums: [Album])
@@ -52,13 +52,13 @@ protocol DatabaseProtocol: AnyObject {
     func addIdol(idolName: String, idolBirthday: String) -> Idol
     func deleteIdol(idol: Idol)
     
-    // Group
-    func addGroup(groupName: String) -> Group
-    func deleteGroup(group: Group)
-    func addIdolToGroup(idol: Idol, group: Group) -> Bool
-    func removeIdolFromGroup(idol: Idol, group: Group)
-    func addAlbumToGroup(album: Album, group: Group) -> Bool
-    func removeAlbumFromGroup(album: Album, group: Group)
+    // Artist
+    func addArtist(artistName: String) -> Artist
+    func deleteArtist(artist: Artist)
+    func addIdolToArtist(idol: Idol, artist: Artist) -> Bool
+    func removeIdolFromArtist(idol: Idol, artist: Artist)
+    func addAlbumToArtist(album: Album, artist: Artist) -> Bool
+    func removeAlbumFromArtist(album: Album, artist: Artist)
     
     // Album
     func addAlbum(albumName: String, albumImage: String) -> Album
@@ -67,7 +67,7 @@ protocol DatabaseProtocol: AnyObject {
     func removePhotocardFromAlbum(photocard: Photocard, album: Album)
     
     // Photocard
-    func addPhotocard(idol: Idol, group: Group, album: Album, image: String) -> Photocard
+    func addPhotocard(idol: Idol, artist: Artist, album: Album, image: String) -> Photocard
     func deletePhotocard(photocard: Photocard)
     
     // User

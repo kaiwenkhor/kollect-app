@@ -14,9 +14,9 @@ class DetailsViewController: UIViewController {
     @IBOutlet weak var findInTradeButton: UIButton!
     
     @IBOutlet weak var photocardImageView: UIImageView!
-    @IBOutlet weak var memberLabel: UILabel!
+    @IBOutlet weak var idolLabel: UILabel!
     @IBOutlet weak var albumLabel: UILabel!
-    @IBOutlet weak var groupLabel: UILabel!
+    @IBOutlet weak var artistLabel: UILabel!
     
     var photocard = Photocard()
     var currentUser = User()
@@ -59,9 +59,9 @@ class DetailsViewController: UIViewController {
         
         // Setup photocard details
         photocardImageView.image = UIImage(named: photocard.image!)
-        memberLabel.text = photocard.idol?.name
+        idolLabel.text = photocard.idol?.name
         albumLabel.text = photocard.album?.name
-        groupLabel.text = photocard.group?.name
+        artistLabel.text = photocard.artist?.name
     }
 
     /*

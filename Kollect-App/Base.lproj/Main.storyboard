@@ -585,7 +585,7 @@
                                     <constraint firstAttribute="width" constant="264" id="q36-HZ-hy5"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Member" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l5a-Rb-UP0">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Idol" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l5a-Rb-UP0">
                                 <rect key="frame" x="20" y="551" width="353" height="17"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
                                 <nil key="textColor"/>
@@ -609,7 +609,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Group" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kBt-bg-o9y">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kBt-bg-o9y">
                                 <rect key="frame" x="20" y="679.66666666666663" width="353" height="17"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
                                 <nil key="textColor"/>
@@ -692,10 +692,10 @@
                     </navigationItem>
                     <connections>
                         <outlet property="albumLabel" destination="g8Z-eQ-VAJ" id="c1v-rU-nJe"/>
+                        <outlet property="artistLabel" destination="QIZ-qW-l85" id="WEj-i3-QAc"/>
                         <outlet property="findInMarketButton" destination="nmG-lO-Vtc" id="e34-zf-leX"/>
                         <outlet property="findInTradeButton" destination="yYE-ah-qky" id="I3c-D0-Lde"/>
-                        <outlet property="groupLabel" destination="QIZ-qW-l85" id="AhJ-Dp-bfP"/>
-                        <outlet property="memberLabel" destination="6Qn-Zg-6Gn" id="f1b-RD-KnS"/>
+                        <outlet property="idolLabel" destination="6Qn-Zg-6Gn" id="hno-IU-tvH"/>
                         <outlet property="photocardImageView" destination="o2M-YL-gtL" id="mPq-u3-c6S"/>
                         <outlet property="wishlistBarButtonItem" destination="pYd-5D-sLa" id="Ioc-jp-OPD"/>
                     </connections>

@@ -9,9 +9,10 @@ import UIKit
 
 private let reuseIdentifier = "PhotocardCollectionViewCell"
 
-class WishlistCollectionViewController: UICollectionViewController, DatabaseListener {
+class WishlistCollectionViewController: UICollectionViewController, UISearchResultsUpdating, DatabaseListener {
     
     var wishList = [Photocard]()
+    var filteredList = [Photocard]()
     var photocard = Photocard()
     var listenerType: ListenerType = .user
     weak var databaseController: DatabaseProtocol?
@@ -25,6 +26,17 @@ class WishlistCollectionViewController: UICollectionViewController, DatabaseList
         // Do any additional setup after loading the view.
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         databaseController = appDelegate?.databaseController
+        
+        filteredList = wishList
+        
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Wishlist"
+        navigationItem.searchController = searchController
+        
+        // This view controller decides how the search controller is presented
+        definesPresentationContext = true
     }
 
     // MARK: - Navigation
@@ -66,13 +78,24 @@ class WishlistCollectionViewController: UICollectionViewController, DatabaseList
         collectionView.deselectItem(at: indexPath, animated: true)
     }
     
+    // MARK: UISearchResultsUpdating
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let searchText = searchController.searchBar.text?.lowercased() else { return
+        }
+        
+        // Search artist
+        // Search idol
+        // Search member
+    }
+    
     // MARK: DatabaseListener
     
-    func onAllArtistsChange(change: DatabaseChange, artists: [Artist]) {
+    func onAllIdolsChange(change: DatabaseChange, idols: [Idol]) {
         // Do nothing
     }
     
-    func onAllGroupsChange(change: DatabaseChange, groups: [Group]) {
+    func onAllArtistsChange(change: DatabaseChange, artists: [Artist]) {
         // Do nothing
     }
     

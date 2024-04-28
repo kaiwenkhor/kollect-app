@@ -13,7 +13,7 @@ class FirebaseController: NSObject, DatabaseProtocol {
     
     var listeners = MulticastDelegate<DatabaseListener>()
     var idolList: [Idol]
-    var groupList: [Group]
+    var artistList: [Artist]
     var albumList: [Album]
     var photocardList: [Photocard]
     var currentUser: User
@@ -21,7 +21,7 @@ class FirebaseController: NSObject, DatabaseProtocol {
     var authController: Auth
     var database: Firestore
     var idolsRef: CollectionReference?
-    var groupsRef: CollectionReference?
+    var artistsRef: CollectionReference?
     var albumsRef: CollectionReference?
     var photocardsRef: CollectionReference?
     var usersRef: CollectionReference?
@@ -32,7 +32,7 @@ class FirebaseController: NSObject, DatabaseProtocol {
         database = Firestore.firestore()
         
         idolList = [Idol]()
-        groupList = [Group]()
+        artistList = [Artist]()
         albumList = [Album]()
         photocardList = [Photocard]()
         currentUser = User()
@@ -96,9 +96,9 @@ class FirebaseController: NSObject, DatabaseProtocol {
             listener.onAllIdolsChange(change: .update, idols: idolList)
         }
         
-        // Group
-        if listener.listenerType == .group || listener.listenerType == .all {
-            listener.onAllGroupsChange(change: .update, groups: groupList)
+        // Artist
+        if listener.listenerType == .artist || listener.listenerType == .all {
+            listener.onAllArtistsChange(change: .update, artists: artistList)
         }
         
         // Album
@@ -140,35 +140,35 @@ class FirebaseController: NSObject, DatabaseProtocol {
             idolsRef?.document(idolID).delete()
         }
         
-        // Delete from group (if any)
+        // Delete from artist (if any)
         // Delete its photocards (if any)
         // Delete from collection (if any)
     }
     
-    func addGroup(groupName: String) -> Group {
-        let group = Group()
-        group.name = groupName
+    func addArtist(artistName: String) -> Artist {
+        let artist = Artist()
+        artist.name = artistName
         
-        if let groupRef = groupsRef?.addDocument(data: ["name": groupName]) {
-            group.id = groupRef.documentID
+        if let artistRef = artistsRef?.addDocument(data: ["name": artistName]) {
+            artist.id = artistRef.documentID
         }
         
-        return group
+        return artist
     }
     
-    func deleteGroup(group: Group) {
-        if let groupID = group.id {
-            groupsRef?.document(groupID).delete()
+    func deleteArtist(artist: Artist) {
+        if let artistID = artist.id {
+            artistsRef?.document(artistID).delete()
         }
     }
     
-    func addIdolToGroup(idol: Idol, group: Group) -> Bool {
-        guard let idolID = idol.id, let groupID = group.id else {
+    func addIdolToArtist(idol: Idol, artist: Artist) -> Bool {
+        guard let idolID = idol.id, let artistID = artist.id else {
             return false
         }
         
         if let newIdolRef = idolsRef?.document(idolID) {
-            groupsRef?.document(groupID).updateData(
+            artistsRef?.document(artistID).updateData(
                 ["members": FieldValue.arrayUnion([newIdolRef])]
             )
         }
@@ -176,10 +176,10 @@ class FirebaseController: NSObject, DatabaseProtocol {
         return true
     }
     
-    func removeIdolFromGroup(idol: Idol, group: Group) {
-        if group.members.contains(idol), let groupID = group.id, let idolID = idol.id {
+    func removeIdolFromArtist(idol: Idol, artist: Artist) {
+        if artist.members.contains(idol), let artistID = artist.id, let idolID = idol.id {
             if let removedIdolRef = idolsRef?.document(idolID) {
-                groupsRef?.document(groupID).updateData(
+                artistsRef?.document(artistID).updateData(
                     ["members": FieldValue.arrayRemove([removedIdolRef])]
                 )
             }
@@ -204,13 +204,13 @@ class FirebaseController: NSObject, DatabaseProtocol {
         }
     }
     
-    func addAlbumToGroup(album: Album, group: Group) -> Bool {
-        guard let albumID = album.id, let groupID = group.id else {
+    func addAlbumToArtist(album: Album, artist: Artist) -> Bool {
+        guard let albumID = album.id, let artistID = artist.id else {
             return false
         }
         
         if let newAlbumRef = albumsRef?.document(albumID) {
-            groupsRef?.document(groupID).updateData(
+            artistsRef?.document(artistID).updateData(
                 ["albums": FieldValue.arrayUnion([newAlbumRef])]
             )
         }
@@ -218,10 +218,10 @@ class FirebaseController: NSObject, DatabaseProtocol {
         return true
     }
     
-    func removeAlbumFromGroup(album: Album, group: Group) {
-        if group.albums.contains(album), let groupID = group.id, let albumID = album.id {
+    func removeAlbumFromArtist(album: Album, artist: Artist) {
+        if artist.albums.contains(album), let artistID = artist.id, let albumID = album.id {
             if let removedAlbumRef = albumsRef?.document(albumID) {
-                groupsRef?.document(groupID).updateData(
+                artistsRef?.document(artistID).updateData(
                     ["albums": FieldValue.arrayRemove([removedAlbumRef])]
                 )
             }
@@ -252,20 +252,20 @@ class FirebaseController: NSObject, DatabaseProtocol {
         }
     }
     
-    func addPhotocard(idol: Idol, group: Group, album: Album, image: String) -> Photocard {
+    func addPhotocard(idol: Idol, artist: Artist, album: Album, image: String) -> Photocard {
         let photocard = Photocard()
         photocard.idol = idol
-        photocard.group = group
+        photocard.artist = artist
         photocard.album = album
         photocard.image = image
         
         // Should save idol name only or idol object
-        if let photocardRef = photocardsRef?.addDocument(data: ["idol": idol, "group": group, "album": album, "image": image]) {
+        if let photocardRef = photocardsRef?.addDocument(data: ["idol": idol, "artist": artist, "album": album, "image": image]) {
             
             photocard.id = photocardRef.documentID
         }
         
-        // Add to Group -> Album -> Idol
+        // Add to Artist -> Album -> Idol
         if !addPhotocardToAlbum(photocard: photocard, album: album) {
             print("Error adding photocard to album.")
         }
@@ -389,8 +389,8 @@ class FirebaseController: NSObject, DatabaseProtocol {
             self.parseIdolSnapshot(snapshot: querySnapshot)
             
             // First-time calls
-            if self.groupsRef == nil {
-                self.setupGroupListener()
+            if self.artistsRef == nil {
+                self.setupArtistListener()
             }
             
             if self.photocardsRef == nil {
@@ -403,15 +403,15 @@ class FirebaseController: NSObject, DatabaseProtocol {
         }
     }
     
-    func setupGroupListener() {
-        groupsRef = database.collection("groups")
-        groupsRef?.addSnapshotListener() { (querySnapshot, error) in
+    func setupArtistListener() {
+        artistsRef = database.collection("artists")
+        artistsRef?.addSnapshotListener() { (querySnapshot, error) in
             guard let querySnapshot = querySnapshot else {
                 print("Failed to fetch documents with error: \(String(describing: error))")
                 return
             }
             
-            self.parseGroupSnapshot(snapshot: querySnapshot)
+            self.parseArtistSnapshot(snapshot: querySnapshot)
         }
     }
     
@@ -468,30 +468,30 @@ class FirebaseController: NSObject, DatabaseProtocol {
         }
     }
     
-    func parseGroupSnapshot(snapshot: QuerySnapshot) {
+    func parseArtistSnapshot(snapshot: QuerySnapshot) {
         snapshot.documentChanges.forEach { (change) in
-            var group: Group
+            var artist: Artist
             
             do {
-                group = try change.document.data(as: Group.self)
+                artist = try change.document.data(as: Artist.self)
             } catch {
                 fatalError("Unable to decode artist: \(error.localizedDescription)")
             }
             
             if change.type == .added {
-                if !groupList.contains(group) {
-                    groupList.insert(group, at: Int(change.newIndex))
+                if !artistList.contains(artist) {
+                    artistList.insert(artist, at: Int(change.newIndex))
                 }
             } else if change.type == .modified {
-                groupList.remove(at: Int(change.oldIndex))
-                groupList.insert(group, at: Int(change.newIndex))
+                artistList.remove(at: Int(change.oldIndex))
+                artistList.insert(artist, at: Int(change.newIndex))
             } else if change.type == .removed {
-                groupList.remove(at: Int(change.oldIndex))
+                artistList.remove(at: Int(change.oldIndex))
             }
             
             listeners.invoke { (listener) in
-                if listener.listenerType == ListenerType.group || listener.listenerType == ListenerType.all {
-                    listener.onAllGroupsChange(change: .update, groups: groupList)
+                if listener.listenerType == ListenerType.artist || listener.listenerType == ListenerType.all {
+                    listener.onAllArtistsChange(change: .update, artists: artistList)
                 }
             }
         }
@@ -571,9 +571,9 @@ class FirebaseController: NSObject, DatabaseProtocol {
         let idolE = addIdol(idolName: "E", idolBirthday: "2005-05-05")
         let idolF = addIdol(idolName: "F", idolBirthday: "2006-06-06")
         
-        let groupA = addGroup(groupName: "123")
-        let groupB = addGroup(groupName: "456")
-        let groupC = addGroup(groupName: "789")
+        let artistA = addArtist(artistName: "123")
+        let artistB = addArtist(artistName: "456")
+        let artistC = addArtist(artistName: "789")
         
         let albumA = addAlbum(albumName: "Album 1", albumImage: "")
         let albumB = addAlbum(albumName: "Album 2", albumImage: "")
@@ -582,31 +582,31 @@ class FirebaseController: NSObject, DatabaseProtocol {
         let albumE = addAlbum(albumName: "Album 5", albumImage: "")
         let albumF = addAlbum(albumName: "Album 6", albumImage: "")
         
-        let _ = addIdolToGroup(idol: idolA, group: groupA)
-        let _ = addIdolToGroup(idol: idolB, group: groupA)
-        let _ = addIdolToGroup(idol: idolC, group: groupB)
-        let _ = addIdolToGroup(idol: idolD, group: groupB)
-        let _ = addIdolToGroup(idol: idolE, group: groupC)
-        let _ = addIdolToGroup(idol: idolF, group: groupC)
+        let _ = addIdolToArtist(idol: idolA, artist: artistA)
+        let _ = addIdolToArtist(idol: idolB, artist: artistA)
+        let _ = addIdolToArtist(idol: idolC, artist: artistB)
+        let _ = addIdolToArtist(idol: idolD, artist: artistB)
+        let _ = addIdolToArtist(idol: idolE, artist: artistC)
+        let _ = addIdolToArtist(idol: idolF, artist: artistC)
         
-        let _ = addAlbumToGroup(album: albumA, group: groupA)
-        let _ = addAlbumToGroup(album: albumB, group: groupA)
-        let _ = addAlbumToGroup(album: albumC, group: groupB)
-        let _ = addAlbumToGroup(album: albumD, group: groupB)
-        let _ = addAlbumToGroup(album: albumE, group: groupC)
-        let _ = addAlbumToGroup(album: albumF, group: groupC)
+        let _ = addAlbumToArtist(album: albumA, artist: artistA)
+        let _ = addAlbumToArtist(album: albumB, artist: artistA)
+        let _ = addAlbumToArtist(album: albumC, artist: artistB)
+        let _ = addAlbumToArtist(album: albumD, artist: artistB)
+        let _ = addAlbumToArtist(album: albumE, artist: artistC)
+        let _ = addAlbumToArtist(album: albumF, artist: artistC)
         
-        let _ = addPhotocard(idol: idolA, group: groupA, album: albumA, image: "")
-        let _ = addPhotocard(idol: idolA, group: groupA, album: albumB, image: "")
-        let _ = addPhotocard(idol: idolB, group: groupA, album: albumA, image: "")
-        let _ = addPhotocard(idol: idolB, group: groupA, album: albumB, image: "")
-        let _ = addPhotocard(idol: idolC, group: groupB, album: albumC, image: "")
-        let _ = addPhotocard(idol: idolC, group: groupB, album: albumD, image: "")
-        let _ = addPhotocard(idol: idolD, group: groupB, album: albumC, image: "")
-        let _ = addPhotocard(idol: idolD, group: groupB, album: albumD, image: "")
-        let _ = addPhotocard(idol: idolE, group: groupC, album: albumE, image: "")
-        let _ = addPhotocard(idol: idolE, group: groupC, album: albumF, image: "")
-        let _ = addPhotocard(idol: idolF, group: groupC, album: albumE, image: "")
-        let _ = addPhotocard(idol: idolF, group: groupC, album: albumF, image: "")
+        let _ = addPhotocard(idol: idolA, artist: artistA, album: albumA, image: "")
+        let _ = addPhotocard(idol: idolA, artist: artistA, album: albumB, image: "")
+        let _ = addPhotocard(idol: idolB, artist: artistA, album: albumA, image: "")
+        let _ = addPhotocard(idol: idolB, artist: artistA, album: albumB, image: "")
+        let _ = addPhotocard(idol: idolC, artist: artistB, album: albumC, image: "")
+        let _ = addPhotocard(idol: idolC, artist: artistB, album: albumD, image: "")
+        let _ = addPhotocard(idol: idolD, artist: artistB, album: albumC, image: "")
+        let _ = addPhotocard(idol: idolD, artist: artistB, album: albumD, image: "")
+        let _ = addPhotocard(idol: idolE, artist: artistC, album: albumE, image: "")
+        let _ = addPhotocard(idol: idolE, artist: artistC, album: albumF, image: "")
+        let _ = addPhotocard(idol: idolF, artist: artistC, album: albumE, image: "")
+        let _ = addPhotocard(idol: idolF, artist: artistC, album: albumF, image: "")
     }
 }
