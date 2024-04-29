@@ -260,9 +260,15 @@ class FirebaseController: NSObject, DatabaseProtocol {
         photocard.image = image
         
         // Should save idol name only or idol object
-        if let photocardRef = photocardsRef?.addDocument(data: ["idol": idol, "artist": artist, "album": album, "image": image]) {
+        if let idolID = idol.id, let artistID = artist.id, let albumID = album.id {
             
-            photocard.id = photocardRef.documentID
+            if let idolRef = idolsRef?.document(idolID), let artistRef = artistsRef?.document(artistID), let albumRef = albumsRef?.document(albumID) {
+                
+                if let photocardRef = photocardsRef?.addDocument(data: ["idol": idolRef, "artist": artistRef, "album": albumRef, "image": image]) {
+                    
+                    photocard.id = photocardRef.documentID
+                }
+            }
         }
         
         // Add to Artist -> Album -> Idol
@@ -528,7 +534,7 @@ class FirebaseController: NSObject, DatabaseProtocol {
     
     func parseUserSnapsnot(snapshot: QueryDocumentSnapshot) {
         currentUser = User()
-        currentUser.id = snapshot.data()["id"] as? String
+        currentUser.name = snapshot.data()["name"] as? String
         currentUser.id = snapshot.documentID
         
         if let allReferences = snapshot.data()["all"] as? [DocumentReference] {
