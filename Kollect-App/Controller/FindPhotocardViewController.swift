@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AddPhotocardViewController: UIViewController {
+class FindPhotocardViewController: UIViewController {
 
     @IBOutlet weak var artistTextField: UITextField!
     @IBOutlet weak var albumTextField: UITextField!
@@ -31,7 +31,6 @@ class AddPhotocardViewController: UIViewController {
             return
         }
         
-        if
         if artist.isEmpty || album.isEmpty {
             var errorMsg = "Please ensure all fields are filled:"
             if artist.isEmpty {
@@ -44,10 +43,8 @@ class AddPhotocardViewController: UIViewController {
             return
         }
         
-        Task {
-            await databaseController?.logInAccount(email: email, password: password)
-            navigationController?.popViewController(animated: true)
-        }
+        // Find photocard(s)
+        
     }
     
     /*
