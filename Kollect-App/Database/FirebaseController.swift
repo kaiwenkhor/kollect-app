@@ -43,12 +43,19 @@ class FirebaseController: NSObject, DatabaseProtocol {
         Task {
             do {
                 let authResult = try await authController.signInAnonymously()
-                currentUser = addUser(userID: authResult.user.uid, username: DEFAULT_USERNAME, isAnonymous: true)
+                currentUser = addUser(userID: authResult.user.uid, username: DEFAULT_USERNAME, isAnonymous: authResult.user.isAnonymous)
             } catch {
                 fatalError("Firebase Authentication Failed with Error \(String(describing: error))")
             }
+//            createDefaults()
             self.setupIdolListener()
         }
+        
+//        idolsRef = database.collection("idols")
+//        artistsRef = database.collection("artists")
+//        albumsRef = database.collection("albums")
+//        photocardsRef = database.collection("photocards")
+//        createDefaults()
     }
     
     func logInAccount(email: String, password: String) async {
@@ -122,6 +129,7 @@ class FirebaseController: NSObject, DatabaseProtocol {
     }
     
     func addIdol(idolName: String, idolBirthday: String) -> Idol {
+        idolsRef = database.collection("idols")
         let idol = Idol()
         idol.name = idolName
         idol.birthday = idolBirthday
@@ -146,6 +154,7 @@ class FirebaseController: NSObject, DatabaseProtocol {
     }
     
     func addArtist(artistName: String) -> Artist {
+        artistsRef = database.collection("artists")
         let artist = Artist()
         artist.name = artistName
         
@@ -187,6 +196,7 @@ class FirebaseController: NSObject, DatabaseProtocol {
     }
     
     func addAlbum(albumName: String, albumImage: String) -> Album {
+        albumsRef = database.collection("albums")
         let album = Album()
         album.name = albumName
         album.image = albumImage
@@ -244,7 +254,7 @@ class FirebaseController: NSObject, DatabaseProtocol {
     
     func removePhotocardFromAlbum(photocard: Photocard, album: Album) {
         if album.photocards.contains(photocard), let albumID = album.id, let photocardID = photocard.id {
-            if let removedPhotocardRef = photocardsRef?.document(albumID) {
+            if let removedPhotocardRef = photocardsRef?.document(photocardID) {
                 albumsRef?.document(albumID).updateData(
                     ["albums": FieldValue.arrayRemove([removedPhotocardRef])]
                 )
@@ -253,6 +263,7 @@ class FirebaseController: NSObject, DatabaseProtocol {
     }
     
     func addPhotocard(idol: Idol, artist: Artist, album: Album, image: String) -> Photocard {
+        photocardsRef = database.collection("photocards")
         let photocard = Photocard()
         photocard.idol = idol
         photocard.artist = artist
@@ -380,6 +391,10 @@ class FirebaseController: NSObject, DatabaseProtocol {
     }
     
     // MARK: - Firebase Controller Specific m=Methods
+    func getArtistByID(_ id: String) -> Artist? {
+        return artistList.first(where: { $0.id == id })
+    }
+    
     func getPhotocardByID(_ id: String) -> Photocard? {
         return photocardList.first(where: { $0.id == id })
     }
@@ -421,6 +436,18 @@ class FirebaseController: NSObject, DatabaseProtocol {
         }
     }
     
+    func setupAlbumListener() {
+        albumsRef = database.collection("albums")
+        albumsRef?.addSnapshotListener() { (querySnapshot, error) in
+            guard let querySnapshot = querySnapshot else {
+                print("Failed to fetch documents with error: \(String(describing: error))")
+                return
+            }
+            
+            self.parseAlbumSnapshot(snapshot: querySnapshot)
+        }
+    }
+    
     func setupPhotocardListener() {
         photocardsRef = database.collection("photocards")
         photocardsRef?.addSnapshotListener() { (querySnapshot, error) in
@@ -435,7 +462,8 @@ class FirebaseController: NSObject, DatabaseProtocol {
     
     func setupUserListener() {
         usersRef = database.collection("users")
-        usersRef?.whereField("name", isEqualTo: currentUser.id!).addSnapshotListener { (querySnapshot, error) in
+        // Match with user document id, as we change the id only in login and sign up and the other currentUser fields might still store the details of the previous user.
+        usersRef?.whereField(FieldPath.documentID(), isEqualTo: currentUser.id!).addSnapshotListener { (querySnapshot, error) in
             guard let querySnapshot = querySnapshot, let userSnapshot = querySnapshot.documents.first else {
                 print("Error fetching user: \(String(describing: error))")
                 return
@@ -476,23 +504,18 @@ class FirebaseController: NSObject, DatabaseProtocol {
     
     func parseArtistSnapshot(snapshot: QuerySnapshot) {
         snapshot.documentChanges.forEach { (change) in
-            var artist: Artist
-            
-            do {
-                artist = try change.document.data(as: Artist.self)
-            } catch {
-                fatalError("Unable to decode artist: \(error.localizedDescription)")
-            }
-            
-            if change.type == .added {
-                if !artistList.contains(artist) {
+            if let artist = getArtistByID(change.document.documentID) {
+                
+                if change.type == .added {
+                    if !artistList.contains(artist) {
+                        artistList.insert(artist, at: Int(change.newIndex))
+                    }
+                } else if change.type == .modified {
+                    artistList.remove(at: Int(change.oldIndex))
                     artistList.insert(artist, at: Int(change.newIndex))
+                } else if change.type == .removed {
+                    artistList.remove(at: Int(change.oldIndex))
                 }
-            } else if change.type == .modified {
-                artistList.remove(at: Int(change.oldIndex))
-                artistList.insert(artist, at: Int(change.newIndex))
-            } else if change.type == .removed {
-                artistList.remove(at: Int(change.oldIndex))
             }
             
             listeners.invoke { (listener) in
@@ -503,25 +526,49 @@ class FirebaseController: NSObject, DatabaseProtocol {
         }
     }
     
-    func parsePhotocardSnapshot(snapshot: QuerySnapshot) {
+    func parseAlbumSnapshot(snapshot: QuerySnapshot) {
         snapshot.documentChanges.forEach { (change) in
-            var photocard: Photocard
+            var album: Album
             
             do {
-                photocard = try change.document.data(as: Photocard.self)
+                album = try change.document.data(as: Album.self)
             } catch {
-                fatalError("Unable to decode photocard: \(error.localizedDescription)")
+                fatalError("Unable to decode artist: \(error.localizedDescription)")
             }
             
             if change.type == .added {
-                if !photocardList.contains(photocard) {
-                    photocardList.insert(photocard, at: Int(change.newIndex))
+                if !albumList.contains(album) {
+                    albumList.insert(album, at: Int(change.newIndex))
                 }
             } else if change.type == .modified {
-                photocardList.remove(at: Int(change.oldIndex))
-                photocardList.insert(photocard, at: Int(change.newIndex))
+                albumList.remove(at: Int(change.oldIndex))
+                albumList.insert(album, at: Int(change.newIndex))
             } else if change.type == .removed {
-                photocardList.remove(at: Int(change.oldIndex))
+                albumList.remove(at: Int(change.oldIndex))
+            }
+            
+            listeners.invoke { (listener) in
+                if listener.listenerType == ListenerType.album || listener.listenerType == ListenerType.all {
+                    listener.onAllAlbumsChange(change: .update, albums: albumList)
+                }
+            }
+        }
+    }
+    
+    func parsePhotocardSnapshot(snapshot: QuerySnapshot) {
+        snapshot.documentChanges.forEach { (change) in
+            if let photocard = getPhotocardByID(change.document.documentID) {
+                
+                if change.type == .added {
+                    if !photocardList.contains(photocard) {
+                        photocardList.insert(photocard, at: Int(change.newIndex))
+                    }
+                } else if change.type == .modified {
+                    photocardList.remove(at: Int(change.oldIndex))
+                    photocardList.insert(photocard, at: Int(change.newIndex))
+                } else if change.type == .removed {
+                    photocardList.remove(at: Int(change.oldIndex))
+                }
             }
             
             listeners.invoke { (listener) in
@@ -570,49 +617,106 @@ class FirebaseController: NSObject, DatabaseProtocol {
     
     // Only call when adding initial data
     func createDefaults() {
-        let idolA = addIdol(idolName: "A", idolBirthday: "2001-01-01")
-        let idolB = addIdol(idolName: "B", idolBirthday: "2002-02-02")
-        let idolC = addIdol(idolName: "C", idolBirthday: "2003-03-03")
-        let idolD = addIdol(idolName: "D", idolBirthday: "2004-04-04")
-        let idolE = addIdol(idolName: "E", idolBirthday: "2005-05-05")
-        let idolF = addIdol(idolName: "F", idolBirthday: "2006-06-06")
+        let jisoo = addIdol(idolName: "Jisoo", idolBirthday: "1995-01-03")
+        let jennie = addIdol(idolName: "Jennie", idolBirthday: "1996-01-16")
+        let rose = addIdol(idolName: "Rosé", idolBirthday: "1997-02-11")
+        let lisa = addIdol(idolName: "Lisa", idolBirthday: "1997-03-27")
+        let yeji = addIdol(idolName: "Yeji", idolBirthday: "2000-05-26")
+        let lia = addIdol(idolName: "Lia", idolBirthday: "2000-07-21")
+        let ryujin = addIdol(idolName: "Ryujin", idolBirthday: "2001-04-17")
+        let chaeryeong = addIdol(idolName: "Chaeryeong", idolBirthday: "2001-06-05")
+        let yuna = addIdol(idolName: "Yuna", idolBirthday: "2003-12-09")
+        let seonghwa = addIdol(idolName: "Seonghwa", idolBirthday: "1998-04-03")
+        let hongjoong = addIdol(idolName: "Hongjoong", idolBirthday: "1998-11-07")
+        let yunho = addIdol(idolName: "Yunho", idolBirthday: "1999-03-23")
+        let yeosang = addIdol(idolName: "Yeosang", idolBirthday: "1999-06-15")
+        let san = addIdol(idolName: "San", idolBirthday: "1999-07-10")
+        let mingi = addIdol(idolName: "Mingi", idolBirthday: "1999-08-09")
+        let wooyoung = addIdol(idolName: "Wooyoung", idolBirthday: "1999-11-26")
+        let jongho = addIdol(idolName: "Jongho", idolBirthday: "2000-10-12")
         
-        let artistA = addArtist(artistName: "123")
-        let artistB = addArtist(artistName: "456")
-        let artistC = addArtist(artistName: "789")
+        let blackpink = addArtist(artistName: "Blackpink")
+        let itzy = addArtist(artistName: "Itzy")
+        let ateez = addArtist(artistName: "Ateez")
         
-        let albumA = addAlbum(albumName: "Album 1", albumImage: "")
-        let albumB = addAlbum(albumName: "Album 2", albumImage: "")
-        let albumC = addAlbum(albumName: "Album 3", albumImage: "")
-        let albumD = addAlbum(albumName: "Album 4", albumImage: "")
-        let albumE = addAlbum(albumName: "Album 5", albumImage: "")
-        let albumF = addAlbum(albumName: "Album 6", albumImage: "")
+        let theAlbum = addAlbum(albumName: "The Album", albumImage: "BLACKPINK-_The_Album.png")
+        let bornPink = addAlbum(albumName: "Born Pink", albumImage: "Born_Pink_Digital.jpeg")
+        let notShy = addAlbum(albumName: "Not Shy", albumImage: "Itzy_-_Not_Shy.jpg")
+        let bornToBe = addAlbum(albumName: "Born to Be", albumImage: "Itzy_-_Born_to_Be_(digital).jpg")
+        let theWorldMovement = addAlbum(albumName: "The World EP.1: Movement", albumImage: "Ateez_-_The_World_EP.1_Movement.png")
+        let theWorldOutlaw = addAlbum(albumName: "The World EP.2: Outlaw", albumImage: "Ateez_-_The_World_EP.2_Outlaw.png")
         
-        let _ = addIdolToArtist(idol: idolA, artist: artistA)
-        let _ = addIdolToArtist(idol: idolB, artist: artistA)
-        let _ = addIdolToArtist(idol: idolC, artist: artistB)
-        let _ = addIdolToArtist(idol: idolD, artist: artistB)
-        let _ = addIdolToArtist(idol: idolE, artist: artistC)
-        let _ = addIdolToArtist(idol: idolF, artist: artistC)
+        let _ = addIdolToArtist(idol: jisoo, artist: blackpink)
+        let _ = addIdolToArtist(idol: jennie, artist: blackpink)
+        let _ = addIdolToArtist(idol: rose, artist: blackpink)
+        let _ = addIdolToArtist(idol: lisa, artist: blackpink)
+        let _ = addIdolToArtist(idol: yeji, artist: itzy)
+        let _ = addIdolToArtist(idol: lia, artist: itzy)
+        let _ = addIdolToArtist(idol: ryujin, artist: itzy)
+        let _ = addIdolToArtist(idol: chaeryeong, artist: itzy)
+        let _ = addIdolToArtist(idol: yuna, artist: itzy)
+        let _ = addIdolToArtist(idol: seonghwa, artist: ateez)
+        let _ = addIdolToArtist(idol: hongjoong, artist: ateez)
+        let _ = addIdolToArtist(idol: yunho, artist: ateez)
+        let _ = addIdolToArtist(idol: yeosang, artist: ateez)
+        let _ = addIdolToArtist(idol: san, artist: ateez)
+        let _ = addIdolToArtist(idol: mingi, artist: ateez)
+        let _ = addIdolToArtist(idol: wooyoung, artist: ateez)
+        let _ = addIdolToArtist(idol: jongho, artist: ateez)
         
-        let _ = addAlbumToArtist(album: albumA, artist: artistA)
-        let _ = addAlbumToArtist(album: albumB, artist: artistA)
-        let _ = addAlbumToArtist(album: albumC, artist: artistB)
-        let _ = addAlbumToArtist(album: albumD, artist: artistB)
-        let _ = addAlbumToArtist(album: albumE, artist: artistC)
-        let _ = addAlbumToArtist(album: albumF, artist: artistC)
+        let _ = addAlbumToArtist(album: theAlbum, artist: blackpink)
+        let _ = addAlbumToArtist(album: bornPink, artist: blackpink)
+        let _ = addAlbumToArtist(album: notShy, artist: itzy)
+        let _ = addAlbumToArtist(album: bornToBe, artist: itzy)
+        let _ = addAlbumToArtist(album: theWorldMovement, artist: ateez)
+        let _ = addAlbumToArtist(album: theWorldOutlaw, artist: ateez)
         
-        let _ = addPhotocard(idol: idolA, artist: artistA, album: albumA, image: "")
-        let _ = addPhotocard(idol: idolA, artist: artistA, album: albumB, image: "")
-        let _ = addPhotocard(idol: idolB, artist: artistA, album: albumA, image: "")
-        let _ = addPhotocard(idol: idolB, artist: artistA, album: albumB, image: "")
-        let _ = addPhotocard(idol: idolC, artist: artistB, album: albumC, image: "")
-        let _ = addPhotocard(idol: idolC, artist: artistB, album: albumD, image: "")
-        let _ = addPhotocard(idol: idolD, artist: artistB, album: albumC, image: "")
-        let _ = addPhotocard(idol: idolD, artist: artistB, album: albumD, image: "")
-        let _ = addPhotocard(idol: idolE, artist: artistC, album: albumE, image: "")
-        let _ = addPhotocard(idol: idolE, artist: artistC, album: albumF, image: "")
-        let _ = addPhotocard(idol: idolF, artist: artistC, album: albumE, image: "")
-        let _ = addPhotocard(idol: idolF, artist: artistC, album: albumF, image: "")
+        // Blacpink photocards
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: theAlbum, image: "Jisoo_Blackpink_TheAlbum_1")
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: theAlbum, image: "Jisoo_Blackpink_TheAlbum_2")
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: theAlbum, image: "Jisoo_Blackpink_TheAlbum_3")
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: theAlbum, image: "Jisoo_Blackpink_TheAlbum_4")
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: theAlbum, image: "Jisoo_Blackpink_TheAlbum_5")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: theAlbum, image: "Jennie_Blackpink_TheAlbum_1")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: theAlbum, image: "Jennie_Blackpink_TheAlbum_2")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: theAlbum, image: "Jennie_Blackpink_TheAlbum_3")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: theAlbum, image: "Jennie_Blackpink_TheAlbum_4")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: theAlbum, image: "Jennie_Blackpink_TheAlbum_5")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: theAlbum, image: "Rosé_Blackpink_TheAlbum_1")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: theAlbum, image: "Rosé_Blackpink_TheAlbum_2")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: theAlbum, image: "Rosé_Blackpink_TheAlbum_3")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: theAlbum, image: "Rosé_Blackpink_TheAlbum_4")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: theAlbum, image: "Rosé_Blackpink_TheAlbum_5")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: theAlbum, image: "Lisa_Blackpink_TheAlbum_1")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: theAlbum, image: "Lisa_Blackpink_TheAlbum_2")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: theAlbum, image: "Lisa_Blackpink_TheAlbum_3")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: theAlbum, image: "Lisa_Blackpink_TheAlbum_4")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: theAlbum, image: "Lisa_Blackpink_TheAlbum_5")
+        
+        // Ateez photocards
+        let _ = addPhotocard(idol: hongjoong, artist: ateez, album: theWorldMovement, image: "Hongjoong_Ateez_TheWorldEP1_1.png")
+        let _ = addPhotocard(idol: hongjoong, artist: ateez, album: theWorldMovement, image: "Hongjoong_Ateez_TheWorldEP1_2.png")
+        let _ = addPhotocard(idol: hongjoong, artist: ateez, album: theWorldMovement, image: "Hongjoong_Ateez_TheWorldEP1_3.png")
+        let _ = addPhotocard(idol: seonghwa, artist: ateez, album: theWorldMovement, image: "Seonghwa_Ateez_TheWorldEP1_1.png")
+        let _ = addPhotocard(idol: seonghwa, artist: ateez, album: theWorldMovement, image: "Seonghwa_Ateez_TheWorldEP1_2.png")
+        let _ = addPhotocard(idol: seonghwa, artist: ateez, album: theWorldMovement, image: "Seonghwa_Ateez_TheWorldEP1_3.png")
+        let _ = addPhotocard(idol: yunho, artist: ateez, album: theWorldMovement, image: "Yunho_Ateez_TheWorldEP1_1.png")
+        let _ = addPhotocard(idol: yunho, artist: ateez, album: theWorldMovement, image: "Yunho_Ateez_TheWorldEP1_2.png")
+        let _ = addPhotocard(idol: yunho, artist: ateez, album: theWorldMovement, image: "Yunho_Ateez_TheWorldEP1_3.png")
+        let _ = addPhotocard(idol: yeosang, artist: ateez, album: theWorldMovement, image: "Yeosang_Ateez_TheWorldEP1_1.png")
+        let _ = addPhotocard(idol: yeosang, artist: ateez, album: theWorldMovement, image: "Yeosang_Ateez_TheWorldEP1_2.png")
+        let _ = addPhotocard(idol: yeosang, artist: ateez, album: theWorldMovement, image: "Yeosang_Ateez_TheWorldEP1_3.png")
+        let _ = addPhotocard(idol: san, artist: ateez, album: theWorldMovement, image: "San_Ateez_TheWorldEP1_1.png")
+        let _ = addPhotocard(idol: san, artist: ateez, album: theWorldMovement, image: "San_Ateez_TheWorldEP1_2.png")
+        let _ = addPhotocard(idol: san, artist: ateez, album: theWorldMovement, image: "San_Ateez_TheWorldEP1_3.png")
+        let _ = addPhotocard(idol: mingi, artist: ateez, album: theWorldMovement, image: "Mingi_Ateez_TheWorldEP1_1.png")
+        let _ = addPhotocard(idol: mingi, artist: ateez, album: theWorldMovement, image: "Mingi_Ateez_TheWorldEP1_2.png")
+        let _ = addPhotocard(idol: mingi, artist: ateez, album: theWorldMovement, image: "Mingi_Ateez_TheWorldEP1_3.png")
+        let _ = addPhotocard(idol: wooyoung, artist: ateez, album: theWorldMovement, image: "Wooyoung_Ateez_TheWorldEP1_1.png")
+        let _ = addPhotocard(idol: wooyoung, artist: ateez, album: theWorldMovement, image: "Wooyoung_Ateez_TheWorldEP1_2.png")
+        let _ = addPhotocard(idol: wooyoung, artist: ateez, album: theWorldMovement, image: "Wooyoung_Ateez_TheWorldEP1_3.png")
+        let _ = addPhotocard(idol: jongho, artist: ateez, album: theWorldMovement, image: "Jongho_Ateez_TheWorldEP1_1.png")
+        let _ = addPhotocard(idol: jongho, artist: ateez, album: theWorldMovement, image: "Jongho_Ateez_TheWorldEP1_2.png")
+        let _ = addPhotocard(idol: jongho, artist: ateez, album: theWorldMovement, image: "Jongho_Ateez_TheWorldEP1_3.png")
     }
 }
