@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4724D7AD2BE183890021647C /* MyCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4724D7AC2BE183890021647C /* MyCollectionViewController.swift */; };
 		4733127C2BD9233E00BB9070 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4733127B2BD9233E00BB9070 /* SettingsTableViewController.swift */; };
 		4733127E2BDA504300BB9070 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4733127D2BDA504200BB9070 /* SignUpViewController.swift */; };
 		4737A8E42BD4CA3B003D23BA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4737A8E32BD4CA3B003D23BA /* AppDelegate.swift */; };
@@ -24,6 +25,8 @@
 		4737A90A2BD4EF18003D23BA /* FirebaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4737A9092BD4EF18003D23BA /* FirebaseController.swift */; };
 		4737A90F2BD4EFDA003D23BA /* DatabaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4737A90E2BD4EFDA003D23BA /* DatabaseController.swift */; };
 		4737A9112BD4FCA9003D23BA /* MulticastDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4737A9102BD4FCA9003D23BA /* MulticastDelegate.swift */; };
+		473CDD8D2BDE7B9700E6F7BD /* MyCollectionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473CDD8C2BDE7B9700E6F7BD /* MyCollectionCollectionViewCell.swift */; };
+		473CDD8F2BDE872700E6F7BD /* FindPhotocardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473CDD8E2BDE872700E6F7BD /* FindPhotocardViewController.swift */; };
 		4743DEE12BD79B22000B3E45 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4743DEE02BD79B22000B3E45 /* User.swift */; };
 		4743DEE52BD7CF83000B3E45 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4743DEE42BD7CF83000B3E45 /* LogInViewController.swift */; };
 		47955AB62BDBC55C0048F38F /* WishlistCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47955AB52BDBC55C0048F38F /* WishlistCollectionViewController.swift */; };
@@ -35,6 +38,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4724D7AC2BE183890021647C /* MyCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCollectionViewController.swift; sourceTree = "<group>"; };
 		4733127B2BD9233E00BB9070 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		4733127D2BDA504200BB9070 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		4737A8E02BD4CA3B003D23BA /* Kollect-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Kollect-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -51,6 +55,8 @@
 		4737A9092BD4EF18003D23BA /* FirebaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseController.swift; sourceTree = "<group>"; };
 		4737A90E2BD4EFDA003D23BA /* DatabaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseController.swift; sourceTree = "<group>"; };
 		4737A9102BD4FCA9003D23BA /* MulticastDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MulticastDelegate.swift; sourceTree = "<group>"; };
+		473CDD8C2BDE7B9700E6F7BD /* MyCollectionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCollectionCollectionViewCell.swift; sourceTree = "<group>"; };
+		473CDD8E2BDE872700E6F7BD /* FindPhotocardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPhotocardViewController.swift; sourceTree = "<group>"; };
 		4743DEE02BD79B22000B3E45 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		4743DEE42BD7CF83000B3E45 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		47955AB52BDBC55C0048F38F /* WishlistCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishlistCollectionViewController.swift; sourceTree = "<group>"; };
@@ -95,8 +101,8 @@
 			isa = PBXGroup;
 			children = (
 				4743DEE32BD7CF5A000B3E45 /* Database */,
-				4737A90B2BD4EF21003D23BA /* Controller */,
 				4737A9022BD4D5E3003D23BA /* Model */,
+				4737A90B2BD4EF21003D23BA /* Controller */,
 				4737A8E32BD4CA3B003D23BA /* AppDelegate.swift */,
 				4737A8E52BD4CA3B003D23BA /* SceneDelegate.swift */,
 				4737A8E92BD4CA3B003D23BA /* Main.storyboard */,
@@ -104,6 +110,7 @@
 				4737A8EE2BD4CA3C003D23BA /* LaunchScreen.storyboard */,
 				4737A8F12BD4CA3C003D23BA /* Info.plist */,
 				4737A8FE2BD4D395003D23BA /* GoogleService-Info.plist */,
+				4724D7AC2BE183890021647C /* MyCollectionViewController.swift */,
 			);
 			path = "Kollect-App";
 			sourceTree = "<group>";
@@ -123,6 +130,11 @@
 		4737A90B2BD4EF21003D23BA /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				473CDD902BDE873A00E6F7BD /* Home */,
+				473CDD912BDE874300E6F7BD /* Collection */,
+				473CDD922BDE875200E6F7BD /* Market */,
+				473CDD932BDE875900E6F7BD /* Trade */,
+				473CDD942BDE875F00E6F7BD /* Menu */,
 				47B0797F2BD8D28400E79EB4 /* UIViewController+displayMessage.swift */,
 				4743DEE42BD7CF83000B3E45 /* LogInViewController.swift */,
 				4733127D2BDA504200BB9070 /* SignUpViewController.swift */,
@@ -131,8 +143,45 @@
 				47955AB52BDBC55C0048F38F /* WishlistCollectionViewController.swift */,
 				47955AB72BDBC5DB0048F38F /* PhotocardCollectionViewCell.swift */,
 				47DE26E42BDCCC00008D3D4E /* DetailsViewController.swift */,
+				473CDD8E2BDE872700E6F7BD /* FindPhotocardViewController.swift */,
+				473CDD8C2BDE7B9700E6F7BD /* MyCollectionCollectionViewCell.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		473CDD902BDE873A00E6F7BD /* Home */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		473CDD912BDE874300E6F7BD /* Collection */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Collection;
+			sourceTree = "<group>";
+		};
+		473CDD922BDE875200E6F7BD /* Market */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Market;
+			sourceTree = "<group>";
+		};
+		473CDD932BDE875900E6F7BD /* Trade */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Trade;
+			sourceTree = "<group>";
+		};
+		473CDD942BDE875F00E6F7BD /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Menu;
 			sourceTree = "<group>";
 		};
 		4743DEE32BD7CF5A000B3E45 /* Database */ = {
@@ -227,12 +276,15 @@
 			files = (
 				4737A90A2BD4EF18003D23BA /* FirebaseController.swift in Sources */,
 				4733127C2BD9233E00BB9070 /* SettingsTableViewController.swift in Sources */,
+				473CDD8F2BDE872700E6F7BD /* FindPhotocardViewController.swift in Sources */,
 				4743DEE52BD7CF83000B3E45 /* LogInViewController.swift in Sources */,
+				4724D7AD2BE183890021647C /* MyCollectionViewController.swift in Sources */,
 				47955ABA2BDBCB440048F38F /* Album.swift in Sources */,
 				4737A8E42BD4CA3B003D23BA /* AppDelegate.swift in Sources */,
 				4737A9012BD4D553003D23BA /* Idol.swift in Sources */,
 				47955AB82BDBC5DB0048F38F /* PhotocardCollectionViewCell.swift in Sources */,
 				4737A9042BD4D600003D23BA /* Artist.swift in Sources */,
+				473CDD8D2BDE7B9700E6F7BD /* MyCollectionCollectionViewCell.swift in Sources */,
 				4737A90F2BD4EFDA003D23BA /* DatabaseController.swift in Sources */,
 				4737A9062BD4DF00003D23BA /* Photocard.swift in Sources */,
 				4733127E2BDA504300BB9070 /* SignUpViewController.swift in Sources */,
