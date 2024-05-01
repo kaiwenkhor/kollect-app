@@ -7,7 +7,7 @@
 
 import UIKit
 
-private let reuseIdentifier = "PhotocardCollectionViewCell"
+private let reuseIdentifier = "photocardCell"
 
 class WishlistCollectionViewController: UICollectionViewController, UISearchResultsUpdating, DatabaseListener {
     
@@ -28,6 +28,9 @@ class WishlistCollectionViewController: UICollectionViewController, UISearchResu
         databaseController = appDelegate?.databaseController
         
         filteredList = wishList
+        
+        // Set layout
+//        collectionView.collectionViewLayout = createLayout()
         
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
@@ -76,6 +79,24 @@ class WishlistCollectionViewController: UICollectionViewController, UISearchResu
         photocard = filteredList[indexPath.row]
         performSegue(withIdentifier: "photocardDetailsFromWishlistSegue", sender: self)
         collectionView.deselectItem(at: indexPath, animated: true)
+    }
+    
+    // MARK: UICollectionViewCompositionalLayout
+    func createLayout() -> UICollectionViewLayout {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                             heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5),
+                                               heightDimension: .fractionalWidth(0.77))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                         subitems: [item])
+      
+        let section = NSCollectionLayoutSection(group: group)
+
+
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        return layout
     }
     
     // MARK: UISearchResultsUpdating
