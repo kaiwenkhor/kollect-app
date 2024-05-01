@@ -24,15 +24,15 @@ class DetailsViewController: UIViewController {
     weak var databaseController: DatabaseProtocol?
     
     @IBAction func addToWishlist(_ sender: Any) {
-        if wishlistBarButtonItem.image == UIImage(named: "heart.fill") {
+        if wishlistBarButtonItem.image == UIImage(systemName: "heart.fill") {
             // Remove from wishlist
             databaseController?.removePhotocardFromWishlist(photocard: photocard, user: currentUser)
-            wishlistBarButtonItem.image = UIImage(named: "heart")
+            wishlistBarButtonItem.image = UIImage(systemName: "heart")
         } else {
             // Add to wishlist
             let result = databaseController?.addPhotocardToWishlist(photocard: photocard, user: currentUser)
             if result == true {
-                wishlistBarButtonItem.image = UIImage(named: "heart.fill")
+                wishlistBarButtonItem.image = UIImage(systemName: "heart.fill")
             }
         }
     }
