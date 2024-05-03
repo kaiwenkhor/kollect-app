@@ -29,9 +29,15 @@
 		473CDD8F2BDE872700E6F7BD /* FindPhotocardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473CDD8E2BDE872700E6F7BD /* FindPhotocardViewController.swift */; };
 		4743DEE12BD79B22000B3E45 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4743DEE02BD79B22000B3E45 /* User.swift */; };
 		4743DEE52BD7CF83000B3E45 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4743DEE42BD7CF83000B3E45 /* LogInViewController.swift */; };
+		4772BB052BE4F12900C4E6A8 /* SelectArtistDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4772BB042BE4F12900C4E6A8 /* SelectArtistDelegate.swift */; };
+		4772BB072BE4F3E700C4E6A8 /* SelectAlbumDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4772BB062BE4F3E700C4E6A8 /* SelectAlbumDelegate.swift */; };
+		4772BB092BE4F3F500C4E6A8 /* SelectMemberDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4772BB082BE4F3F500C4E6A8 /* SelectMemberDelegate.swift */; };
+		4772BB0B2BE4F46500C4E6A8 /* AllAlbumsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4772BB0A2BE4F46500C4E6A8 /* AllAlbumsTableViewController.swift */; };
+		4772BB0D2BE4F47300C4E6A8 /* AllMembersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4772BB0C2BE4F47300C4E6A8 /* AllMembersTableViewController.swift */; };
 		47955AB62BDBC55C0048F38F /* WishlistCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47955AB52BDBC55C0048F38F /* WishlistCollectionViewController.swift */; };
 		47955AB82BDBC5DB0048F38F /* PhotocardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47955AB72BDBC5DB0048F38F /* PhotocardCollectionViewCell.swift */; };
 		47955ABA2BDBCB440048F38F /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47955AB92BDBCB440048F38F /* Album.swift */; };
+		47AA1CE92BE3A60A00E312A9 /* AllArtistsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AA1CE82BE3A60A00E312A9 /* AllArtistsTableViewController.swift */; };
 		47B079802BD8D28400E79EB4 /* UIViewController+displayMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B0797F2BD8D28400E79EB4 /* UIViewController+displayMessage.swift */; };
 		47B079822BD8DA7200E79EB4 /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B079812BD8DA7200E79EB4 /* MenuTableViewController.swift */; };
 		47DE26E52BDCCC00008D3D4E /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DE26E42BDCCC00008D3D4E /* DetailsViewController.swift */; };
@@ -59,9 +65,15 @@
 		473CDD8E2BDE872700E6F7BD /* FindPhotocardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPhotocardViewController.swift; sourceTree = "<group>"; };
 		4743DEE02BD79B22000B3E45 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		4743DEE42BD7CF83000B3E45 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
+		4772BB042BE4F12900C4E6A8 /* SelectArtistDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectArtistDelegate.swift; sourceTree = "<group>"; };
+		4772BB062BE4F3E700C4E6A8 /* SelectAlbumDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectAlbumDelegate.swift; sourceTree = "<group>"; };
+		4772BB082BE4F3F500C4E6A8 /* SelectMemberDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectMemberDelegate.swift; sourceTree = "<group>"; };
+		4772BB0A2BE4F46500C4E6A8 /* AllAlbumsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllAlbumsTableViewController.swift; sourceTree = "<group>"; };
+		4772BB0C2BE4F47300C4E6A8 /* AllMembersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllMembersTableViewController.swift; sourceTree = "<group>"; };
 		47955AB52BDBC55C0048F38F /* WishlistCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishlistCollectionViewController.swift; sourceTree = "<group>"; };
 		47955AB72BDBC5DB0048F38F /* PhotocardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotocardCollectionViewCell.swift; sourceTree = "<group>"; };
 		47955AB92BDBCB440048F38F /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
+		47AA1CE82BE3A60A00E312A9 /* AllArtistsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllArtistsTableViewController.swift; sourceTree = "<group>"; };
 		47B0797F2BD8D28400E79EB4 /* UIViewController+displayMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+displayMessage.swift"; sourceTree = "<group>"; };
 		47B079812BD8DA7200E79EB4 /* MenuTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewController.swift; sourceTree = "<group>"; };
 		47DE26E42BDCCC00008D3D4E /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
@@ -111,6 +123,9 @@
 				4737A8F12BD4CA3C003D23BA /* Info.plist */,
 				4737A8FE2BD4D395003D23BA /* GoogleService-Info.plist */,
 				4724D7AC2BE183890021647C /* MyCollectionViewController.swift */,
+				4772BB042BE4F12900C4E6A8 /* SelectArtistDelegate.swift */,
+				4772BB062BE4F3E700C4E6A8 /* SelectAlbumDelegate.swift */,
+				4772BB082BE4F3F500C4E6A8 /* SelectMemberDelegate.swift */,
 			);
 			path = "Kollect-App";
 			sourceTree = "<group>";
@@ -159,6 +174,9 @@
 		473CDD912BDE874300E6F7BD /* Collection */ = {
 			isa = PBXGroup;
 			children = (
+				47AA1CE82BE3A60A00E312A9 /* AllArtistsTableViewController.swift */,
+				4772BB0A2BE4F46500C4E6A8 /* AllAlbumsTableViewController.swift */,
+				4772BB0C2BE4F47300C4E6A8 /* AllMembersTableViewController.swift */,
 			);
 			path = Collection;
 			sourceTree = "<group>";
@@ -274,16 +292,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4772BB0D2BE4F47300C4E6A8 /* AllMembersTableViewController.swift in Sources */,
+				4772BB072BE4F3E700C4E6A8 /* SelectAlbumDelegate.swift in Sources */,
 				4737A90A2BD4EF18003D23BA /* FirebaseController.swift in Sources */,
 				4733127C2BD9233E00BB9070 /* SettingsTableViewController.swift in Sources */,
 				473CDD8F2BDE872700E6F7BD /* FindPhotocardViewController.swift in Sources */,
 				4743DEE52BD7CF83000B3E45 /* LogInViewController.swift in Sources */,
 				4724D7AD2BE183890021647C /* MyCollectionViewController.swift in Sources */,
 				47955ABA2BDBCB440048F38F /* Album.swift in Sources */,
+				4772BB0B2BE4F46500C4E6A8 /* AllAlbumsTableViewController.swift in Sources */,
 				4737A8E42BD4CA3B003D23BA /* AppDelegate.swift in Sources */,
 				4737A9012BD4D553003D23BA /* Idol.swift in Sources */,
 				47955AB82BDBC5DB0048F38F /* PhotocardCollectionViewCell.swift in Sources */,
 				4737A9042BD4D600003D23BA /* Artist.swift in Sources */,
+				47AA1CE92BE3A60A00E312A9 /* AllArtistsTableViewController.swift in Sources */,
 				473CDD8D2BDE7B9700E6F7BD /* MyCollectionCollectionViewCell.swift in Sources */,
 				4737A90F2BD4EFDA003D23BA /* DatabaseController.swift in Sources */,
 				4737A9062BD4DF00003D23BA /* Photocard.swift in Sources */,
@@ -291,8 +313,10 @@
 				47DE26E52BDCCC00008D3D4E /* DetailsViewController.swift in Sources */,
 				4737A9112BD4FCA9003D23BA /* MulticastDelegate.swift in Sources */,
 				47B079822BD8DA7200E79EB4 /* MenuTableViewController.swift in Sources */,
+				4772BB052BE4F12900C4E6A8 /* SelectArtistDelegate.swift in Sources */,
 				4737A8E62BD4CA3B003D23BA /* SceneDelegate.swift in Sources */,
 				47955AB62BDBC55C0048F38F /* WishlistCollectionViewController.swift in Sources */,
+				4772BB092BE4F3F500C4E6A8 /* SelectMemberDelegate.swift in Sources */,
 				4743DEE12BD79B22000B3E45 /* User.swift in Sources */,
 				47B079802BD8D28400E79EB4 /* UIViewController+displayMessage.swift in Sources */,
 			);
