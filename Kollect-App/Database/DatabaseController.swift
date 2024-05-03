@@ -63,8 +63,8 @@ protocol DatabaseProtocol: AnyObject {
     // Album
     func addAlbum(albumName: String, albumImage: String) -> Album
     func deleteAlbum(album: Album)
-    func addPhotocardToAlbum(photocard: Photocard, album: Album) -> Bool
-    func removePhotocardFromAlbum(photocard: Photocard, album: Album)
+//    func addPhotocardToAlbum(photocard: Photocard, album: Album) -> Bool
+//    func removePhotocardFromAlbum(photocard: Photocard, album: Album)
     
     // Photocard
     func addPhotocard(idol: Idol, artist: Artist, album: Album, image: String) -> Photocard
@@ -85,4 +85,6 @@ protocol DatabaseProtocol: AnyObject {
     // Authentication
     func logInAccount(email: String, password: String) async
     func createAccount(email: String, username: String, password: String) async
+    func signInAnonymous() async
+    func signOutAccount() async
 }
