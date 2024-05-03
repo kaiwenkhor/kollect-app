@@ -41,21 +41,19 @@ class FirebaseController: NSObject, DatabaseProtocol {
         
         // Sign in anonymously
         Task {
-            do {
-                let authResult = try await authController.signInAnonymously()
-                currentUser = addUser(userID: authResult.user.uid, username: DEFAULT_USERNAME, isAnonymous: authResult.user.isAnonymous)
-            } catch {
-                fatalError("Firebase Authentication Failed with Error \(String(describing: error))")
-            }
+            await signInAnonymous()
 //            createDefaults()
             self.setupIdolListener()
         }
-        
-//        idolsRef = database.collection("idols")
-//        artistsRef = database.collection("artists")
-//        albumsRef = database.collection("albums")
-//        photocardsRef = database.collection("photocards")
-//        createDefaults()
+    }
+    
+    func signInAnonymous() async {
+        do {
+            let authResult = try await authController.signInAnonymously()
+            currentUser = addUser(userID: authResult.user.uid, username: DEFAULT_USERNAME, isAnonymous: authResult.user.isAnonymous)
+        } catch {
+            fatalError("Firebase Authentication Failed with Error \(String(describing: error))")
+        }
     }
     
     func logInAccount(email: String, password: String) async {
@@ -89,6 +87,17 @@ class FirebaseController: NSObject, DatabaseProtocol {
         
         // Change user
         self.setupUserListener()
+    }
+    
+    func signOutAccount() async {
+        print("Before sign out: \(String(describing: currentUser.id))")
+        do {
+            try authController.signOut()
+            await signInAnonymous()
+        } catch {
+            print("Error signing out: \(error.localizedDescription)")
+        }
+        print("After sign out: \(currentUser.id ?? "NIL")")
     }
     
     func cleanup() {
@@ -238,29 +247,29 @@ class FirebaseController: NSObject, DatabaseProtocol {
         }
     }
     
-    func addPhotocardToAlbum(photocard: Photocard, album: Album) -> Bool {
-        guard let photocardID = photocard.id, let albumID = album.id else {
-            return false
-        }
-        
-        if let newPhotocardRef = photocardsRef?.document(photocardID) {
-            albumsRef?.document(albumID).updateData(
-                ["photocards": FieldValue.arrayUnion([newPhotocardRef])]
-            )
-        }
-        
-        return true
-    }
+//    func addPhotocardToAlbum(photocard: Photocard, album: Album) -> Bool {
+//        guard let photocardID = photocard.id, let albumID = album.id else {
+//            return false
+//        }
+//        
+//        if let newPhotocardRef = photocardsRef?.document(photocardID) {
+//            albumsRef?.document(albumID).updateData(
+//                ["photocards": FieldValue.arrayUnion([newPhotocardRef])]
+//            )
+//        }
+//        
+//        return true
+//    }
     
-    func removePhotocardFromAlbum(photocard: Photocard, album: Album) {
-        if album.photocards.contains(photocard), let albumID = album.id, let photocardID = photocard.id {
-            if let removedPhotocardRef = photocardsRef?.document(photocardID) {
-                albumsRef?.document(albumID).updateData(
-                    ["albums": FieldValue.arrayRemove([removedPhotocardRef])]
-                )
-            }
-        }
-    }
+//    func removePhotocardFromAlbum(photocard: Photocard, album: Album) {
+//        if album.photocards.contains(photocard), let albumID = album.id, let photocardID = photocard.id {
+//            if let removedPhotocardRef = photocardsRef?.document(photocardID) {
+//                albumsRef?.document(albumID).updateData(
+//                    ["albums": FieldValue.arrayRemove([removedPhotocardRef])]
+//                )
+//            }
+//        }
+//    }
     
     func addPhotocard(idol: Idol, artist: Artist, album: Album, image: String) -> Photocard {
         photocardsRef = database.collection("photocards")
@@ -283,9 +292,9 @@ class FirebaseController: NSObject, DatabaseProtocol {
         }
         
         // Add to Artist -> Album -> Idol
-        if !addPhotocardToAlbum(photocard: photocard, album: album) {
-            print("Error adding photocard to album.")
-        }
+//        if !addPhotocardToAlbum(photocard: photocard, album: album) {
+//            print("Error adding photocard to album.")
+//        }
         
         return photocard
     }
@@ -391,6 +400,14 @@ class FirebaseController: NSObject, DatabaseProtocol {
     }
     
     // MARK: - Firebase Controller Specific m=Methods
+    func getIdolByID(_ id: String) -> Idol? {
+        return idolList.first(where: { $0.id == id })
+    }
+    
+    func getAlbumByID(_ id: String) -> Album? {
+        return albumList.first(where: { $0.id == id })
+    }
+    
     func getArtistByID(_ id: String) -> Artist? {
         return artistList.first(where: { $0.id == id })
     }
@@ -410,6 +427,10 @@ class FirebaseController: NSObject, DatabaseProtocol {
             self.parseIdolSnapshot(snapshot: querySnapshot)
             
             // First-time calls
+            if self.albumsRef == nil {
+                self.setupAlbumListener()
+            }
+            
             if self.artistsRef == nil {
                 self.setupArtistListener()
             }
@@ -504,18 +525,36 @@ class FirebaseController: NSObject, DatabaseProtocol {
     
     func parseArtistSnapshot(snapshot: QuerySnapshot) {
         snapshot.documentChanges.forEach { (change) in
-            if let artist = getArtistByID(change.document.documentID) {
-                
-                if change.type == .added {
-                    if !artistList.contains(artist) {
-                        artistList.insert(artist, at: Int(change.newIndex))
+            var artist = Artist()
+            
+            artist.id = change.document.documentID
+            artist.name = change.document.data()["name"] as? String
+            
+            if let albumReferences = change.document.data()["albums"] as? [DocumentReference] {
+                for reference in albumReferences {
+                    if let album = getAlbumByID(reference.documentID) {
+                        artist.albums.append(album)
                     }
-                } else if change.type == .modified {
-                    artistList.remove(at: Int(change.oldIndex))
-                    artistList.insert(artist, at: Int(change.newIndex))
-                } else if change.type == .removed {
-                    artistList.remove(at: Int(change.oldIndex))
                 }
+            }
+            
+            if let memberReferences = change.document.data()["members"] as? [DocumentReference] {
+                for reference in memberReferences {
+                    if let member = getIdolByID(reference.documentID) {
+                        artist.members.append(member)
+                    }
+                }
+            }
+                
+            if change.type == .added {
+                if !artistList.contains(artist) {
+                    artistList.insert(artist, at: Int(change.newIndex))
+                }
+            } else if change.type == .modified {
+                artistList.remove(at: Int(change.oldIndex))
+                artistList.insert(artist, at: Int(change.newIndex))
+            } else if change.type == .removed {
+                artistList.remove(at: Int(change.oldIndex))
             }
             
             listeners.invoke { (listener) in
@@ -533,7 +572,7 @@ class FirebaseController: NSObject, DatabaseProtocol {
             do {
                 album = try change.document.data(as: Album.self)
             } catch {
-                fatalError("Unable to decode artist: \(error.localizedDescription)")
+                fatalError("Unable to decode album: \(error.localizedDescription)")
             }
             
             if change.type == .added {
