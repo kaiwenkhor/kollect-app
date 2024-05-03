@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+protocol SelectArtistDelegate: AnyObject {
+    func selectArtist(_ artist: Artist) -> Bool
+}
