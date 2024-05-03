@@ -150,7 +150,16 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
                 } else if menuItem == ITEM_SETTING {
                     performSegue(withIdentifier: "settingsFromMenuSegue", sender: self)
                 } else if menuItem == ITEM_LOGOUT {
-//                    performSegue(withIdentifier: "logOutSegue", sender: self)
+                    let alert = UIAlertController(title: "Sign Out", message: "Are you sure you want to sign out?", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                    alert.addAction(UIAlertAction(title: "Sign out", style: .default, handler: { _ in
+                        Task {
+                            await self.databaseController?.signOutAccount()
+                            self.currentUser = self.databaseController!.currentUser
+                            tableView.reloadData()
+                        }
+                    }))
+                    self.present(alert, animated: true, completion: nil)
                 }
             }
             
