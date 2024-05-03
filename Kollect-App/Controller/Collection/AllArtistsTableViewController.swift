@@ -7,74 +7,79 @@
 
 import UIKit
 
-class AllArtistsTableViewController: UITableViewController {
+class AllArtistsTableViewController: UITableViewController, UISearchResultsUpdating, DatabaseListener {
+    
+    let CELL_ARTIST = "artistCell"
+    var allArtists = [Artist]()
+    var filteredArtists = [Artist]()
+    var listenerType = ListenerType.artist
+    weak var databaseController: DatabaseProtocol?
+    weak var artistDelegate: SelectArtistDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.title = "Select Artist"
+        navigationItem.backButtonTitle = "Back"
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        databaseController = appDelegate?.databaseController
+        
+        filteredArtists = allArtists
+        
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search All Artists"
+        navigationItem.searchController = searchController
+        
+        // This view controller decides how the search controller is presented.
+        definesPresentationContext = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        databaseController?.addListener(listener: self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        databaseController?.removeListener(listener: self)
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        return filteredArtists.count
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
+        // Configure and return an artist cell
+        let artistCell = tableView.dequeueReusableCell(withIdentifier: CELL_ARTIST, for: indexPath)
+        
+        var content = artistCell.defaultContentConfiguration()
+        let artist = filteredArtists[indexPath.row]
+        content.text = artist.name
+        artistCell.contentConfiguration = content
+        
+        return artistCell
     }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let artistDelegate = artistDelegate {
+            if artistDelegate.selectArtist(filteredArtists[indexPath.row]) {
+                navigationController?.popViewController(animated: false)
+                return
+            }
+        }
+        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
 
     /*
     // MARK: - Navigation
@@ -85,5 +90,46 @@ class AllArtistsTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    // MARK: - UISearchResultsUpdating
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let searchText = searchController.searchBar.text?.lowercased() else {
+            return
+        }
+        
+        if searchText.count > 0 {
+            filteredArtists = allArtists.filter({ (artist: Artist) -> Bool in
+                return (artist.name?.lowercased().contains(searchText) ?? false)
+            })
+        } else {
+            filteredArtists = allArtists
+        }
+        
+        tableView.reloadData()
+    }
+    
+    // MARK: - DatabaseListener
+    
+    func onAllIdolsChange(change: DatabaseChange, idols: [Idol]) {
+        //
+    }
+    
+    func onAllArtistsChange(change: DatabaseChange, artists: [Artist]) {
+        allArtists = artists
+        updateSearchResults(for: navigationItem.searchController!)
+    }
+    
+    func onAllAlbumsChange(change: DatabaseChange, albums: [Album]) {
+        //
+    }
+    
+    func onAllPhotocardsChange(change: DatabaseChange, photocards: [Photocard]) {
+        //
+    }
+    
+    func onUserChange(change: DatabaseChange, user: User) {
+        //
+    }
 
 }
