@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+protocol SelectMemberDelegate: AnyObject {
+    func selectMember(_ member: Idol) -> Bool
+}
