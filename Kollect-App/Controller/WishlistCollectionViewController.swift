@@ -7,10 +7,9 @@
 
 import UIKit
 
-private let reuseIdentifier = "photocardCell"
-
 class WishlistCollectionViewController: UICollectionViewController, UISearchResultsUpdating, DatabaseListener {
     
+    let CELL_PHOTOCARD = "photocardCell"
     var wishList = [Photocard]()
     var filteredList = [Photocard]()
     var photocard = Photocard()
@@ -19,9 +18,6 @@ class WishlistCollectionViewController: UICollectionViewController, UISearchResu
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Register cell classes
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
         // Do any additional setup after loading the view.
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
@@ -66,7 +62,7 @@ class WishlistCollectionViewController: UICollectionViewController, UISearchResu
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let photocardCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PhotocardCollectionViewCell
+        let photocardCell = collectionView.dequeueReusableCell(withReuseIdentifier: CELL_PHOTOCARD, for: indexPath) as! PhotocardCollectionViewCell
         
         photocardCell.setup(with: filteredList[indexPath.row])
         
