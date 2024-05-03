@@ -596,18 +596,41 @@ class FirebaseController: NSObject, DatabaseProtocol {
     
     func parsePhotocardSnapshot(snapshot: QuerySnapshot) {
         snapshot.documentChanges.forEach { (change) in
-            if let photocard = getPhotocardByID(change.document.documentID) {
-                
-                if change.type == .added {
-                    if !photocardList.contains(photocard) {
-                        photocardList.insert(photocard, at: Int(change.newIndex))
-                    }
-                } else if change.type == .modified {
-                    photocardList.remove(at: Int(change.oldIndex))
-                    photocardList.insert(photocard, at: Int(change.newIndex))
-                } else if change.type == .removed {
-                    photocardList.remove(at: Int(change.oldIndex))
+            var photocard = Photocard()
+            
+            photocard.id = change.document.documentID
+            photocard.image = change.document.data()["image"] as? String
+            
+            // Idol
+            if let idolReference = change.document.data()["idol"] as? DocumentReference {
+                if let idol = getIdolByID(idolReference.documentID) {
+                    photocard.idol = idol
                 }
+            }
+            
+            // Artist
+            if let artistReference = change.document.data()["artist"] as? DocumentReference {
+                if let artist = getArtistByID(artistReference.documentID) {
+                    photocard.artist = artist
+                }
+            }
+            
+            // Album
+            if let albumReference = change.document.data()["album"] as? DocumentReference {
+                if let album = getAlbumByID(albumReference.documentID) {
+                    photocard.album = album
+                }
+            }
+                
+            if change.type == .added {
+                if !photocardList.contains(photocard) {
+                    photocardList.insert(photocard, at: Int(change.newIndex))
+                }
+            } else if change.type == .modified {
+                photocardList.remove(at: Int(change.oldIndex))
+                photocardList.insert(photocard, at: Int(change.newIndex))
+            } else if change.type == .removed {
+                photocardList.remove(at: Int(change.oldIndex))
             }
             
             listeners.invoke { (listener) in
@@ -616,6 +639,7 @@ class FirebaseController: NSObject, DatabaseProtocol {
                 }
             }
         }
+        print(photocardList)
     }
     
     func parseUserSnapsnot(snapshot: QueryDocumentSnapshot) {
