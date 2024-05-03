@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FindPhotocardViewController: UIViewController, SelectArtistDelegate, SelectAlbumDelegate, SelectMemberDelegate {
+class FindPhotocardViewController: UIViewController, SelectArtistDelegate, SelectAlbumDelegate, SelectMemberDelegate, DatabaseListener {
 
     @IBOutlet weak var artistTextField: UITextField!
     @IBOutlet weak var albumTextField: UITextField!
@@ -17,7 +17,9 @@ class FindPhotocardViewController: UIViewController, SelectArtistDelegate, Selec
     var selectedArtist = Artist()
     var selectedAlbum = Album()
     var selectedMember = Idol()
-    var listenerType: ListenerType = .user
+    var selectedPhotocards = [Photocard]()
+    var allPhotocards = [Photocard]()
+    var listenerType: ListenerType = .photocard
     weak var databaseController: DatabaseProtocol?
     
     override func viewDidLoad() {
@@ -27,10 +29,22 @@ class FindPhotocardViewController: UIViewController, SelectArtistDelegate, Selec
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         databaseController = appDelegate?.databaseController
         
+        selectedPhotocards = allPhotocards
+        
         // Let text field select Objects (Artist, Album, Idol)
         albumTextField.isEnabled = false
         memberTextField.isEnabled = false
         findPhotocardButton.isEnabled = false
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        databaseController?.addListener(listener: self)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        databaseController?.removeListener(listener: self)
     }
         
     @IBAction func selectArtist(_ sender: Any) {
@@ -82,12 +96,37 @@ class FindPhotocardViewController: UIViewController, SelectArtistDelegate, Selec
         }
         
         if artist.isEmpty {
-            var errorMsg = "Please select an artist"
+            let errorMsg = "Please select an artist"
             displayMessage(title: "Incomplete form", message: errorMsg)
+            return
         }
         
         // Find photocard(s)
-        // Perform search
+        // - Pass the correct photocards
+        if !artist.isEmpty && album.isEmpty && member.isEmpty {
+            // Pass all artist photocards
+            selectedPhotocards = allPhotocards.filter({ (photocard: Photocard) -> Bool in
+                let artistPhotocards = photocard.artist?.name == selectedArtist.name ? true : false
+                return artistPhotocards
+            })
+        } else if !artist.isEmpty && !album.isEmpty && member.isEmpty {
+            // Pass all album photocards of artist
+            selectedPhotocards = allPhotocards.filter({ (photocard: Photocard) -> Bool in
+                let artistPhotocards = photocard.artist?.name == selectedArtist.name ? true : false
+                let albumPhotocards = photocard.album?.name == selectedAlbum.name ? true : false
+                return artistPhotocards && albumPhotocards
+            })
+        } else if !artist.isEmpty && !album.isEmpty && !member.isEmpty {
+            // Pass all member photocards in album of artist
+            selectedPhotocards = allPhotocards.filter({ (photocard: Photocard) -> Bool in
+                let artistPhotocards = photocard.artist?.name == selectedArtist.name ? true : false
+                let albumPhotocards = photocard.album?.name == selectedAlbum.name ? true : false
+                let memberPhotocards = photocard.idol?.name == selectedMember.name ? true : false
+                return artistPhotocards && albumPhotocards && memberPhotocards
+            })
+        }
+        
+        performSegue(withIdentifier: "allPhotocardsSegue", sender: self)
     }
     
     // MARK: - Navigation
@@ -97,14 +136,20 @@ class FindPhotocardViewController: UIViewController, SelectArtistDelegate, Selec
         if segue.identifier == "allArtistsSegue" {
             let destination = segue.destination as! AllArtistsTableViewController
             destination.artistDelegate = self
+            
         } else if segue.identifier == "allAlbumsSegue" {
             let destination = segue.destination as! AllAlbumsTableViewController
             destination.albumDelegate = self
             destination.allAlbums = selectedArtist.albums
+            
         } else if segue.identifier == "allMembersSegue" {
             let destination = segue.destination as! AllMembersTableViewController
             destination.memberDelegate = self
             destination.allMembers = selectedArtist.members
+            
+        } else if segue.identifier == "allPhotocardsSegue" {
+            let destination = segue.destination as! AllPhotocardsCollectionViewController
+            destination.allPhotocards = selectedPhotocards
         }
     }
     
@@ -144,6 +189,28 @@ class FindPhotocardViewController: UIViewController, SelectArtistDelegate, Selec
         memberTextField.text = member.name
         
         return true
+    }
+    
+    // MARK: - DatabaseListener
+    
+    func onAllIdolsChange(change: DatabaseChange, idols: [Idol]) {
+        //
+    }
+    
+    func onAllArtistsChange(change: DatabaseChange, artists: [Artist]) {
+        //
+    }
+    
+    func onAllAlbumsChange(change: DatabaseChange, albums: [Album]) {
+        //
+    }
+    
+    func onAllPhotocardsChange(change: DatabaseChange, photocards: [Photocard]) {
+        allPhotocards = photocards
+    }
+    
+    func onUserChange(change: DatabaseChange, user: User) {
+        //
     }
 
 }
