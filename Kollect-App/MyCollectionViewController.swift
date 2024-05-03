@@ -56,11 +56,13 @@ class MyCollectionViewController: UIViewController, DatabaseListener {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         databaseController?.addListener(listener: self)
+        navigationController?.navigationBar.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         databaseController?.removeListener(listener: self)
+        navigationController?.navigationBar.isHidden = false
     }
     
     // Get data from the user's collection
@@ -139,7 +141,7 @@ class MyCollectionViewController: UIViewController, DatabaseListener {
         section.orthogonalScrollingBehavior = .continuous
         
         // Section header
-        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44))
+//        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(44))
         //        let headerLayout =
         //        section.boundarySupplementaryItems = [headerLayout]
         
