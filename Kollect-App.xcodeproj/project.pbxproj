@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		470CBEE42BE51E5800D0FADD /* AllPhotocardsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470CBEE32BE51E5800D0FADD /* AllPhotocardsCollectionViewController.swift */; };
+		470CBEE82BE5242A00D0FADD /* AllPhotocardsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470CBEE72BE5242A00D0FADD /* AllPhotocardsCollectionViewCell.swift */; };
 		4724D7AD2BE183890021647C /* MyCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4724D7AC2BE183890021647C /* MyCollectionViewController.swift */; };
 		4733127C2BD9233E00BB9070 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4733127B2BD9233E00BB9070 /* SettingsTableViewController.swift */; };
 		4733127E2BDA504300BB9070 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4733127D2BDA504200BB9070 /* SignUpViewController.swift */; };
@@ -44,6 +46,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		470CBEE32BE51E5800D0FADD /* AllPhotocardsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPhotocardsCollectionViewController.swift; sourceTree = "<group>"; };
+		470CBEE72BE5242A00D0FADD /* AllPhotocardsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPhotocardsCollectionViewCell.swift; sourceTree = "<group>"; };
 		4724D7AC2BE183890021647C /* MyCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCollectionViewController.swift; sourceTree = "<group>"; };
 		4733127B2BD9233E00BB9070 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		4733127D2BDA504200BB9070 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -177,6 +181,8 @@
 				47AA1CE82BE3A60A00E312A9 /* AllArtistsTableViewController.swift */,
 				4772BB0A2BE4F46500C4E6A8 /* AllAlbumsTableViewController.swift */,
 				4772BB0C2BE4F47300C4E6A8 /* AllMembersTableViewController.swift */,
+				470CBEE32BE51E5800D0FADD /* AllPhotocardsCollectionViewController.swift */,
+				470CBEE72BE5242A00D0FADD /* AllPhotocardsCollectionViewCell.swift */,
 			);
 			path = Collection;
 			sourceTree = "<group>";
@@ -314,9 +320,11 @@
 				4737A9112BD4FCA9003D23BA /* MulticastDelegate.swift in Sources */,
 				47B079822BD8DA7200E79EB4 /* MenuTableViewController.swift in Sources */,
 				4772BB052BE4F12900C4E6A8 /* SelectArtistDelegate.swift in Sources */,
+				470CBEE82BE5242A00D0FADD /* AllPhotocardsCollectionViewCell.swift in Sources */,
 				4737A8E62BD4CA3B003D23BA /* SceneDelegate.swift in Sources */,
 				47955AB62BDBC55C0048F38F /* WishlistCollectionViewController.swift in Sources */,
 				4772BB092BE4F3F500C4E6A8 /* SelectMemberDelegate.swift in Sources */,
+				470CBEE42BE51E5800D0FADD /* AllPhotocardsCollectionViewController.swift in Sources */,
 				4743DEE12BD79B22000B3E45 /* User.swift in Sources */,
 				47B079802BD8D28400E79EB4 /* UIViewController+displayMessage.swift in Sources */,
 			);
