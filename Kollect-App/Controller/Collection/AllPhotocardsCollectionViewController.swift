@@ -12,14 +12,45 @@ class AllPhotocardsCollectionViewController: UICollectionViewController, UISearc
     let CELL_PHOTOCARD = "photocardCell"
     var allPhotocards = [Photocard]()
     var filteredPhotocards = [Photocard]()
+    var selectedPhotocards = [Photocard]()
     weak var databaseController: DatabaseProtocol?
     let DEFAULT_IMAGE = "Default_Photocard_Image"
+    
+    @IBOutlet weak var addPhotocardsBarButton: UIBarButtonItem!
+    
+    @IBAction func addPhotocards(_ sender: Any) {
+        let isPluralText = self.selectedPhotocards.count == 1 ? "" : "s"
+        
+        let actionSheet = UIAlertController(title: nil, message: "Add photocard" + isPluralText + " to collection?", preferredStyle: .actionSheet)
+        
+        let addAction = UIAlertAction(title: "Add \(self.selectedPhotocards.count) photocard" + isPluralText, style: .default) { action in
+            for photocard in self.selectedPhotocards {
+                let photocardAdded = self.databaseController?.addPhotocardToCollection(photocard: photocard, user: self.databaseController!.currentUser) ?? false
+                if !photocardAdded {
+                    self.displayMessage(title: "Error", message: "Error adding photocards. Please try again.")
+                    return
+                }
+            }
+            
+            // After delete from collection, clear selectedPhotocards and reload collection
+            self.selectedPhotocards.removeAll()
+            self.addPhotocardsBarButton.isEnabled = false
+            self.navigationController?.isToolbarHidden = true
+            self.navigationController?.popToRootViewController(animated: true)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        actionSheet.addAction(addAction)
+        actionSheet.addAction(cancelAction)
+        
+        self.present(actionSheet, animated: true, completion: nil)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "Select Photocard"
-        navigationItem.backButtonTitle = "Back"
+        navigationItem.title = "All Photocards"
         
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         databaseController = appDelegate?.databaseController
@@ -36,6 +67,19 @@ class AllPhotocardsCollectionViewController: UICollectionViewController, UISearc
         definesPresentationContext = true
         
         collectionView.setCollectionViewLayout(createLayout(), animated: false)
+        collectionView.allowsMultipleSelection = true
+        
+        addPhotocardsBarButton.isEnabled = false
+        
+        // Show tool bar
+        let spaceItem = UIBarButtonItem(systemItem: .flexibleSpace)
+        let labelItem = UIBarButtonItem(title: "Select Photocards", style: .plain, target: nil, action: nil)
+        labelItem.isEnabled = false
+        labelItem.setTitleTextAttributes([.foregroundColor: UIColor.label, .font: UIFont.systemFont(ofSize: 17, weight: .semibold)], for: .disabled)
+        
+        toolbarItems = [spaceItem, labelItem, spaceItem]
+        navigationController?.setToolbarItems(toolbarItems, animated: true)
+        navigationController?.isToolbarHidden = false
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {
@@ -59,13 +103,11 @@ class AllPhotocardsCollectionViewController: UICollectionViewController, UISearc
         return UICollectionViewCompositionalLayout(section: sectionLayout)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        // Download photocard images?
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        //
     }
 
     // MARK: UICollectionViewDataSource
@@ -84,6 +126,18 @@ class AllPhotocardsCollectionViewController: UICollectionViewController, UISearc
     
         let photocard = filteredPhotocards[indexPath.row]
         cell.photocardImageView.image = UIImage(named: photocard.image ?? DEFAULT_IMAGE)
+        cell.layer.cornerRadius = 10
+        
+        if databaseController?.currentUser.all.contains(photocard) == true {
+            cell.isUserInteractionEnabled = false
+            cell.coverView.backgroundColor = .label
+            cell.titleLabel.text = "Owned"
+            cell.titleLabel.textColor = .systemBackground
+            cell.coverView.layer.opacity = 0.5
+        } else {
+            cell.isUserInteractionEnabled = true
+            cell.coverView.layer.opacity = 0
+        }
     
         return cell
     }
@@ -93,6 +147,39 @@ class AllPhotocardsCollectionViewController: UICollectionViewController, UISearc
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let photocard = filteredPhotocards[indexPath.row]
         print("PHOTOCARD \(photocard.image ?? DEFAULT_IMAGE) SELECTED")
+        
+        // Display as selected
+        collectionView.cellForItem(at: indexPath)?.layer.opacity = 0.5
+        // Add to selection
+        selectedPhotocards.append(photocard)
+        // Enable button
+        addPhotocardsBarButton.isEnabled = true
+        // Update display text
+        let isPluralText = self.selectedPhotocards.count == 1 ? "" : "s"
+        toolbarItems?[1].title = "\(selectedPhotocards.count) Photocard" + isPluralText + " Selected"
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let photocard = filteredPhotocards[indexPath.row]
+        print("PHOTOCARD \(photocard.image ?? DEFAULT_IMAGE) DESELECTED")
+        
+        // Display as deselected
+        collectionView.cellForItem(at: indexPath)?.layer.opacity = 1
+        // Remove from selection
+        selectedPhotocards.removeAll { selectedPhotocard in
+            return selectedPhotocard == photocard
+        }
+        // Disable buttons if no cells selected
+        if selectedPhotocards.count == 0 {
+            // Disable button
+            addPhotocardsBarButton.isEnabled = false
+            // Update display text
+            toolbarItems?[1].title = "Select Photocards"
+        } else {
+            // Update display text
+            let isPluralText = self.selectedPhotocards.count == 1 ? "" : "s"
+            toolbarItems?[1].title = "\(selectedPhotocards.count) Photocard" + isPluralText + " Selected"
+        }
     }
     
     // MARK: - UISearchResultsUpdating
@@ -114,13 +201,6 @@ class AllPhotocardsCollectionViewController: UICollectionViewController, UISearc
         }
         
         collectionView.reloadData()
-    }
-    
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        //
     }
 
 }
