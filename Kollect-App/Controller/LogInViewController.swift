@@ -35,13 +35,18 @@ class LogInViewController: UIViewController {
         }
         
         Task {
-            await databaseController?.logInAccount(email: email, password: password)
-            navigationController?.popViewController(animated: true)
+            if let result = await databaseController?.logInAccount(email: email, password: password) {
+                if result == false {
+                    displayMessage(title: "Log In Error", message: "Authentication failed")
+                } else {
+                    navigationController?.popViewController(animated: true)
+                }
+            }
         }
     }
     
     @IBAction func signUp(_ sender: Any) {
-        performSegue(withIdentifier: "signUpFromMenuSegue", sender: self)
+//        performSegue(withIdentifier: "signUpFromMenuSegue", sender: self)
         emailTextField.text?.removeAll()
         passwordTextField.text?.removeAll()
     }
@@ -51,6 +56,9 @@ class LogInViewController: UIViewController {
         
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         databaseController = appDelegate?.databaseController
+        
+        // Set back button title for Sign Up screen
+        navigationItem.backButtonTitle = "Account"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,6 +72,12 @@ class LogInViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         authController.removeStateDidChangeListener(authHandle!)
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        //
     }
 
 }
