@@ -56,13 +56,14 @@ class FirebaseController: NSObject, DatabaseProtocol {
         }
     }
     
-    func logInAccount(email: String, password: String) async {
+    func logInAccount(email: String, password: String) async -> Bool{
         do {
             let authResult = try await authController.signIn(withEmail: email, password: password)
             currentUser.id = authResult.user.uid
             print("Log in: \(authResult.user.uid)")
         } catch {
             print("Authentication failed with error:: \(error.localizedDescription)")
+            return false
         }
         
         if idolsRef == nil {
@@ -71,14 +72,17 @@ class FirebaseController: NSObject, DatabaseProtocol {
         
         // Change user
         self.setupUserListener()
+        
+        return true
     }
     
-    func createAccount(email: String, username: String, password: String) async {
+    func createAccount(email: String, username: String, password: String) async -> Bool {
         do {
             let authResult = try await authController.createUser(withEmail: email, password: password)
             currentUser = addUser(userID: authResult.user.uid, username: username, isAnonymous: false)
         } catch {
             print("User creation failed with error: \(error.localizedDescription)")
+            return false
         }
         
         if idolsRef == nil {
@@ -87,6 +91,8 @@ class FirebaseController: NSObject, DatabaseProtocol {
         
         // Change user
         self.setupUserListener()
+        
+        return true
     }
     
     func signOutAccount() async {
@@ -377,6 +383,7 @@ class FirebaseController: NSObject, DatabaseProtocol {
                 )
             }
         }
+        removePhotocardFromFavourites(photocard: photocard, user: user)
     }
     
     func removePhotocardFromFavourites(photocard: Photocard, user: User) {
@@ -639,7 +646,6 @@ class FirebaseController: NSObject, DatabaseProtocol {
                 }
             }
         }
-        print(photocardList)
     }
     
     func parseUserSnapsnot(snapshot: QueryDocumentSnapshot) {
@@ -702,12 +708,12 @@ class FirebaseController: NSObject, DatabaseProtocol {
         let itzy = addArtist(artistName: "Itzy")
         let ateez = addArtist(artistName: "Ateez")
         
-        let theAlbum = addAlbum(albumName: "The Album", albumImage: "BLACKPINK-_The_Album.png")
-        let bornPink = addAlbum(albumName: "Born Pink", albumImage: "Born_Pink_Digital.jpeg")
-        let notShy = addAlbum(albumName: "Not Shy", albumImage: "Itzy_-_Not_Shy.jpg")
-        let bornToBe = addAlbum(albumName: "Born to Be", albumImage: "Itzy_-_Born_to_Be_(digital).jpg")
-        let theWorldMovement = addAlbum(albumName: "The World EP.1: Movement", albumImage: "Ateez_-_The_World_EP.1_Movement.png")
-        let theWorldOutlaw = addAlbum(albumName: "The World EP.2: Outlaw", albumImage: "Ateez_-_The_World_EP.2_Outlaw.png")
+        let theAlbum = addAlbum(albumName: "The Album", albumImage: "BLACKPINK-_The_Album")
+        let bornPink = addAlbum(albumName: "Born Pink", albumImage: "Born_Pink_Digital")
+        let notShy = addAlbum(albumName: "Not Shy", albumImage: "Itzy_-_Not_Shy")
+        let bornToBe = addAlbum(albumName: "Born to Be", albumImage: "Itzy_-_Born_to_Be_(digital)")
+        let theWorldMovement = addAlbum(albumName: "The World EP.1: Movement", albumImage: "Ateez_-_The_World_EP.1_Movement")
+        let theWorldOutlaw = addAlbum(albumName: "The World EP.2: Outlaw", albumImage: "Ateez_-_The_World_EP.2_Outlaw")
         
         let _ = addIdolToArtist(idol: jisoo, artist: blackpink)
         let _ = addIdolToArtist(idol: jennie, artist: blackpink)
@@ -735,6 +741,7 @@ class FirebaseController: NSObject, DatabaseProtocol {
         let _ = addAlbumToArtist(album: theWorldOutlaw, artist: ateez)
         
         // Blacpink photocards
+        // The Album
         let _ = addPhotocard(idol: jisoo, artist: blackpink, album: theAlbum, image: "Jisoo_Blackpink_TheAlbum_1")
         let _ = addPhotocard(idol: jisoo, artist: blackpink, album: theAlbum, image: "Jisoo_Blackpink_TheAlbum_2")
         let _ = addPhotocard(idol: jisoo, artist: blackpink, album: theAlbum, image: "Jisoo_Blackpink_TheAlbum_3")
@@ -755,31 +762,178 @@ class FirebaseController: NSObject, DatabaseProtocol {
         let _ = addPhotocard(idol: lisa, artist: blackpink, album: theAlbum, image: "Lisa_Blackpink_TheAlbum_3")
         let _ = addPhotocard(idol: lisa, artist: blackpink, album: theAlbum, image: "Lisa_Blackpink_TheAlbum_4")
         let _ = addPhotocard(idol: lisa, artist: blackpink, album: theAlbum, image: "Lisa_Blackpink_TheAlbum_5")
+        // Born Pink
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: bornPink, image: "Jisoo_Blackpink_BornPink_1")
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: bornPink, image: "Jisoo_Blackpink_BornPink_2")
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: bornPink, image: "Jisoo_Blackpink_BornPink_3")
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: bornPink, image: "Jisoo_Blackpink_BornPink_4")
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: bornPink, image: "Jisoo_Blackpink_BornPink_5")
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: bornPink, image: "Jisoo_Blackpink_BornPink_6")
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: bornPink, image: "Jisoo_Blackpink_BornPink_7")
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: bornPink, image: "Jisoo_Blackpink_BornPink_8")
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: bornPink, image: "Jisoo_Blackpink_BornPink_9")
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: bornPink, image: "Jisoo_Blackpink_BornPink_10")
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: bornPink, image: "Jisoo_Blackpink_BornPink_11")
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: bornPink, image: "Jisoo_Blackpink_BornPink_12")
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: bornPink, image: "Jisoo_Blackpink_BornPink_13")
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: bornPink, image: "Jisoo_Blackpink_BornPink_14")
+        let _ = addPhotocard(idol: jisoo, artist: blackpink, album: bornPink, image: "Jisoo_Blackpink_BornPink_15")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: bornPink, image: "Jennie_Blackpink_BornPink_1")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: bornPink, image: "Jennie_Blackpink_BornPink_2")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: bornPink, image: "Jennie_Blackpink_BornPink_3")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: bornPink, image: "Jennie_Blackpink_BornPink_4")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: bornPink, image: "Jennie_Blackpink_BornPink_5")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: bornPink, image: "Jennie_Blackpink_BornPink_6")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: bornPink, image: "Jennie_Blackpink_BornPink_7")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: bornPink, image: "Jennie_Blackpink_BornPink_8")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: bornPink, image: "Jennie_Blackpink_BornPink_9")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: bornPink, image: "Jennie_Blackpink_BornPink_10")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: bornPink, image: "Jennie_Blackpink_BornPink_11")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: bornPink, image: "Jennie_Blackpink_BornPink_12")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: bornPink, image: "Jennie_Blackpink_BornPink_13")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: bornPink, image: "Jennie_Blackpink_BornPink_14")
+        let _ = addPhotocard(idol: jennie, artist: blackpink, album: bornPink, image: "Jennie_Blackpink_BornPink_15")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: bornPink, image: "Rosé_Blackpink_BornPink_1")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: bornPink, image: "Rosé_Blackpink_BornPink_2")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: bornPink, image: "Rosé_Blackpink_BornPink_3")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: bornPink, image: "Rosé_Blackpink_BornPink_4")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: bornPink, image: "Rosé_Blackpink_BornPink_5")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: bornPink, image: "Rosé_Blackpink_BornPink_6")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: bornPink, image: "Rosé_Blackpink_BornPink_7")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: bornPink, image: "Rosé_Blackpink_BornPink_8")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: bornPink, image: "Rosé_Blackpink_BornPink_9")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: bornPink, image: "Rosé_Blackpink_BornPink_10")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: bornPink, image: "Rosé_Blackpink_BornPink_11")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: bornPink, image: "Rosé_Blackpink_BornPink_12")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: bornPink, image: "Rosé_Blackpink_BornPink_13")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: bornPink, image: "Rosé_Blackpink_BornPink_14")
+        let _ = addPhotocard(idol: rose, artist: blackpink, album: bornPink, image: "Rosé_Blackpink_BornPink_15")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: bornPink, image: "Lisa_Blackpink_BornPink_1")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: bornPink, image: "Lisa_Blackpink_BornPink_2")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: bornPink, image: "Lisa_Blackpink_BornPink_3")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: bornPink, image: "Lisa_Blackpink_BornPink_4")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: bornPink, image: "Lisa_Blackpink_BornPink_5")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: bornPink, image: "Lisa_Blackpink_BornPink_6")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: bornPink, image: "Lisa_Blackpink_BornPink_7")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: bornPink, image: "Lisa_Blackpink_BornPink_8")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: bornPink, image: "Lisa_Blackpink_BornPink_9")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: bornPink, image: "Lisa_Blackpink_BornPink_10")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: bornPink, image: "Lisa_Blackpink_BornPink_11")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: bornPink, image: "Lisa_Blackpink_BornPink_12")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: bornPink, image: "Lisa_Blackpink_BornPink_13")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: bornPink, image: "Lisa_Blackpink_BornPink_14")
+        let _ = addPhotocard(idol: lisa, artist: blackpink, album: bornPink, image: "Lisa_Blackpink_BornPink_15")
         
         // Ateez photocards
-        let _ = addPhotocard(idol: hongjoong, artist: ateez, album: theWorldMovement, image: "Hongjoong_Ateez_TheWorldEP1_1.png")
-        let _ = addPhotocard(idol: hongjoong, artist: ateez, album: theWorldMovement, image: "Hongjoong_Ateez_TheWorldEP1_2.png")
-        let _ = addPhotocard(idol: hongjoong, artist: ateez, album: theWorldMovement, image: "Hongjoong_Ateez_TheWorldEP1_3.png")
-        let _ = addPhotocard(idol: seonghwa, artist: ateez, album: theWorldMovement, image: "Seonghwa_Ateez_TheWorldEP1_1.png")
-        let _ = addPhotocard(idol: seonghwa, artist: ateez, album: theWorldMovement, image: "Seonghwa_Ateez_TheWorldEP1_2.png")
-        let _ = addPhotocard(idol: seonghwa, artist: ateez, album: theWorldMovement, image: "Seonghwa_Ateez_TheWorldEP1_3.png")
-        let _ = addPhotocard(idol: yunho, artist: ateez, album: theWorldMovement, image: "Yunho_Ateez_TheWorldEP1_1.png")
-        let _ = addPhotocard(idol: yunho, artist: ateez, album: theWorldMovement, image: "Yunho_Ateez_TheWorldEP1_2.png")
-        let _ = addPhotocard(idol: yunho, artist: ateez, album: theWorldMovement, image: "Yunho_Ateez_TheWorldEP1_3.png")
-        let _ = addPhotocard(idol: yeosang, artist: ateez, album: theWorldMovement, image: "Yeosang_Ateez_TheWorldEP1_1.png")
-        let _ = addPhotocard(idol: yeosang, artist: ateez, album: theWorldMovement, image: "Yeosang_Ateez_TheWorldEP1_2.png")
-        let _ = addPhotocard(idol: yeosang, artist: ateez, album: theWorldMovement, image: "Yeosang_Ateez_TheWorldEP1_3.png")
-        let _ = addPhotocard(idol: san, artist: ateez, album: theWorldMovement, image: "San_Ateez_TheWorldEP1_1.png")
-        let _ = addPhotocard(idol: san, artist: ateez, album: theWorldMovement, image: "San_Ateez_TheWorldEP1_2.png")
-        let _ = addPhotocard(idol: san, artist: ateez, album: theWorldMovement, image: "San_Ateez_TheWorldEP1_3.png")
-        let _ = addPhotocard(idol: mingi, artist: ateez, album: theWorldMovement, image: "Mingi_Ateez_TheWorldEP1_1.png")
-        let _ = addPhotocard(idol: mingi, artist: ateez, album: theWorldMovement, image: "Mingi_Ateez_TheWorldEP1_2.png")
-        let _ = addPhotocard(idol: mingi, artist: ateez, album: theWorldMovement, image: "Mingi_Ateez_TheWorldEP1_3.png")
-        let _ = addPhotocard(idol: wooyoung, artist: ateez, album: theWorldMovement, image: "Wooyoung_Ateez_TheWorldEP1_1.png")
-        let _ = addPhotocard(idol: wooyoung, artist: ateez, album: theWorldMovement, image: "Wooyoung_Ateez_TheWorldEP1_2.png")
-        let _ = addPhotocard(idol: wooyoung, artist: ateez, album: theWorldMovement, image: "Wooyoung_Ateez_TheWorldEP1_3.png")
-        let _ = addPhotocard(idol: jongho, artist: ateez, album: theWorldMovement, image: "Jongho_Ateez_TheWorldEP1_1.png")
-        let _ = addPhotocard(idol: jongho, artist: ateez, album: theWorldMovement, image: "Jongho_Ateez_TheWorldEP1_2.png")
-        let _ = addPhotocard(idol: jongho, artist: ateez, album: theWorldMovement, image: "Jongho_Ateez_TheWorldEP1_3.png")
+        // The World EP1
+        let _ = addPhotocard(idol: hongjoong, artist: ateez, album: theWorldMovement, image: "Hongjoong_Ateez_TheWorldEP1_1")
+        let _ = addPhotocard(idol: hongjoong, artist: ateez, album: theWorldMovement, image: "Hongjoong_Ateez_TheWorldEP1_2")
+        let _ = addPhotocard(idol: hongjoong, artist: ateez, album: theWorldMovement, image: "Hongjoong_Ateez_TheWorldEP1_3")
+        let _ = addPhotocard(idol: seonghwa, artist: ateez, album: theWorldMovement, image: "Seonghwa_Ateez_TheWorldEP1_1")
+        let _ = addPhotocard(idol: seonghwa, artist: ateez, album: theWorldMovement, image: "Seonghwa_Ateez_TheWorldEP1_2")
+        let _ = addPhotocard(idol: seonghwa, artist: ateez, album: theWorldMovement, image: "Seonghwa_Ateez_TheWorldEP1_3")
+        let _ = addPhotocard(idol: yunho, artist: ateez, album: theWorldMovement, image: "Yunho_Ateez_TheWorldEP1_1")
+        let _ = addPhotocard(idol: yunho, artist: ateez, album: theWorldMovement, image: "Yunho_Ateez_TheWorldEP1_2")
+        let _ = addPhotocard(idol: yunho, artist: ateez, album: theWorldMovement, image: "Yunho_Ateez_TheWorldEP1_3")
+        let _ = addPhotocard(idol: yeosang, artist: ateez, album: theWorldMovement, image: "Yeosang_Ateez_TheWorldEP1_1")
+        let _ = addPhotocard(idol: yeosang, artist: ateez, album: theWorldMovement, image: "Yeosang_Ateez_TheWorldEP1_2")
+        let _ = addPhotocard(idol: yeosang, artist: ateez, album: theWorldMovement, image: "Yeosang_Ateez_TheWorldEP1_3")
+        let _ = addPhotocard(idol: san, artist: ateez, album: theWorldMovement, image: "San_Ateez_TheWorldEP1_1")
+        let _ = addPhotocard(idol: san, artist: ateez, album: theWorldMovement, image: "San_Ateez_TheWorldEP1_2")
+        let _ = addPhotocard(idol: san, artist: ateez, album: theWorldMovement, image: "San_Ateez_TheWorldEP1_3")
+        let _ = addPhotocard(idol: mingi, artist: ateez, album: theWorldMovement, image: "Mingi_Ateez_TheWorldEP1_1")
+        let _ = addPhotocard(idol: mingi, artist: ateez, album: theWorldMovement, image: "Mingi_Ateez_TheWorldEP1_2")
+        let _ = addPhotocard(idol: mingi, artist: ateez, album: theWorldMovement, image: "Mingi_Ateez_TheWorldEP1_3")
+        let _ = addPhotocard(idol: wooyoung, artist: ateez, album: theWorldMovement, image: "Wooyoung_Ateez_TheWorldEP1_1")
+        let _ = addPhotocard(idol: wooyoung, artist: ateez, album: theWorldMovement, image: "Wooyoung_Ateez_TheWorldEP1_2")
+        let _ = addPhotocard(idol: wooyoung, artist: ateez, album: theWorldMovement, image: "Wooyoung_Ateez_TheWorldEP1_3")
+        let _ = addPhotocard(idol: jongho, artist: ateez, album: theWorldMovement, image: "Jongho_Ateez_TheWorldEP1_1")
+        let _ = addPhotocard(idol: jongho, artist: ateez, album: theWorldMovement, image: "Jongho_Ateez_TheWorldEP1_2")
+        let _ = addPhotocard(idol: jongho, artist: ateez, album: theWorldMovement, image: "Jongho_Ateez_TheWorldEP1_3")
+        // The World EP2
+        let _ = addPhotocard(idol: hongjoong, artist: ateez, album: theWorldOutlaw, image: "Hongjoong_Ateez_TheWorldEP2_1")
+        let _ = addPhotocard(idol: hongjoong, artist: ateez, album: theWorldOutlaw, image: "Hongjoong_Ateez_TheWorldEP2_2")
+        let _ = addPhotocard(idol: hongjoong, artist: ateez, album: theWorldOutlaw, image: "Hongjoong_Ateez_TheWorldEP2_3")
+        let _ = addPhotocard(idol: hongjoong, artist: ateez, album: theWorldOutlaw, image: "Hongjoong_Ateez_TheWorldEP2_4")
+        let _ = addPhotocard(idol: hongjoong, artist: ateez, album: theWorldOutlaw, image: "Hongjoong_Ateez_TheWorldEP2_5")
+        let _ = addPhotocard(idol: hongjoong, artist: ateez, album: theWorldOutlaw, image: "Hongjoong_Ateez_TheWorldEP2_6")
+        let _ = addPhotocard(idol: seonghwa, artist: ateez, album: theWorldOutlaw, image: "Seonghwa_Ateez_TheWorldEP2_1")
+        let _ = addPhotocard(idol: seonghwa, artist: ateez, album: theWorldOutlaw, image: "Seonghwa_Ateez_TheWorldEP2_2")
+        let _ = addPhotocard(idol: seonghwa, artist: ateez, album: theWorldOutlaw, image: "Seonghwa_Ateez_TheWorldEP2_3")
+        let _ = addPhotocard(idol: seonghwa, artist: ateez, album: theWorldOutlaw, image: "Seonghwa_Ateez_TheWorldEP2_4")
+        let _ = addPhotocard(idol: seonghwa, artist: ateez, album: theWorldOutlaw, image: "Seonghwa_Ateez_TheWorldEP2_5")
+        let _ = addPhotocard(idol: seonghwa, artist: ateez, album: theWorldOutlaw, image: "Seonghwa_Ateez_TheWorldEP2_6")
+        let _ = addPhotocard(idol: yunho, artist: ateez, album: theWorldOutlaw, image: "Yunho_Ateez_TheWorldEP2_1")
+        let _ = addPhotocard(idol: yunho, artist: ateez, album: theWorldOutlaw, image: "Yunho_Ateez_TheWorldEP2_2")
+        let _ = addPhotocard(idol: yunho, artist: ateez, album: theWorldOutlaw, image: "Yunho_Ateez_TheWorldEP2_3")
+        let _ = addPhotocard(idol: yunho, artist: ateez, album: theWorldOutlaw, image: "Yunho_Ateez_TheWorldEP2_4")
+        let _ = addPhotocard(idol: yunho, artist: ateez, album: theWorldOutlaw, image: "Yunho_Ateez_TheWorldEP2_5")
+        let _ = addPhotocard(idol: yunho, artist: ateez, album: theWorldOutlaw, image: "Yunho_Ateez_TheWorldEP2_6")
+        let _ = addPhotocard(idol: yeosang, artist: ateez, album: theWorldOutlaw, image: "Yeosang_Ateez_TheWorldEP2_1")
+        let _ = addPhotocard(idol: yeosang, artist: ateez, album: theWorldOutlaw, image: "Yeosang_Ateez_TheWorldEP2_2")
+        let _ = addPhotocard(idol: yeosang, artist: ateez, album: theWorldOutlaw, image: "Yeosang_Ateez_TheWorldEP2_3")
+        let _ = addPhotocard(idol: yeosang, artist: ateez, album: theWorldOutlaw, image: "Yeosang_Ateez_TheWorldEP2_4")
+        let _ = addPhotocard(idol: yeosang, artist: ateez, album: theWorldOutlaw, image: "Yeosang_Ateez_TheWorldEP2_5")
+        let _ = addPhotocard(idol: yeosang, artist: ateez, album: theWorldOutlaw, image: "Yeosang_Ateez_TheWorldEP2_6")
+        let _ = addPhotocard(idol: san, artist: ateez, album: theWorldOutlaw, image: "San_Ateez_TheWorldEP2_1")
+        let _ = addPhotocard(idol: san, artist: ateez, album: theWorldOutlaw, image: "San_Ateez_TheWorldEP2_2")
+        let _ = addPhotocard(idol: san, artist: ateez, album: theWorldOutlaw, image: "San_Ateez_TheWorldEP2_3")
+        let _ = addPhotocard(idol: san, artist: ateez, album: theWorldOutlaw, image: "San_Ateez_TheWorldEP2_4")
+        let _ = addPhotocard(idol: san, artist: ateez, album: theWorldOutlaw, image: "San_Ateez_TheWorldEP2_5")
+        let _ = addPhotocard(idol: san, artist: ateez, album: theWorldOutlaw, image: "San_Ateez_TheWorldEP2_6")
+        let _ = addPhotocard(idol: mingi, artist: ateez, album: theWorldOutlaw, image: "Mingi_Ateez_TheWorldEP2_1")
+        let _ = addPhotocard(idol: mingi, artist: ateez, album: theWorldOutlaw, image: "Mingi_Ateez_TheWorldEP2_2")
+        let _ = addPhotocard(idol: mingi, artist: ateez, album: theWorldOutlaw, image: "Mingi_Ateez_TheWorldEP2_3")
+        let _ = addPhotocard(idol: mingi, artist: ateez, album: theWorldOutlaw, image: "Mingi_Ateez_TheWorldEP2_4")
+        let _ = addPhotocard(idol: mingi, artist: ateez, album: theWorldOutlaw, image: "Mingi_Ateez_TheWorldEP2_5")
+        let _ = addPhotocard(idol: mingi, artist: ateez, album: theWorldOutlaw, image: "Mingi_Ateez_TheWorldEP2_6")
+        let _ = addPhotocard(idol: wooyoung, artist: ateez, album: theWorldOutlaw, image: "Wooyoung_Ateez_TheWorldEP2_1")
+        let _ = addPhotocard(idol: wooyoung, artist: ateez, album: theWorldOutlaw, image: "Wooyoung_Ateez_TheWorldEP2_2")
+        let _ = addPhotocard(idol: wooyoung, artist: ateez, album: theWorldOutlaw, image: "Wooyoung_Ateez_TheWorldEP2_3")
+        let _ = addPhotocard(idol: wooyoung, artist: ateez, album: theWorldOutlaw, image: "Wooyoung_Ateez_TheWorldEP2_4")
+        let _ = addPhotocard(idol: wooyoung, artist: ateez, album: theWorldOutlaw, image: "Wooyoung_Ateez_TheWorldEP2_5")
+        let _ = addPhotocard(idol: wooyoung, artist: ateez, album: theWorldOutlaw, image: "Wooyoung_Ateez_TheWorldEP2_6")
+        let _ = addPhotocard(idol: jongho, artist: ateez, album: theWorldOutlaw, image: "Jongho_Ateez_TheWorldEP2_1")
+        let _ = addPhotocard(idol: jongho, artist: ateez, album: theWorldOutlaw, image: "Jongho_Ateez_TheWorldEP2_2")
+        let _ = addPhotocard(idol: jongho, artist: ateez, album: theWorldOutlaw, image: "Jongho_Ateez_TheWorldEP2_3")
+        let _ = addPhotocard(idol: jongho, artist: ateez, album: theWorldOutlaw, image: "Jongho_Ateez_TheWorldEP2_4")
+        let _ = addPhotocard(idol: jongho, artist: ateez, album: theWorldOutlaw, image: "Jongho_Ateez_TheWorldEP2_5")
+        let _ = addPhotocard(idol: jongho, artist: ateez, album: theWorldOutlaw, image: "Jongho_Ateez_TheWorldEP2_6")
+        
+        
+        // Itzy photocards
+        // Not Shy
+        let _ = addPhotocard(idol: yeji, artist: itzy, album: notShy, image: "Yeji_Itzy_NotShy_1")
+        let _ = addPhotocard(idol: yeji, artist: itzy, album: notShy, image: "Yeji_Itzy_NotShy_2")
+        let _ = addPhotocard(idol: yeji, artist: itzy, album: notShy, image: "Yeji_Itzy_NotShy_3")
+        let _ = addPhotocard(idol: lia, artist: itzy, album: notShy, image: "Lia_Itzy_NotShy_1")
+        let _ = addPhotocard(idol: lia, artist: itzy, album: notShy, image: "Lia_Itzy_NotShy_2")
+        let _ = addPhotocard(idol: lia, artist: itzy, album: notShy, image: "Lia_Itzy_NotShy_3")
+        let _ = addPhotocard(idol: ryujin, artist: itzy, album: notShy, image: "Ryujin_Itzy_NotShy_1")
+        let _ = addPhotocard(idol: ryujin, artist: itzy, album: notShy, image: "Ryujin_Itzy_NotShy_2")
+        let _ = addPhotocard(idol: ryujin, artist: itzy, album: notShy, image: "Ryujin_Itzy_NotShy_3")
+        let _ = addPhotocard(idol: chaeryeong, artist: itzy, album: notShy, image: "Chaeryeong_Itzy_NotShy_1")
+        let _ = addPhotocard(idol: chaeryeong, artist: itzy, album: notShy, image: "Chaeryeong_Itzy_NotShy_2")
+        let _ = addPhotocard(idol: chaeryeong, artist: itzy, album: notShy, image: "Chaeryeong_Itzy_NotShy_3")
+        let _ = addPhotocard(idol: yuna, artist: itzy, album: notShy, image: "Yuna_Itzy_NotShy_1")
+        let _ = addPhotocard(idol: yuna, artist: itzy, album: notShy, image: "Yuna_Itzy_NotShy_2")
+        let _ = addPhotocard(idol: yuna, artist: itzy, album: notShy, image: "Yuna_Itzy_NotShy_3")
+        // Born to Be
+        let _ = addPhotocard(idol: yeji, artist: itzy, album: bornToBe, image: "Yeji_Itzy_BornToBe_1")
+        let _ = addPhotocard(idol: yeji, artist: itzy, album: bornToBe, image: "Yeji_Itzy_BornToBe_2")
+        let _ = addPhotocard(idol: yeji, artist: itzy, album: bornToBe, image: "Yeji_Itzy_BornToBe_3")
+        let _ = addPhotocard(idol: yeji, artist: itzy, album: bornToBe, image: "Yeji_Itzy_BornToBe_4")
+        let _ = addPhotocard(idol: ryujin, artist: itzy, album: bornToBe, image: "Ryujin_Itzy_BornToBe_1")
+        let _ = addPhotocard(idol: ryujin, artist: itzy, album: bornToBe, image: "Ryujin_Itzy_BornToBe_2")
+        let _ = addPhotocard(idol: ryujin, artist: itzy, album: bornToBe, image: "Ryujin_Itzy_BornToBe_3")
+        let _ = addPhotocard(idol: ryujin, artist: itzy, album: bornToBe, image: "Ryujin_Itzy_BornToBe_4")
+        let _ = addPhotocard(idol: chaeryeong, artist: itzy, album: bornToBe, image: "Chaeryeong_Itzy_BornToBe_1")
+        let _ = addPhotocard(idol: chaeryeong, artist: itzy, album: bornToBe, image: "Chaeryeong_Itzy_BornToBe_2")
+        let _ = addPhotocard(idol: chaeryeong, artist: itzy, album: bornToBe, image: "Chaeryeong_Itzy_BornToBe_3")
+        let _ = addPhotocard(idol: chaeryeong, artist: itzy, album: bornToBe, image: "Chaeryeong_Itzy_BornToBe_4")
+        let _ = addPhotocard(idol: yuna, artist: itzy, album: bornToBe, image: "Yuna_Itzy_BornToBe_1")
+        let _ = addPhotocard(idol: yuna, artist: itzy, album: bornToBe, image: "Yuna_Itzy_BornToBe_2")
+        let _ = addPhotocard(idol: yuna, artist: itzy, album: bornToBe, image: "Yuna_Itzy_BornToBe_3")
+        let _ = addPhotocard(idol: yuna, artist: itzy, album: bornToBe, image: "Yuna_Itzy_BornToBe_4")
     }
 }
