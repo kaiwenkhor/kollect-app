@@ -18,9 +18,6 @@ class AllArtistsTableViewController: UITableViewController, UISearchResultsUpdat
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        navigationItem.title = "Select Artist"
-        navigationItem.backButtonTitle = "Back"
 
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         databaseController = appDelegate?.databaseController
@@ -73,7 +70,7 @@ class AllArtistsTableViewController: UITableViewController, UISearchResultsUpdat
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let artistDelegate = artistDelegate {
             if artistDelegate.selectArtist(filteredArtists[indexPath.row]) {
-                navigationController?.popViewController(animated: false)
+                navigationController?.popViewController(animated: true)
                 return
             }
         }
