@@ -39,8 +39,13 @@ class SignUpViewController: UIViewController {
         }
         
         Task {
-            await databaseController?.createAccount(email: email, username: username, password: password)
-            navigationController?.popViewController(animated: false)
+            if let result = await databaseController?.createAccount(email: email, username: username, password: password) {
+                if result == false {
+                    displayMessage(title: "Sign Up Error", message: "User creation failed")
+                } else {
+                    navigationController?.popViewController(animated: true)
+                }
+            }
         }
     }
     
@@ -53,6 +58,10 @@ class SignUpViewController: UIViewController {
 
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         databaseController = appDelegate?.databaseController
+        
+        navigationItem.backAction = UIAction() { action in
+            self.navigationController?.popToRootViewController(animated: true)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
