@@ -10,6 +10,7 @@
 		470CBEE42BE51E5800D0FADD /* AllPhotocardsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470CBEE32BE51E5800D0FADD /* AllPhotocardsCollectionViewController.swift */; };
 		470CBEE82BE5242A00D0FADD /* AllPhotocardsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 470CBEE72BE5242A00D0FADD /* AllPhotocardsCollectionViewCell.swift */; };
 		4724D7AD2BE183890021647C /* MyCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4724D7AC2BE183890021647C /* MyCollectionViewController.swift */; };
+		472FE4CB2BEE083100203B61 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472FE4CA2BEE083100203B61 /* HomeViewController.swift */; };
 		4733127C2BD9233E00BB9070 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4733127B2BD9233E00BB9070 /* SettingsTableViewController.swift */; };
 		4733127E2BDA504300BB9070 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4733127D2BDA504200BB9070 /* SignUpViewController.swift */; };
 		4737A8E42BD4CA3B003D23BA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4737A8E32BD4CA3B003D23BA /* AppDelegate.swift */; };
@@ -31,6 +32,9 @@
 		473CDD8F2BDE872700E6F7BD /* FindPhotocardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473CDD8E2BDE872700E6F7BD /* FindPhotocardViewController.swift */; };
 		4743DEE12BD79B22000B3E45 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4743DEE02BD79B22000B3E45 /* User.swift */; };
 		4743DEE52BD7CF83000B3E45 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4743DEE42BD7CF83000B3E45 /* LogInViewController.swift */; };
+		47466B9B2BE7867B00C3CC6B /* HeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47466B9A2BE7867B00C3CC6B /* HeaderCollectionReusableView.swift */; };
+		47466B9D2BE7A0F000C3CC6B /* AllCollectionsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47466B9C2BE7A0F000C3CC6B /* AllCollectionsCollectionViewController.swift */; };
+		47466BA12BE7E18700C3CC6B /* AllCollectionsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47466BA02BE7E18700C3CC6B /* AllCollectionsCollectionViewCell.swift */; };
 		4772BB052BE4F12900C4E6A8 /* SelectArtistDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4772BB042BE4F12900C4E6A8 /* SelectArtistDelegate.swift */; };
 		4772BB072BE4F3E700C4E6A8 /* SelectAlbumDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4772BB062BE4F3E700C4E6A8 /* SelectAlbumDelegate.swift */; };
 		4772BB092BE4F3F500C4E6A8 /* SelectMemberDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4772BB082BE4F3F500C4E6A8 /* SelectMemberDelegate.swift */; };
@@ -40,6 +44,11 @@
 		47955AB82BDBC5DB0048F38F /* PhotocardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47955AB72BDBC5DB0048F38F /* PhotocardCollectionViewCell.swift */; };
 		47955ABA2BDBCB440048F38F /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47955AB92BDBCB440048F38F /* Album.swift */; };
 		47AA1CE92BE3A60A00E312A9 /* AllArtistsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AA1CE82BE3A60A00E312A9 /* AllArtistsTableViewController.swift */; };
+		47ADCD0C2BEB3BC200DED866 /* FavouritesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47ADCD0B2BEB3BC200DED866 /* FavouritesCollectionViewController.swift */; };
+		47ADCD0E2BEB3BE100DED866 /* AddToWishlistCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47ADCD0D2BEB3BE100DED866 /* AddToWishlistCollectionViewController.swift */; };
+		47ADCD102BEB3CB300DED866 /* AddToWishlistCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47ADCD0F2BEB3CB300DED866 /* AddToWishlistCollectionViewCell.swift */; };
+		47ADCD122BEB3CC200DED866 /* FavouritesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47ADCD112BEB3CC200DED866 /* FavouritesCollectionViewCell.swift */; };
+		47AF19DB2BF26B8E00EC6879 /* SetHeaderButtonActionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47AF19DA2BF26B8E00EC6879 /* SetHeaderButtonActionDelegate.swift */; };
 		47B079802BD8D28400E79EB4 /* UIViewController+displayMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B0797F2BD8D28400E79EB4 /* UIViewController+displayMessage.swift */; };
 		47B079822BD8DA7200E79EB4 /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B079812BD8DA7200E79EB4 /* MenuTableViewController.swift */; };
 		47DE26E52BDCCC00008D3D4E /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DE26E42BDCCC00008D3D4E /* DetailsViewController.swift */; };
@@ -49,6 +58,7 @@
 		470CBEE32BE51E5800D0FADD /* AllPhotocardsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPhotocardsCollectionViewController.swift; sourceTree = "<group>"; };
 		470CBEE72BE5242A00D0FADD /* AllPhotocardsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPhotocardsCollectionViewCell.swift; sourceTree = "<group>"; };
 		4724D7AC2BE183890021647C /* MyCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCollectionViewController.swift; sourceTree = "<group>"; };
+		472FE4CA2BEE083100203B61 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		4733127B2BD9233E00BB9070 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		4733127D2BDA504200BB9070 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		4737A8E02BD4CA3B003D23BA /* Kollect-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Kollect-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,6 +79,9 @@
 		473CDD8E2BDE872700E6F7BD /* FindPhotocardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPhotocardViewController.swift; sourceTree = "<group>"; };
 		4743DEE02BD79B22000B3E45 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		4743DEE42BD7CF83000B3E45 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
+		47466B9A2BE7867B00C3CC6B /* HeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCollectionReusableView.swift; sourceTree = "<group>"; };
+		47466B9C2BE7A0F000C3CC6B /* AllCollectionsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCollectionsCollectionViewController.swift; sourceTree = "<group>"; };
+		47466BA02BE7E18700C3CC6B /* AllCollectionsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCollectionsCollectionViewCell.swift; sourceTree = "<group>"; };
 		4772BB042BE4F12900C4E6A8 /* SelectArtistDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectArtistDelegate.swift; sourceTree = "<group>"; };
 		4772BB062BE4F3E700C4E6A8 /* SelectAlbumDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectAlbumDelegate.swift; sourceTree = "<group>"; };
 		4772BB082BE4F3F500C4E6A8 /* SelectMemberDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectMemberDelegate.swift; sourceTree = "<group>"; };
@@ -78,6 +91,11 @@
 		47955AB72BDBC5DB0048F38F /* PhotocardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotocardCollectionViewCell.swift; sourceTree = "<group>"; };
 		47955AB92BDBCB440048F38F /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
 		47AA1CE82BE3A60A00E312A9 /* AllArtistsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllArtistsTableViewController.swift; sourceTree = "<group>"; };
+		47ADCD0B2BEB3BC200DED866 /* FavouritesCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesCollectionViewController.swift; sourceTree = "<group>"; };
+		47ADCD0D2BEB3BE100DED866 /* AddToWishlistCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToWishlistCollectionViewController.swift; sourceTree = "<group>"; };
+		47ADCD0F2BEB3CB300DED866 /* AddToWishlistCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToWishlistCollectionViewCell.swift; sourceTree = "<group>"; };
+		47ADCD112BEB3CC200DED866 /* FavouritesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesCollectionViewCell.swift; sourceTree = "<group>"; };
+		47AF19DA2BF26B8E00EC6879 /* SetHeaderButtonActionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetHeaderButtonActionDelegate.swift; sourceTree = "<group>"; };
 		47B0797F2BD8D28400E79EB4 /* UIViewController+displayMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+displayMessage.swift"; sourceTree = "<group>"; };
 		47B079812BD8DA7200E79EB4 /* MenuTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewController.swift; sourceTree = "<group>"; };
 		47DE26E42BDCCC00008D3D4E /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
@@ -126,10 +144,10 @@
 				4737A8EE2BD4CA3C003D23BA /* LaunchScreen.storyboard */,
 				4737A8F12BD4CA3C003D23BA /* Info.plist */,
 				4737A8FE2BD4D395003D23BA /* GoogleService-Info.plist */,
-				4724D7AC2BE183890021647C /* MyCollectionViewController.swift */,
 				4772BB042BE4F12900C4E6A8 /* SelectArtistDelegate.swift */,
 				4772BB062BE4F3E700C4E6A8 /* SelectAlbumDelegate.swift */,
 				4772BB082BE4F3F500C4E6A8 /* SelectMemberDelegate.swift */,
+				47AF19DA2BF26B8E00EC6879 /* SetHeaderButtonActionDelegate.swift */,
 			);
 			path = "Kollect-App";
 			sourceTree = "<group>";
@@ -162,8 +180,6 @@
 				47955AB52BDBC55C0048F38F /* WishlistCollectionViewController.swift */,
 				47955AB72BDBC5DB0048F38F /* PhotocardCollectionViewCell.swift */,
 				47DE26E42BDCCC00008D3D4E /* DetailsViewController.swift */,
-				473CDD8E2BDE872700E6F7BD /* FindPhotocardViewController.swift */,
-				473CDD8C2BDE7B9700E6F7BD /* MyCollectionCollectionViewCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -171,6 +187,7 @@
 		473CDD902BDE873A00E6F7BD /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				472FE4CA2BEE083100203B61 /* HomeViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -178,11 +195,21 @@
 		473CDD912BDE874300E6F7BD /* Collection */ = {
 			isa = PBXGroup;
 			children = (
+				4724D7AC2BE183890021647C /* MyCollectionViewController.swift */,
+				473CDD8C2BDE7B9700E6F7BD /* MyCollectionCollectionViewCell.swift */,
+				473CDD8E2BDE872700E6F7BD /* FindPhotocardViewController.swift */,
 				47AA1CE82BE3A60A00E312A9 /* AllArtistsTableViewController.swift */,
 				4772BB0A2BE4F46500C4E6A8 /* AllAlbumsTableViewController.swift */,
 				4772BB0C2BE4F47300C4E6A8 /* AllMembersTableViewController.swift */,
 				470CBEE32BE51E5800D0FADD /* AllPhotocardsCollectionViewController.swift */,
 				470CBEE72BE5242A00D0FADD /* AllPhotocardsCollectionViewCell.swift */,
+				47466B9A2BE7867B00C3CC6B /* HeaderCollectionReusableView.swift */,
+				47466B9C2BE7A0F000C3CC6B /* AllCollectionsCollectionViewController.swift */,
+				47466BA02BE7E18700C3CC6B /* AllCollectionsCollectionViewCell.swift */,
+				47ADCD0B2BEB3BC200DED866 /* FavouritesCollectionViewController.swift */,
+				47ADCD112BEB3CC200DED866 /* FavouritesCollectionViewCell.swift */,
+				47ADCD0D2BEB3BE100DED866 /* AddToWishlistCollectionViewController.swift */,
+				47ADCD0F2BEB3CB300DED866 /* AddToWishlistCollectionViewCell.swift */,
 			);
 			path = Collection;
 			sourceTree = "<group>";
@@ -298,18 +325,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				47466BA12BE7E18700C3CC6B /* AllCollectionsCollectionViewCell.swift in Sources */,
+				47ADCD122BEB3CC200DED866 /* FavouritesCollectionViewCell.swift in Sources */,
 				4772BB0D2BE4F47300C4E6A8 /* AllMembersTableViewController.swift in Sources */,
+				472FE4CB2BEE083100203B61 /* HomeViewController.swift in Sources */,
 				4772BB072BE4F3E700C4E6A8 /* SelectAlbumDelegate.swift in Sources */,
+				47466B9D2BE7A0F000C3CC6B /* AllCollectionsCollectionViewController.swift in Sources */,
 				4737A90A2BD4EF18003D23BA /* FirebaseController.swift in Sources */,
 				4733127C2BD9233E00BB9070 /* SettingsTableViewController.swift in Sources */,
 				473CDD8F2BDE872700E6F7BD /* FindPhotocardViewController.swift in Sources */,
 				4743DEE52BD7CF83000B3E45 /* LogInViewController.swift in Sources */,
+				47ADCD0C2BEB3BC200DED866 /* FavouritesCollectionViewController.swift in Sources */,
+				47AF19DB2BF26B8E00EC6879 /* SetHeaderButtonActionDelegate.swift in Sources */,
 				4724D7AD2BE183890021647C /* MyCollectionViewController.swift in Sources */,
 				47955ABA2BDBCB440048F38F /* Album.swift in Sources */,
 				4772BB0B2BE4F46500C4E6A8 /* AllAlbumsTableViewController.swift in Sources */,
 				4737A8E42BD4CA3B003D23BA /* AppDelegate.swift in Sources */,
 				4737A9012BD4D553003D23BA /* Idol.swift in Sources */,
 				47955AB82BDBC5DB0048F38F /* PhotocardCollectionViewCell.swift in Sources */,
+				47ADCD102BEB3CB300DED866 /* AddToWishlistCollectionViewCell.swift in Sources */,
 				4737A9042BD4D600003D23BA /* Artist.swift in Sources */,
 				47AA1CE92BE3A60A00E312A9 /* AllArtistsTableViewController.swift in Sources */,
 				473CDD8D2BDE7B9700E6F7BD /* MyCollectionCollectionViewCell.swift in Sources */,
@@ -325,7 +359,9 @@
 				47955AB62BDBC55C0048F38F /* WishlistCollectionViewController.swift in Sources */,
 				4772BB092BE4F3F500C4E6A8 /* SelectMemberDelegate.swift in Sources */,
 				470CBEE42BE51E5800D0FADD /* AllPhotocardsCollectionViewController.swift in Sources */,
+				47ADCD0E2BEB3BE100DED866 /* AddToWishlistCollectionViewController.swift in Sources */,
 				4743DEE12BD79B22000B3E45 /* User.swift in Sources */,
+				47466B9B2BE7867B00C3CC6B /* HeaderCollectionReusableView.swift in Sources */,
 				47B079802BD8D28400E79EB4 /* UIViewController+displayMessage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -478,6 +514,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5YF5JS4FH6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Kollect-App/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -505,6 +542,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5YF5JS4FH6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Kollect-App/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
