@@ -18,9 +18,6 @@ class AllAlbumsTableViewController: UITableViewController, UISearchResultsUpdati
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = "Select Album"
-        navigationItem.backButtonTitle = "Back"
-
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         databaseController = appDelegate?.databaseController
         
@@ -69,7 +66,7 @@ class AllAlbumsTableViewController: UITableViewController, UISearchResultsUpdati
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let albumDelegate = albumDelegate {
             if albumDelegate.selectAlbum(filteredAlbums[indexPath.row]) {
-                navigationController?.popViewController(animated: false)
+                navigationController?.popViewController(animated: true)
                 return
             }
         }
