@@ -83,8 +83,8 @@ protocol DatabaseProtocol: AnyObject {
     func removePhotocardFromWishlist(photocard: Photocard, user: User)
     
     // Authentication
-    func logInAccount(email: String, password: String) async
-    func createAccount(email: String, username: String, password: String) async
+    func logInAccount(email: String, password: String) async -> Bool
+    func createAccount(email: String, username: String, password: String) async -> Bool
     func signInAnonymous() async
     func signOutAccount() async
 }
