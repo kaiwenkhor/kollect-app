@@ -1,5 +1,5 @@
 //
-//  AddToFavouritesCollectionViewCell.swift
+//  FavouritesCollectionViewCell.swift
 //  Kollect-App
 //
 //  Created by Daryl Khor on 08/05/2024.
