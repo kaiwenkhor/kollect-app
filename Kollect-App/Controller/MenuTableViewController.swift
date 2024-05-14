@@ -11,18 +11,16 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
     
     let SECTION_USER = 0
     let SECTION_MENU = 1
+    let SECTION_AUTH = 2
     let CELL_USER = "userCell"
     let CELL_MENU = "menuCell"
+    let CELL_AUTH = "authCell"
     let ITEM_WISHLIST = "Wishlist"
     let ITEM_TRANSACTION = "Transactions"
     let ITEM_NOTI = "Notifications"
     let ITEM_SETTING = "Settings"
-    let ITEM_LOGOUT = "Log out"
-    let ITEM_LOGIN = "Log in"
-    let menuList = ["Wishlist", "Transactions", "Notifications", "Settings", "Log out"]
-    let iconList = ["star.fill", "scroll.fill", "bell.fill", "gearshape.fill", "rectangle.portrait.and.arrow.right"]
-    let noUserMenuList = ["Wishlist", "Transactions", "Notifications", "Settings", "Log in"]
-    let noUserIconList = ["star.fill", "scroll.fill", "bell.fill", "gearshape.fill", "person.fill"]
+    let menuList = ["Wishlist", "Transactions", "Notifications", "Settings"]
+    let iconList = ["star.fill", "scroll.fill", "bell.fill", "gearshape.fill"]
     var currentUser = User()
     var listenerType: ListenerType = .user
     weak var databaseController: DatabaseProtocol?
@@ -32,16 +30,19 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
         
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         databaseController = appDelegate?.databaseController
+
+        navigationItem.title = "Account"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+//        navigationController?.navigationBar.prefersLargeTitles = true
         super.viewWillAppear(animated)
         databaseController?.addListener(listener: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(false, animated: animated)
         super.viewWillDisappear(animated)
         databaseController?.removeListener(listener: self)
     }
@@ -49,7 +50,7 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -57,11 +58,9 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
             case SECTION_USER:
                 return 1
             case SECTION_MENU:
-                if currentUser.isAnonymous == true {
-                    return noUserMenuList.count
-                } else {
-                    return menuList.count
-                }
+                return menuList.count
+            case SECTION_AUTH:
+                return 1
             default:
                 return 0
         }
@@ -80,42 +79,44 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
                 content.text = currentUser.name
             }
             content.secondaryText = "UID: \(currentUser.id!)"
-            userCell.contentConfiguration = content
             
+            userCell.contentConfiguration = content
             return userCell
             
-        } else {
+        } else if indexPath.section == SECTION_MENU {
             // Configure and return the menu cells instead
             let menuCell = tableView.dequeueReusableCell(withIdentifier: CELL_MENU, for: indexPath)
             
             var content = menuCell.defaultContentConfiguration()
             
-            // Only show 'Log out' when user is logged in.
-            if currentUser.isAnonymous == true {
-                let menuItem = noUserMenuList[indexPath.row]
-                content.text = menuItem
-                content.image = UIImage(systemName: noUserIconList[indexPath.row])
-                // Set icon colour
-//                content.imageProperties.tintColor = UIColor.systemPink
-            } else {
-                let menuItem = menuList[indexPath.row]
-                content.text = menuItem
-                content.image = UIImage(systemName: iconList[indexPath.row])
-                if menuItem == "Log out" {
-                    content.textProperties.color = UIColor.red
-                    content.imageProperties.tintColor = UIColor.red
-                }
-            }
+            let menuItem = menuList[indexPath.row]
+            content.text = menuItem
+            content.image = UIImage(systemName: iconList[indexPath.row])
             
             menuCell.contentConfiguration = content
-            
             return menuCell
+            
+        } else {
+            let authCell = tableView.dequeueReusableCell(withIdentifier: CELL_AUTH, for: indexPath)
+            var content = authCell.defaultContentConfiguration()
+            
+            if currentUser.isAnonymous == true {
+                content.text = "Log in"
+                content.image = UIImage(systemName: "arrowshape.right.circle.fill")
+            } else {
+                content.text = "Sign out"
+                content.image = UIImage(systemName: "arrowshape.left.circle.fill")
+                content.textProperties.color = UIColor.red
+                content.imageProperties.tintColor = UIColor.red
+            }
+            
+            authCell.contentConfiguration = content
+            return authCell
         }
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == SECTION_USER {
-            
             
             // Shud do one section? but still need to have a header/title
             // Can show user here, and add a 'Edit profile' in menuList
@@ -123,10 +124,9 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
             
             tableView.deselectRow(at: indexPath, animated: true)
             
-        } else {
+        } else if indexPath.section == SECTION_MENU {
+            let menuItem = menuList[indexPath.row]
             if currentUser.isAnonymous == true {
-                let menuItem = noUserMenuList[indexPath.row]
-                
                 if menuItem == ITEM_WISHLIST {
                     performSegue(withIdentifier: "logInFromMenuSegue", sender: self)
                 } else if menuItem == ITEM_TRANSACTION {
@@ -135,12 +135,9 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
 //                    performSegue(withIdentifier: "notificationsSegue", sender: self)
                 } else if menuItem == ITEM_SETTING {
                     performSegue(withIdentifier: "settingsFromMenuSegue", sender: self)
-                } else if menuItem == ITEM_LOGIN {
-                    performSegue(withIdentifier: "logInFromMenuSegue", sender: self)
                 }
-            } else {
-                let menuItem = menuList[indexPath.row]
                 
+            } else {
                 if menuItem == ITEM_WISHLIST {
                     performSegue(withIdentifier: "wishlistFromMenuSegue", sender: self)
                 } else if menuItem == ITEM_TRANSACTION {
@@ -149,21 +146,33 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
 //                    performSegue(withIdentifier: "notificationsSegue", sender: self)
                 } else if menuItem == ITEM_SETTING {
                     performSegue(withIdentifier: "settingsFromMenuSegue", sender: self)
-                } else if menuItem == ITEM_LOGOUT {
-                    let alert = UIAlertController(title: "Sign Out", message: "Are you sure you want to sign out?", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-                    alert.addAction(UIAlertAction(title: "Sign out", style: .default, handler: { _ in
-                        Task {
-                            await self.databaseController?.signOutAccount()
-                            self.currentUser = self.databaseController!.currentUser
-                            tableView.reloadData()
-                        }
-                    }))
-                    self.present(alert, animated: true, completion: nil)
                 }
             }
             
             tableView.deselectRow(at: indexPath, animated: true)
+            
+        } else if indexPath.section == SECTION_AUTH {
+            if currentUser.isAnonymous == true {
+                performSegue(withIdentifier: "logInFromMenuSegue", sender: self)
+                tableView.deselectRow(at: indexPath, animated: true)
+                
+            } else {
+                let actionSheet = UIAlertController(title: nil, message: "Sign out of \(currentUser.name ?? "account")?", preferredStyle: .actionSheet)
+                
+                let signOutAction = UIAlertAction(title: "Sign Out", style: .destructive) { action in
+                    Task {
+                        await self.databaseController?.signOutAccount()
+                    }
+                }
+                
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                
+                actionSheet.addAction(signOutAction)
+                actionSheet.addAction(cancelAction)
+                
+                self.present(actionSheet, animated: true, completion: nil)
+                tableView.deselectRow(at: indexPath, animated: true)
+            }
         }
     }
 
