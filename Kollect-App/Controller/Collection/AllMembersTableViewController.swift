@@ -18,9 +18,6 @@ class AllMembersTableViewController: UITableViewController, UISearchResultsUpdat
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = "Select Member"
-        navigationItem.backButtonTitle = "Back"
-
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         databaseController = appDelegate?.databaseController
         
@@ -69,7 +66,7 @@ class AllMembersTableViewController: UITableViewController, UISearchResultsUpdat
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let memberDelegate = memberDelegate {
             if memberDelegate.selectMember(filteredMembers[indexPath.row]) {
-                navigationController?.popViewController(animated: false)
+                navigationController?.popViewController(animated: true)
                 return
             }
         }
