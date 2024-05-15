@@ -9,8 +9,7 @@ import UIKit
 
 class DetailsViewController: UIViewController, DatabaseListener {
     
-    @IBOutlet weak var favouritesButton: UIButton!
-    @IBOutlet weak var wishlistButton: UIButton!
+    @IBOutlet weak var actionButton: UIButton!
     @IBOutlet weak var findInMarketButton: UIButton!
     
     @IBOutlet weak var photocardImageView: UIImageView!
@@ -18,6 +17,7 @@ class DetailsViewController: UIViewController, DatabaseListener {
     @IBOutlet weak var albumLabel: UILabel!
     @IBOutlet weak var artistLabel: UILabel!
     
+    var isWishlist = false
     var photocard = Photocard()
     var currentUser = User()
     var listenerType: ListenerType = .user
@@ -45,11 +45,18 @@ class DetailsViewController: UIViewController, DatabaseListener {
         artistLabel.text = photocard.artist?.name
         
         // Check if is favourite/wishlist
-        if currentUser.favourites.contains(photocard) {
-            favouritesButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-        }
-        if currentUser.wishlist.contains(photocard) {
-            wishlistButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        if isWishlist {
+            if currentUser.wishlist.contains(photocard) {
+                actionButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+            } else {
+                actionButton.setImage(UIImage(systemName: "star"), for: .normal)
+            }
+        } else {
+            if currentUser.favourites.contains(photocard) {
+                actionButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            } else {
+                actionButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            }
         }
     }
     
@@ -63,30 +70,30 @@ class DetailsViewController: UIViewController, DatabaseListener {
         databaseController?.removeListener(listener: self)
     }
     
-    @IBAction func addToFavourites(_ sender: Any) {
-        if favouritesButton.currentImage == UIImage(systemName: "heart.fill") {
-            // Remove from favourites
-            databaseController?.removePhotocardFromFavourites(photocard: photocard, user: currentUser)
-            favouritesButton.setImage(UIImage(systemName: "heart"), for: .normal)
-        } else {
-            // Add to favourites
-            let result = databaseController?.addPhotocardToFavourites(photocard: photocard, user: currentUser)
-            if result == true {
-                favouritesButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+    @IBAction func addToFavouritesOrWishlist(_ sender: Any) {
+        if isWishlist {
+            if actionButton.currentImage == UIImage(systemName: "star.fill") {
+                // Remove from wishlist
+                databaseController?.removePhotocardFromWishlist(photocard: photocard, user: currentUser)
+                actionButton.setImage(UIImage(systemName: "star"), for: .normal)
+            } else {
+                // Add to wishlist
+                let result = databaseController?.addPhotocardToWishlist(photocard: photocard, user: currentUser)
+                if result == true {
+                    actionButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+                }
             }
-        }
-    }
-    
-    @IBAction func addToWishlist(_ sender: Any) {
-        if wishlistButton.currentImage == UIImage(systemName: "star.fill") {
-            // Remove from wishlist
-            databaseController?.removePhotocardFromWishlist(photocard: photocard, user: currentUser)
-            wishlistButton.setImage(UIImage(systemName: "star"), for: .normal)
         } else {
-            // Add to wishlist
-            let result = databaseController?.addPhotocardToWishlist(photocard: photocard, user: currentUser)
-            if result == true {
-                wishlistButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+            if actionButton.currentImage == UIImage(systemName: "heart.fill") {
+                // Remove from favourites
+                databaseController?.removePhotocardFromFavourites(photocard: photocard, user: currentUser)
+                actionButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            } else {
+                // Add to favourites
+                let result = databaseController?.addPhotocardToFavourites(photocard: photocard, user: currentUser)
+                if result == true {
+                    actionButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                }
             }
         }
     }
