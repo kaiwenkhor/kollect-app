@@ -95,15 +95,17 @@ class FirebaseController: NSObject, DatabaseProtocol {
         return true
     }
     
-    func signOutAccount() async {
+    func signOutAccount() async -> Bool {
         print("Before sign out: \(String(describing: currentUser.id))")
         do {
             try authController.signOut()
             await signInAnonymous()
         } catch {
             print("Error signing out: \(error.localizedDescription)")
+            return false
         }
         print("After sign out: \(currentUser.id ?? "NIL")")
+        return true
     }
     
     func cleanup() {
@@ -330,6 +332,12 @@ class FirebaseController: NSObject, DatabaseProtocol {
         if let userID = user.id {
             // Deletes 'collection' too
             usersRef?.document(userID).delete()
+        }
+    }
+    
+    func updateUserDetails(userID: String, newName: String, newImage: String) {
+        if let userRef = usersRef?.document(userID) {
+            userRef.setData(["name": newName, "image": newImage])
         }
     }
     
