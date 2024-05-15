@@ -24,6 +24,7 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
     var currentUser = User()
     var listenerType: ListenerType = .user
     weak var databaseController: DatabaseProtocol?
+    var indicator = UIActivityIndicatorView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,10 +35,19 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
         navigationItem.title = "Account"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
+        
+        // Add a loading indicator view
+        indicator.style = UIActivityIndicatorView.Style.large
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(indicator)
+        
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
+        ])
     }
     
     override func viewWillAppear(_ animated: Bool) {
-//        navigationController?.navigationBar.prefersLargeTitles = true
         super.viewWillAppear(animated)
         databaseController?.addListener(listener: self)
     }
@@ -70,15 +80,23 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
         if indexPath.section == SECTION_USER {
             // Configure and return a user cell
             let userCell = tableView.dequeueReusableCell(withIdentifier: CELL_USER, for: indexPath)
-            
             var content = userCell.defaultContentConfiguration()
             
             if currentUser.isAnonymous == true {
                 content.text = "Guest User"
+                content.image = UIImage(named: "Default_Profile_Image")
             } else {
                 content.text = currentUser.name
+                if let image = currentUser.image {
+                    content.image = UIImage(named: image)
+                } else {
+                    content.image = UIImage(named: "Default_Profile_Image")
+                }
             }
-            content.secondaryText = "UID: \(currentUser.id!)"
+            content.textProperties.font = .systemFont(ofSize: 17, weight: .medium)
+            content.secondaryTextProperties.color = .secondaryLabel
+            content.imageProperties.cornerRadius = .infinity
+            content.secondaryText = "ID: \(currentUser.id!)"
             
             userCell.contentConfiguration = content
             return userCell
@@ -113,6 +131,15 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
             authCell.contentConfiguration = content
             return authCell
         }
+    }
+    
+    // MARK: - Table view delegate
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == SECTION_USER {
+            return 68.0
+        }
+        return tableView.rowHeight
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -161,8 +188,16 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
                 
                 let signOutAction = UIAlertAction(title: "Sign Out", style: .destructive) { action in
                     Task {
-                        await self.databaseController?.signOutAccount()
+                        self.indicator.startAnimating()
+                        let result = await self.databaseController?.signOutAccount()
+                        self.indicator.stopAnimating()
+                        if result == false {
+                            self.displayMessage(title: "Sign Out Error", message: "User sign out failed")
+                        }
+                        self.currentUser = self.databaseController!.currentUser
+                        tableView.reloadData()
                     }
+                    self.indicator.stopAnimating()
                 }
                 
                 let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -183,6 +218,8 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
         //
     }
     
+    // MARK: - DatabaseListener
+    
     func onAllIdolsChange(change: DatabaseChange, idols: [Idol]) {
         // Do nothing
     }
@@ -201,6 +238,7 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
     
     func onUserChange(change: DatabaseChange, user: User) {
         currentUser = user
+        print("User change \(currentUser.id!)")
         tableView.reloadData()
     }
 
