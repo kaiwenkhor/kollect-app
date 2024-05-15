@@ -15,4 +15,5 @@ class User: NSObject, Codable {
     var favourites = [Photocard]()
     var wishlist = [Photocard]()
     var isAnonymous: Bool?
+    var image: String?
 }
