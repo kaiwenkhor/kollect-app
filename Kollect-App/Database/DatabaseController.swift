@@ -75,6 +75,7 @@ protocol DatabaseProtocol: AnyObject {
     
     func addUser(userID: String, username: String, isAnonymous: Bool) -> User
     func deleteUser(user: User)
+    func updateUserDetails(userID: String, newName: String, newImage: String)
     func addPhotocardToCollection(photocard: Photocard, user: User) -> Bool
     func addPhotocardToFavourites(photocard: Photocard, user: User) -> Bool
     func addPhotocardToWishlist(photocard: Photocard, user: User) -> Bool
@@ -86,5 +87,5 @@ protocol DatabaseProtocol: AnyObject {
     func logInAccount(email: String, password: String) async -> Bool
     func createAccount(email: String, username: String, password: String) async -> Bool
     func signInAnonymous() async
-    func signOutAccount() async
+    func signOutAccount() async -> Bool
 }
