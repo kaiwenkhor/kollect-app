@@ -158,6 +158,7 @@ class FavouritesCollectionViewController: UICollectionViewController, UISearchRe
             let destination = segue.destination as! DetailsViewController
             // Pass selected photocard to view details
             destination.photocard = selectedPhotocard
+            destination.isWishlist = false
         }
     }
 
@@ -196,7 +197,6 @@ class FavouritesCollectionViewController: UICollectionViewController, UISearchRe
     // MARK: UICollectionViewDelegate
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.cellForItem(at: indexPath)?.alpha = 0.5
         let photocard = filteredPhotocards[indexPath.row]
         print("PHOTOCARD \(photocard.image ?? DEFAULT_IMAGE) SELECTED")
         
@@ -265,7 +265,7 @@ class FavouritesCollectionViewController: UICollectionViewController, UISearchRe
             filteredPhotocards = favouritePhotocards.filter({ (photocard: Photocard) -> Bool in
                 let searchArtist = photocard.artist?.name?.lowercased().contains(searchText) ?? false
                 let searchIdol = photocard.idol?.name?.lowercased().contains(searchText) ?? false
-                let searchAlbum =  photocard.album?.name?.lowercased().contains(searchText) ?? false
+                let searchAlbum = photocard.album?.name?.lowercased().contains(searchText) ?? false
                 return searchArtist || searchIdol || searchAlbum
             })
         } else {
