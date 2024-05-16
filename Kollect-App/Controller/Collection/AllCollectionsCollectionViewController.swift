@@ -173,6 +173,7 @@ class AllCollectionsCollectionViewController: UICollectionViewController, UISear
             let destination = segue.destination as! DetailsViewController
             // Pass selected photocard to view details
             destination.photocard = selectedPhotocard
+            destination.isWishlist = false
         }
     }
 
