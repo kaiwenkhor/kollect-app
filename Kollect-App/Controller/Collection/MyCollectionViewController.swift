@@ -24,8 +24,8 @@ class MyCollectionViewController: UIViewController, DatabaseListener, SetHeaderB
     
     var numOfPhotocards: Int = 0
     var numOfArtists: Int = 0
-    var favIdol = Idol()
-    var favArtist = Artist()
+    var favIdol: Idol?
+    var favArtist: Artist?
     
     var photocard = Photocard()
     
@@ -88,6 +88,8 @@ class MyCollectionViewController: UIViewController, DatabaseListener, SetHeaderB
         numOfArtists = uniqueArtists.count
         
         // Favourite idol and artist
+        favIdol = Idol()
+        favArtist = Artist()
         var idolsCount = [Idol: Int]()
         var artistsCount = [Artist: Int]()
         for photocard in photocards {
@@ -128,11 +130,11 @@ class MyCollectionViewController: UIViewController, DatabaseListener, SetHeaderB
         totalArtistsContent.font = .systemFont(ofSize: 20.0)
         totalArtistsButton.configuration?.attributedSubtitle = totalArtistsContent
         
-        var favouriteIdolContent = AttributedString(favIdol.name ?? "Unavailable")
+        var favouriteIdolContent = AttributedString(favIdol?.name ?? "Unavailable")
         favouriteIdolContent.font = .systemFont(ofSize: 20.0)
         favouriteIdolButton.configuration?.attributedSubtitle = favouriteIdolContent
         
-        var favouriteArtistContent = AttributedString(favArtist.name ?? "Unavailable")
+        var favouriteArtistContent = AttributedString(favArtist?.name ?? "Unavailable")
         favouriteArtistContent.font = .systemFont(ofSize: 20.0)
         favouriteArtistButton.configuration?.attributedSubtitle = favouriteArtistContent
     }
@@ -176,6 +178,7 @@ class MyCollectionViewController: UIViewController, DatabaseListener, SetHeaderB
             let destination = segue.destination as! DetailsViewController
             // Pass selected photocard to view details
             destination.photocard = photocard
+            destination.isWishlist = false
         } else if segue.identifier == "allCollectionsSegue" {
             let destination = segue.destination as! AllCollectionsCollectionViewController
             destination.allPhotocards = allList
