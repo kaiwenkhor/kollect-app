@@ -110,7 +110,7 @@ class AllPhotocardsCollectionViewController: UICollectionViewController, UISearc
         //
     }
 
-    // MARK: UICollectionViewDataSource
+    // MARK: - UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -142,7 +142,7 @@ class AllPhotocardsCollectionViewController: UICollectionViewController, UISearc
         return cell
     }
 
-    // MARK: UICollectionViewDelegate
+    // MARK: - UICollectionViewDelegate
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let photocard = filteredPhotocards[indexPath.row]
