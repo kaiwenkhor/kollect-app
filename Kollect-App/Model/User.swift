@@ -16,4 +16,6 @@ class User: NSObject, Codable {
     var wishlist = [Photocard]()
     var isAnonymous: Bool?
     var image: String?
+    var email: String?
+//    var transactions = [Transaction]()
 }
