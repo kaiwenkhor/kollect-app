@@ -13,6 +13,6 @@ class Idol: NSObject, Codable {
     var name: String?
     // Only using birthday to display (future: sort by age?)
     var birthday: String?
-//    var image: String?
+    var image: String?
 //    var country: String?
 }
