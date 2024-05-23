@@ -12,6 +12,7 @@ class Album: NSObject, Codable {
     @DocumentID var id: String?
     var name: String?
     var image: String?
+    var artist: Artist?
 //    var photocards = [Photocard]()
     // Future: Sort by date
 //    var dateReleased: Date?
