@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class MenuTableViewController: UITableViewController, DatabaseListener {
     
@@ -22,8 +23,11 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
     let menuList = ["Wishlist", "Transactions", "Notifications", "Settings"]
     let iconList = ["star.fill", "scroll.fill", "bell.fill", "gearshape.fill"]
     var currentUser = User()
+    var userImage: UIImage?
+    var userImagePath: String?
     var listenerType: ListenerType = .user
     weak var databaseController: DatabaseProtocol?
+    var managedObjectContext: NSManagedObjectContext?
     var indicator = UIActivityIndicatorView()
 
     override func viewDidLoad() {
@@ -31,6 +35,7 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
         
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         databaseController = appDelegate?.databaseController
+        managedObjectContext = appDelegate?.persistentContainer?.viewContext
 
         navigationItem.title = "Account"
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -50,6 +55,25 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         databaseController?.addListener(listener: self)
+        
+        do {
+            // Fetch all image metadata
+            let imageDataList = try managedObjectContext!.fetch(UserImageMetaData.fetchRequest()) as [UserImageMetaData]
+            
+            for data in imageDataList {
+                let filename = data.filename!
+                
+                if filename == currentUser.image {
+                    if let image = loadImageData(filename: filename) {
+                        userImage = image
+                        userImagePath = filename
+                    }
+                }
+            }
+                
+        } catch {
+            print("Unable to fetch image")
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -79,26 +103,23 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == SECTION_USER {
             // Configure and return a user cell
-            let userCell = tableView.dequeueReusableCell(withIdentifier: CELL_USER, for: indexPath)
-            var content = userCell.defaultContentConfiguration()
+            let userCell = tableView.dequeueReusableCell(withIdentifier: CELL_USER, for: indexPath) as! UserTableViewCell
             
             if currentUser.isAnonymous == true {
-                content.text = "Guest User"
-                content.image = UIImage(named: "Default_Profile_Image")
+                userCell.userImageView.image = UIImage.defaultProfile
+                userCell.userNameLabel.text = "Guest User"
             } else {
-                content.text = currentUser.name
-                if let image = currentUser.image {
-                    content.image = UIImage(named: image)
+                if userImage != nil {
+                    userCell.userImageView.image = userImage
                 } else {
-                    content.image = UIImage(named: "Default_Profile_Image")
+                    userCell.userImageView.image = UIImage.defaultProfile
                 }
+                userCell.userNameLabel.text = currentUser.name
             }
-            content.textProperties.font = .systemFont(ofSize: 17, weight: .medium)
-            content.secondaryTextProperties.color = .secondaryLabel
-            content.imageProperties.cornerRadius = .infinity
-            content.secondaryText = "ID: \(currentUser.id!)"
+            userCell.userIdLabel.text = "ID: \(currentUser.id!)"
+         
+            userCell.userImageView.layer.cornerRadius = userCell.userImageView.frame.size.width / 2
             
-            userCell.contentConfiguration = content
             return userCell
             
         } else if indexPath.section == SECTION_MENU {
@@ -119,10 +140,10 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
             var content = authCell.defaultContentConfiguration()
             
             if currentUser.isAnonymous == true {
-                content.text = "Log in"
+                content.text = "Log In"
                 content.image = UIImage(systemName: "arrowshape.right.circle.fill")
             } else {
-                content.text = "Sign out"
+                content.text = "Sign Out"
                 content.image = UIImage(systemName: "arrowshape.left.circle.fill")
                 content.textProperties.color = UIColor.red
                 content.imageProperties.tintColor = UIColor.red
@@ -137,7 +158,7 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == SECTION_USER {
-            return 68.0
+            return 88
         }
         return tableView.rowHeight
     }
@@ -147,7 +168,11 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
             
             // Shud do one section? but still need to have a header/title
             // Can show user here, and add a 'Edit profile' in menuList
-            // this is not clickable
+            if currentUser.isAnonymous == true {
+                performSegue(withIdentifier: "logInFromMenuSegue", sender: self)
+            } else {
+                performSegue(withIdentifier: "userFromMenuSegue", sender: self)
+            }
             
             tableView.deselectRow(at: indexPath, animated: true)
             
@@ -196,6 +221,8 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
                         }
                         self.currentUser = self.databaseController!.currentUser
                         tableView.reloadData()
+                        // Go to first tab
+//                        self.tabBarController?.selectedIndex = 0
                     }
                     self.indicator.stopAnimating()
                 }
@@ -215,7 +242,10 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        //
+        if segue.identifier == "userFromMenuSegue" {
+            let destination = segue.destination as! UserViewController
+            destination.currentUser = currentUser
+        }
     }
     
     // MARK: - DatabaseListener
@@ -236,10 +266,26 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
         // Do nothing
     }
     
+    func onAllListingsChange(change: DatabaseChange, listings: [Listing]) {
+        // Do nothing
+    }
+    
     func onUserChange(change: DatabaseChange, user: User) {
         currentUser = user
         print("User change \(currentUser.id!)")
         tableView.reloadData()
+    }
+    
+    //
+    
+    func loadImageData(filename: String) -> UIImage? {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = paths[0]
+        
+        let imageURL = documentsDirectory.appendingPathComponent(filename)
+        let image = UIImage(contentsOfFile: imageURL.path)
+        
+        return image
     }
 
 }

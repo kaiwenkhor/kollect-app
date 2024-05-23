@@ -46,6 +46,8 @@ class WishlistCollectionViewController: UICollectionViewController, UISearchResu
         collectionView.setCollectionViewLayout(createLayout(), animated: false)
         
         navigationController?.isToolbarHidden = true
+        
+        collectionView.keyboardDismissMode = .onDrag
     }
     
     @IBAction func editWishlist(_ sender: Any) {
@@ -238,6 +240,10 @@ class WishlistCollectionViewController: UICollectionViewController, UISearchResu
     }
     
     func onAllPhotocardsChange(change: DatabaseChange, photocards: [Photocard]) {
+        // Do nothing
+    }
+    
+    func onAllListingsChange(change: DatabaseChange, listings: [Listing]) {
         // Do nothing
     }
     
