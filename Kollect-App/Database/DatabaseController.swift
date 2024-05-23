@@ -18,6 +18,7 @@ enum ListenerType {
     case artist
     case album
     case photocard
+    case listing
     case user
     case all
 }
@@ -37,6 +38,9 @@ protocol DatabaseListener: AnyObject {
     
     // Photocard
     func onAllPhotocardsChange(change: DatabaseChange, photocards: [Photocard])
+    
+    // Listing
+    func onAllListingsChange(change: DatabaseChange, listings: [Listing])
     
     // User
     func onUserChange(change: DatabaseChange, user: User)
@@ -61,19 +65,22 @@ protocol DatabaseProtocol: AnyObject {
     func removeAlbumFromArtist(album: Album, artist: Artist)
     
     // Album
-    func addAlbum(albumName: String, albumImage: String) -> Album
+    func addAlbum(albumName: String, albumImage: String, artist: Artist) -> Album
     func deleteAlbum(album: Album)
-//    func addPhotocardToAlbum(photocard: Photocard, album: Album) -> Bool
-//    func removePhotocardFromAlbum(photocard: Photocard, album: Album)
     
     // Photocard
     func addPhotocard(idol: Idol, artist: Artist, album: Album, image: String) -> Photocard
     func deletePhotocard(photocard: Photocard)
     
+    // Listing
+    func addListing(photocard: Photocard, price: Double, seller: User, images: [String]) -> Listing
+//    func setListingPrice(listing: Listing, newPrice: Double)
+    func deleteListing(listing: Listing)
+    
     // User
     var currentUser: User {get set}
     
-    func addUser(userID: String, username: String, isAnonymous: Bool) -> User
+    func addUser(userID: String, username: String, isAnonymous: Bool, email: String) -> User
     func deleteUser(user: User)
     func updateUserDetails(userID: String, newName: String, newImage: String)
     func addPhotocardToCollection(photocard: Photocard, user: User) -> Bool
