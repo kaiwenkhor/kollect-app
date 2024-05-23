@@ -16,6 +16,7 @@ class LogInViewController: UIViewController {
     var authController = Auth.auth()
     var authHandle: AuthStateDidChangeListenerHandle?
     weak var databaseController: DatabaseProtocol?
+    var indicator = UIActivityIndicatorView()
     
     @IBAction func logIn(_ sender: Any) {
         guard let email = emailTextField.text, let password = passwordTextField.text else {
@@ -35,11 +36,14 @@ class LogInViewController: UIViewController {
         }
         
         Task {
+            indicator.startAnimating()
             if let result = await databaseController?.logInAccount(email: email, password: password) {
+                indicator.stopAnimating()
                 if result == false {
                     displayMessage(title: "Log In Error", message: "Authentication failed")
                 } else {
                     navigationController?.popViewController(animated: true)
+//                    tabBarController?.selectedIndex = 0
                 }
             }
         }
@@ -59,6 +63,16 @@ class LogInViewController: UIViewController {
         
         // Set back button title for Sign Up screen
         navigationItem.backButtonTitle = "Account"
+        
+        // Add a loading indicator view
+        indicator.style = UIActivityIndicatorView.Style.large
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(indicator)
+        
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
+        ])
     }
     
     override func viewWillAppear(_ animated: Bool) {
