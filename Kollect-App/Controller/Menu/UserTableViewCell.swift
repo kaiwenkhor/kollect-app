@@ -2,14 +2,17 @@
 //  UserTableViewCell.swift
 //  Kollect-App
 //
-//  Created by Daryl Khor on 15/05/2024.
+//  Created by Daryl Khor on 19/05/2024.
 //
 
 import UIKit
 
 class UserTableViewCell: UITableViewCell {
     
-
+    @IBOutlet weak var userImageView: UIImageView!
+    @IBOutlet weak var userNameLabel: UILabel!
+    @IBOutlet weak var userIdLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
