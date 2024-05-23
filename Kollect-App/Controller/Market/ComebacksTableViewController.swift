@@ -36,7 +36,7 @@ class ComebacksTableViewController: UITableViewController {
             
             // Group comebacks by date
             for comeback in newComebacks {
-                let date = getDate(date: comeback.date, timeZone: "KST")
+                let date = getDate(date: comeback.date)
                 comebacksByDate[date, default: []].append(comeback)
             }
             
@@ -66,7 +66,7 @@ class ComebacksTableViewController: UITableViewController {
         let comeback = comebacks[indexPath.row]
         
         cell.titleLabel.text = comeback.title
-        cell.timeLabel.text = getTime(date: comeback.date, timeZone: "KST")
+        cell.timeLabel.text = getTime(date: comeback.date)
         cell.timeLabel.textColor = .secondaryLabel
         
         cell.isUserInteractionEnabled = false
@@ -80,6 +80,14 @@ class ComebacksTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sortedDates[section]
+    }
+    
+    // TODO: Reference
+    // https://stackoverflow.com/a/19173756
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let headerView = view as? UITableViewHeaderFooterView {
+            headerView.textLabel?.textColor = .accent
+        }
     }
 
     /*
@@ -119,18 +127,18 @@ class ComebacksTableViewController: UITableViewController {
         }
     }
 
-    func getDate(date: Double, timeZone: String) -> String {
+    func getDate(date: Double) -> String {
         let newDate = Date(timeIntervalSince1970: date/1000)
         let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone(abbreviation: timeZone)
+        dateFormatter.timeZone = TimeZone(abbreviation: TimeZone.current.abbreviation()!)
         dateFormatter.dateFormat = "yyyy.MM.dd"
         return dateFormatter.string(from: newDate)
     }
     
-    func getTime(date: Double, timeZone: String) -> String {
+    func getTime(date: Double) -> String {
         let newDate = Date(timeIntervalSince1970: date/1000)
         let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone(abbreviation: timeZone)
+        dateFormatter.timeZone = TimeZone(abbreviation: TimeZone.current.abbreviation()!)
         dateFormatter.dateFormat = "h:mma"
         return dateFormatter.string(from: newDate)
     }
