@@ -46,6 +46,8 @@ class AllCollectionsCollectionViewController: UICollectionViewController, UISear
         collectionView.setCollectionViewLayout(createLayout(), animated: false)
         
         navigationController?.isToolbarHidden = true
+        
+        collectionView.keyboardDismissMode = .onDrag
     }
     
     @IBAction func editCollection(_ sender: Any) {
@@ -332,6 +334,10 @@ class AllCollectionsCollectionViewController: UICollectionViewController, UISear
     
     func onAllPhotocardsChange(change: DatabaseChange, photocards: [Photocard]) {
         //
+    }
+    
+    func onAllListingsChange(change: DatabaseChange, listings: [Listing]) {
+        // Do nothing
     }
     
     func onUserChange(change: DatabaseChange, user: User) {

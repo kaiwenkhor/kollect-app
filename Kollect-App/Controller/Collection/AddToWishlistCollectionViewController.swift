@@ -56,6 +56,8 @@ class AddToWishlistCollectionViewController: UICollectionViewController, UISearc
         
         // Allow multi select to add multiple photocards at once
         collectionView.allowsMultipleSelection = true
+        
+        collectionView.keyboardDismissMode = .onDrag
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {

@@ -50,7 +50,7 @@ class MyCollectionViewController: UIViewController, DatabaseListener, SetHeaderB
         myCollectionsCollectionView.dataSource = self
         myCollectionsCollectionView.delegate = self
         
-        myCollectionsCollectionView.isScrollEnabled = false
+//        myCollectionsCollectionView.isScrollEnabled = false
         
         // Set layout
         myCollectionsCollectionView.setCollectionViewLayout(createLayout(), animated: false)
@@ -205,6 +205,10 @@ class MyCollectionViewController: UIViewController, DatabaseListener, SetHeaderB
     
     func onAllPhotocardsChange(change: DatabaseChange, photocards: [Photocard]) {
         //
+    }
+    
+    func onAllListingsChange(change: DatabaseChange, listings: [Listing]) {
+        // Do nothing
     }
     
     func onUserChange(change: DatabaseChange, user: User) {

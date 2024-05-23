@@ -32,6 +32,8 @@ class AllArtistsTableViewController: UITableViewController, UISearchResultsUpdat
         
         // This view controller decides how the search controller is presented.
         definesPresentationContext = true
+        
+        tableView.keyboardDismissMode = .onDrag
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -123,6 +125,10 @@ class AllArtistsTableViewController: UITableViewController, UISearchResultsUpdat
     
     func onAllPhotocardsChange(change: DatabaseChange, photocards: [Photocard]) {
         //
+    }
+    
+    func onAllListingsChange(change: DatabaseChange, listings: [Listing]) {
+        // Do nothing
     }
     
     func onUserChange(change: DatabaseChange, user: User) {

@@ -31,6 +31,8 @@ class AllAlbumsTableViewController: UITableViewController, UISearchResultsUpdati
         
         // This view controller decides how the search controller is presented.
         definesPresentationContext = true
+        
+        tableView.keyboardDismissMode = .onDrag
     }
     
     override func viewWillAppear(_ animated: Bool) {

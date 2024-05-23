@@ -80,6 +80,8 @@ class AllPhotocardsCollectionViewController: UICollectionViewController, UISearc
         toolbarItems = [spaceItem, labelItem, spaceItem]
         navigationController?.setToolbarItems(toolbarItems, animated: true)
         navigationController?.isToolbarHidden = false
+        
+        collectionView.keyboardDismissMode = .onDrag
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {

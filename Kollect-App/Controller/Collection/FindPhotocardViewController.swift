@@ -211,6 +211,10 @@ class FindPhotocardViewController: UIViewController, SelectArtistDelegate, Selec
         allPhotocards = photocards
     }
     
+    func onAllListingsChange(change: DatabaseChange, listings: [Listing]) {
+        // Do nothing
+    }
+    
     func onUserChange(change: DatabaseChange, user: User) {
         //
     }

@@ -117,6 +117,8 @@ class FavouritesCollectionViewController: UICollectionViewController, UISearchRe
         collectionView.setCollectionViewLayout(createLayout(), animated: false)
         
         navigationController?.isToolbarHidden = true
+        
+        collectionView.keyboardDismissMode = .onDrag
     }
     
     func createLayout() -> UICollectionViewCompositionalLayout {
@@ -126,7 +128,7 @@ class FavouritesCollectionViewController: UICollectionViewController, UISearchRe
          * - Group width is 1 x screen width, and height is 17/33 screen width (photocard height)
          * - Poster width is 1/3 x group width, with height as 1 x group width
          * - This makes item dimensions 5.5:8.5
-         * - contentInsets puts a 1 pixel margin around each photocard
+         * - contentInsets puts a 2 pixel margin around each photocard
          */
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1))
         let itemLayout = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -291,6 +293,10 @@ class FavouritesCollectionViewController: UICollectionViewController, UISearchRe
     
     func onAllPhotocardsChange(change: DatabaseChange, photocards: [Photocard]) {
         //
+    }
+    
+    func onAllListingsChange(change: DatabaseChange, listings: [Listing]) {
+        // Do nothing
     }
     
     func onUserChange(change: DatabaseChange, user: User) {
