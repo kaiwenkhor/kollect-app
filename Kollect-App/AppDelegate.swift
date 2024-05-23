@@ -6,14 +6,24 @@
 //
 
 import UIKit
+import CoreData
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     var databaseController: DatabaseProtocol?
-
+    var persistentContainer: NSPersistentContainer?
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         databaseController = FirebaseController()
+        
+        persistentContainer = NSPersistentContainer(name: "UserImageModel")
+        persistentContainer?.loadPersistentStores() { (description, error) in
+            if let error = error {
+                fatalError("Failed to load CoreData stack with error: \(error)")
+            }
+        }
+        
         return true
     }
 
