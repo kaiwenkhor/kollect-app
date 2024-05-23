@@ -12,7 +12,7 @@ class Artist: NSObject, Codable {
     @DocumentID var id: String?
     var name: String?
     var members = [Idol]()
-//    var image: String?
+    var image: String?
     var albums = [Album]()
     var isSolo: Bool?
 //    var debutDate: Date?
