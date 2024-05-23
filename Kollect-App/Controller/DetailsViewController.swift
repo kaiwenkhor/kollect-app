@@ -101,6 +101,7 @@ class DetailsViewController: UIViewController, DatabaseListener {
     @IBAction func findInMarket(_ sender: Any) {
         // Find in market
         // Go to photocard in market and show listings for that photocard.
+        performSegue(withIdentifier: "photocardListingsFromPhotocardDetailsSegue", sender: self)
     }
     
     @IBAction func sharePhotocard(_ sender: Any) {
@@ -108,15 +109,15 @@ class DetailsViewController: UIViewController, DatabaseListener {
         // Deep linking
     }
 
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "photocardListingsFromPhotocardDetailsSegue" {
+            let destination = segue.destination as! PhotocardListingsViewController
+            destination.photocard = self.photocard
+        }
     }
-    */
 
     // MARK: - DatabaseListener
     
@@ -134,6 +135,10 @@ class DetailsViewController: UIViewController, DatabaseListener {
     
     func onAllPhotocardsChange(change: DatabaseChange, photocards: [Photocard]) {
         //
+    }
+    
+    func onAllListingsChange(change: DatabaseChange, listings: [Listing]) {
+        // Do nothing
     }
     
     func onUserChange(change: DatabaseChange, user: User) {
