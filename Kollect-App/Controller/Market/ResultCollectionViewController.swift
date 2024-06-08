@@ -18,8 +18,6 @@ class ResultCollectionViewController: UICollectionViewController, UISearchBarDel
     var keyword: String?
     
     weak var databaseController: DatabaseProtocol?
-    
-    // TODO: Add Search History as Core Data
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,7 +68,9 @@ class ResultCollectionViewController: UICollectionViewController, UISearchBarDel
     
         let photocard = filteredPhotocards[indexPath.row]
         
-        cell.photocardImageView.image = UIImage(named: photocard.image!)
+        if let image = databaseController?.getImage(imageData: photocard.image!) {
+            cell.photocardImageView.image = image
+        }
         cell.photocardImageView.layer.cornerRadius = 10
         
         cell.idolLabel.text = photocard.idol?.name

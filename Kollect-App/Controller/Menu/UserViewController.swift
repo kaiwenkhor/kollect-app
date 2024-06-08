@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import FirebaseStorage
 
 class UserViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, DatabaseListener {
     
@@ -22,7 +23,12 @@ class UserViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     var userName: String?
     var userImage: UIImage?
     let DEFAULT_IMAGE = "Default_Profile_Image"
+    
+    var imageList = [UIImage]()
+    var imagePathList = [String]()
+    
     var managedObjectContext: NSManagedObjectContext?
+    var storageReference = Storage.storage().reference()
     
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
@@ -32,14 +38,39 @@ class UserViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet weak var editBarButton: UIBarButtonItem!
     
     @IBAction func editDone(_ sender: Any) {
-        guard let id = currentUser.id else {
+        guard let image = userImageView.image else {
+            displayMessage(title: "Error", message: "No image found!")
             return
         }
         
-        databaseController?.updateUserDetails(userID: id, newName: userName ?? currentUser.name!, newImage: currentUser.image ?? DEFAULT_IMAGE)
+        let uid = UUID().uuidString
+//        let filename = "\(uid).jpg"
         
-        navigationController?.popViewController(animated: true)
-        editBarButton.isEnabled = false
+        guard let data = image.jpegData(compressionQuality: 0.8) else {
+            displayMessage(title: "Error", message: "Image data could not be compressed!")
+            return
+        }
+        
+        guard let userID = currentUser.id else {
+            displayMessage(title: "Error", message: "No user logged in!")
+            return
+        }
+        
+        // Location of saved photos
+        let imageRef = storageReference.child("/users/\(userID)/images/\(uid)")
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpg"
+        
+        // Upload image to Firebase Storage
+        let uploadTask = imageRef.putData(data, metadata: metadata)
+        uploadTask.observe(.success) { snapshot in
+            self.databaseController?.updateUserDetails(userID: userID, newName: self.userName ?? self.currentUser.name!, newImage: uid)
+            self.navigationController?.popViewController(animated: true)
+            self.editBarButton.isEnabled = false
+        }
+        uploadTask.observe(.failure) { snapshot in
+            self.displayMessage(title: "Error", message: "\(String(describing: snapshot.error))")
+        }
     }
     
     override func viewDidLoad() {
@@ -56,13 +87,7 @@ class UserViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         userInfoTableView.delegate = self
 //        userInfoTableView.isScrollEnabled = false
         
-        // Get image from Core Data
-        if currentUser.image == nil || currentUser.image?.isEmpty == true {
-            userImageView.image = UIImage(named: DEFAULT_IMAGE)
-        } else {
-//            userImageView.image = UIImage(named: currentUser.image ?? DEFAULT_IMAGE)
-            userImageView.image = loadImageData(filename: currentUser.image!)
-        }
+        userImageView.image = userImage
         userImageView.layer.cornerRadius = userImageView.frame.size.width / 2
         
         userNameLabel.text = currentUser.name
@@ -117,66 +142,14 @@ class UserViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         userInfoTableView.reloadData()
     }
     
-    @objc func textFieldDidChange(_ textField: UITextField) {
-        if textField.text?.isEmpty == false && textField.text != currentUser.name {
-            editBarButton.isEnabled = true
-            userName = textField.text
-            userImage = userImageView.image
-        } else {
-            editBarButton.isEnabled = false
-            userName = nil
-            userImage = nil
-        }
-    }
-    
     // MARK: - UIImagePickerControllerDelegate
     
     // Called when user selected a photo to be saved
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[.originalImage] as? UIImage {
             userImageView.image = pickedImage
-            
-            // Ensure image exists within the imageView
-            guard let image = userImageView.image else {
-                displayMessage(title: "Error", message: "Cannot save until an image has been selected!")
-                return
-            }
-            
-            // Generate filename
-            let timestamp = UInt(Date().timeIntervalSince1970)
-            let filename = "\(timestamp).jpg"
-            
-            // Compress image into data stream using jpeg compression
-            guard let data = image.jpegData(compressionQuality: 0.8) else {
-                displayMessage(title: "Error", message: "Image data could not be compressed")
-                return
-            }
-            
-            // Get access to the app's document directory and attempt to save the file
-            let pathsList = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-            let documentDirectory = pathsList[0]
-            let imageFile = documentDirectory.appendingPathComponent(filename)
-            
-            // Store filename into Core Data entity (to retrieve later)
-            do {
-                try data.write(to: imageFile)
-                
-                let imageEntity = NSEntityDescription.insertNewObject(forEntityName: "UserImageMetaData", into: managedObjectContext!) as! UserImageMetaData
-                
-                imageEntity.filename = filename
-                try managedObjectContext?.save()
-                
-                // Set to current user
-                currentUser.image = filename
-                editBarButton.isEnabled = true
-                
-//                navigationController?.popViewController(animated: true)
-                
-            } catch {
-                displayMessage(title: "Error", message: "\(error)")
-            }
+            editBarButton.isEnabled = true
         }
-        
         dismiss(animated: true, completion: nil)
     }
     

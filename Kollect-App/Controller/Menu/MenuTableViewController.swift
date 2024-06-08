@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import FirebaseStorage
 
 class MenuTableViewController: UITableViewController, DatabaseListener {
     
@@ -17,18 +18,18 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
     let CELL_MENU = "menuCell"
     let CELL_AUTH = "authCell"
     let ITEM_WISHLIST = "Wishlist"
-    let ITEM_TRANSACTION = "Transactions"
-    let ITEM_NOTI = "Notifications"
     let ITEM_SETTING = "Settings"
-    let menuList = ["Wishlist", "Transactions", "Notifications", "Settings"]
-    let iconList = ["star.fill", "scroll.fill", "bell.fill", "gearshape.fill"]
+    let menuList = ["Wishlist", "Settings"]
+    let iconList = ["star.fill", "gearshape.fill"]
     var currentUser = User()
     var userImage: UIImage?
     var userImagePath: String?
+    var defaultUserImage: UIImage?
     var listenerType: ListenerType = .user
     weak var databaseController: DatabaseProtocol?
     var managedObjectContext: NSManagedObjectContext?
     var indicator = UIActivityIndicatorView()
+    var storageReference = Storage.storage()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,30 +51,48 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
             indicator.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             indicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
         ])
+        
+        defaultUserImage = databaseController?.defaultUserImage
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         databaseController?.addListener(listener: self)
         
-        do {
-            // Fetch all image metadata
-            let imageDataList = try managedObjectContext!.fetch(UserImageMetaData.fetchRequest()) as [UserImageMetaData]
-            
-            for data in imageDataList {
-                let filename = data.filename!
-                
-                if filename == currentUser.image {
-                    if let image = loadImageData(filename: filename) {
-                        userImage = image
-                        userImagePath = filename
+        // Load image
+        if let (imageName, imageURL) = currentUser.image {
+            let filename = ("\(imageName).jpg")
+            // Check if image has been loaded into the application
+            if userImagePath != filename {
+                // Load it from file in local storage
+                if let image = databaseController?.loadImageData(filename: filename) {
+                    userImage = image
+                    userImagePath = filename
+                    // Reload user section only
+                    tableView.reloadSections([SECTION_USER], with: .none)
+                } else {
+                    // Download from Firebase Storage
+                    let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+                    let documentsDirectory = paths[0]
+                    let fileURL = documentsDirectory.appendingPathComponent(filename)
+                    
+                    let downloadTask = storageReference.reference(forURL: imageURL).write(toFile: fileURL)
+                    
+                    downloadTask.observe(.success) { snapshot in
+                        let image = self.databaseController?.loadImageData(filename: filename)
+                        self.userImage = image
+                        self.userImagePath = filename
+                        // Reload user section only
+                        self.tableView.reloadSections([self.SECTION_USER], with: .none)
+                    }
+                    
+                    downloadTask.observe(.failure) { snapshot in
+                        print("\(String(describing: snapshot.error))")
                     }
                 }
             }
-                
-        } catch {
-            print("Unable to fetch image")
         }
+        tableView.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -106,13 +125,13 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
             let userCell = tableView.dequeueReusableCell(withIdentifier: CELL_USER, for: indexPath) as! UserTableViewCell
             
             if currentUser.isAnonymous == true {
-                userCell.userImageView.image = UIImage.defaultProfile
+                userCell.userImageView.image = defaultUserImage
                 userCell.userNameLabel.text = "Guest User"
             } else {
                 if userImage != nil {
                     userCell.userImageView.image = userImage
                 } else {
-                    userCell.userImageView.image = UIImage.defaultProfile
+                    userCell.userImageView.image = defaultUserImage
                 }
                 userCell.userNameLabel.text = currentUser.name
             }
@@ -181,10 +200,6 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
             if currentUser.isAnonymous == true {
                 if menuItem == ITEM_WISHLIST {
                     performSegue(withIdentifier: "logInFromMenuSegue", sender: self)
-                } else if menuItem == ITEM_TRANSACTION {
-                    performSegue(withIdentifier: "logInFromMenuSegue", sender: self)
-                } else if menuItem == ITEM_NOTI {
-//                    performSegue(withIdentifier: "notificationsSegue", sender: self)
                 } else if menuItem == ITEM_SETTING {
                     performSegue(withIdentifier: "settingsFromMenuSegue", sender: self)
                 }
@@ -192,10 +207,6 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
             } else {
                 if menuItem == ITEM_WISHLIST {
                     performSegue(withIdentifier: "wishlistFromMenuSegue", sender: self)
-                } else if menuItem == ITEM_TRANSACTION {
-//                    performSegue(withIdentifier: "transactionsSegue", sender: self)
-                } else if menuItem == ITEM_NOTI {
-//                    performSegue(withIdentifier: "notificationsSegue", sender: self)
                 } else if menuItem == ITEM_SETTING {
                     performSegue(withIdentifier: "settingsFromMenuSegue", sender: self)
                 }
@@ -245,6 +256,7 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
         if segue.identifier == "userFromMenuSegue" {
             let destination = segue.destination as! UserViewController
             destination.currentUser = currentUser
+            destination.userImage = userImage
         }
     }
     
@@ -276,16 +288,14 @@ class MenuTableViewController: UITableViewController, DatabaseListener {
         tableView.reloadData()
     }
     
-    //
-    
-    func loadImageData(filename: String) -> UIImage? {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let documentsDirectory = paths[0]
-        
-        let imageURL = documentsDirectory.appendingPathComponent(filename)
-        let image = UIImage(contentsOfFile: imageURL.path)
-        
-        return image
-    }
+//    func loadImageData(filename: String) -> UIImage? {
+//        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+//        let documentsDirectory = paths[0]
+//        
+//        let imageURL = documentsDirectory.appendingPathComponent(filename)
+//        let image = UIImage(contentsOfFile: imageURL.path)
+//        
+//        return image
+//    }
 
 }

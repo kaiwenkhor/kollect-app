@@ -10,6 +10,7 @@ import UIKit
 class ComebacksTableViewController: UITableViewController {
     
     let CELL_COMEBACK = "comebackCell"
+    // Reference: https://kpop-comebacks.heismauri.com/api
     let REQUEST_STRING = "https://kpop-comebacks.heismauri.com/api"
     
     var newComebacks = [ComebackData]()
@@ -82,8 +83,7 @@ class ComebacksTableViewController: UITableViewController {
         return sortedDates[section]
     }
     
-    // TODO: Reference
-    // https://stackoverflow.com/a/19173756
+    // Reference: https://stackoverflow.com/a/19173756
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let headerView = view as? UITableViewHeaderFooterView {
             headerView.textLabel?.textColor = .accent
@@ -100,19 +100,29 @@ class ComebacksTableViewController: UITableViewController {
     }
     */
     
+    /// Makes a network request to retrieve a list of comebacks based on a given name.
+    ///
+    /// This function constructs a URL request using the `REQUEST_STRING` constant, which should contain the API endpoint for retrieving comebacks.
+    /// It then uses `URLSession.shared.data(for:)` to make the request and decode the response data into an array of `ComebackData` objects.
+    /// The retrieved comebacks are stored in the `newComebacks` array, and the table view is reloaded to display the updated data.
     func requestComebacksNamed() async {
+        // Check if the request URL is valid.
         guard let requestURL = URL(string: REQUEST_STRING) else {
             print("Invalid URL.")
             return
         }
         
         indicator.startAnimating()
+        
+        // Create a URL request.
         let urlRequest = URLRequest(url: requestURL)
         
+        // Make the network request.
         do {
-            let (data, response) = try await URLSession.shared.data(for: urlRequest)
+            let (data, _) = try await URLSession.shared.data(for: urlRequest)
             indicator.stopAnimating()
             
+            // Decode the JSON data into an array of ComebackData objects.
             do {
                 let decoder = JSONDecoder()
                 let comebacks = try decoder.decode([ComebackData].self, from: data)
@@ -120,13 +130,18 @@ class ComebacksTableViewController: UITableViewController {
                 tableView.reloadData()
                 
             } catch let error {
+                // Handle any errors that occur during decoding.
                 print(error)
             }
         } catch let error {
+            // Handle any errors that occur during the network request.
             print(error)
         }
     }
-
+    
+    /// Formats a Unix timestamp (in milliseconds) into a date string.
+    /// - Parameter date: The Unix timestamp in milliseconds.
+    /// - Returns: A string representing the date in the format "yyyy.MM.dd".
     func getDate(date: Double) -> String {
         let newDate = Date(timeIntervalSince1970: date/1000)
         let dateFormatter = DateFormatter()
@@ -135,6 +150,9 @@ class ComebacksTableViewController: UITableViewController {
         return dateFormatter.string(from: newDate)
     }
     
+    /// Formats a Unix timestamp (in milliseconds) into a time string.
+    /// - Parameter date: The Unix timestamp in milliseconds.
+    /// - Returns: A string representing the time in the format "h:mma".
     func getTime(date: Double) -> String {
         let newDate = Date(timeIntervalSince1970: date/1000)
         let dateFormatter = DateFormatter()

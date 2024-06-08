@@ -178,7 +178,9 @@ class FavouritesCollectionViewController: UICollectionViewController, UISearchRe
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CELL_PHOTOCARD, for: indexPath) as! FavouritesCollectionViewCell
     
         let photocard = filteredPhotocards[indexPath.row]
-        cell.photocardImageView.image = UIImage(named: photocard.image ?? DEFAULT_IMAGE)
+        if let image = databaseController?.getImage(imageData: photocard.image!) {
+            cell.photocardImageView.image = image
+        }
         
         if favouritePhotocards.contains(photocard) {
             cell.favouriteImageView.isHidden = false
@@ -200,7 +202,6 @@ class FavouritesCollectionViewController: UICollectionViewController, UISearchRe
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let photocard = filteredPhotocards[indexPath.row]
-        print("PHOTOCARD \(photocard.image ?? DEFAULT_IMAGE) SELECTED")
         
         if isEditingMode {
             // Show cell as selected
@@ -232,7 +233,6 @@ class FavouritesCollectionViewController: UICollectionViewController, UISearchRe
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         collectionView.cellForItem(at: indexPath)?.alpha = 1
         let photocard = filteredPhotocards[indexPath.row]
-        print("PHOTOCARD \(photocard.image ?? DEFAULT_IMAGE) DESELECTED")
         
         // Remove from selection
         selectedPhotocards.removeAll { selectedPhotocard in

@@ -50,7 +50,6 @@ class LogInViewController: UIViewController {
     }
     
     @IBAction func signUp(_ sender: Any) {
-//        performSegue(withIdentifier: "signUpFromMenuSegue", sender: self)
         emailTextField.text?.removeAll()
         passwordTextField.text?.removeAll()
     }

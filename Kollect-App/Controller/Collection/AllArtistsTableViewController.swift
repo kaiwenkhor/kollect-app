@@ -111,7 +111,7 @@ class AllArtistsTableViewController: UITableViewController, UISearchResultsUpdat
     // MARK: - DatabaseListener
     
     func onAllIdolsChange(change: DatabaseChange, idols: [Idol]) {
-        //
+        // Do nothing
     }
     
     func onAllArtistsChange(change: DatabaseChange, artists: [Artist]) {
@@ -120,11 +120,11 @@ class AllArtistsTableViewController: UITableViewController, UISearchResultsUpdat
     }
     
     func onAllAlbumsChange(change: DatabaseChange, albums: [Album]) {
-        //
+        // Do nothing
     }
     
     func onAllPhotocardsChange(change: DatabaseChange, photocards: [Photocard]) {
-        //
+        // Do nothing
     }
     
     func onAllListingsChange(change: DatabaseChange, listings: [Listing]) {
@@ -132,7 +132,7 @@ class AllArtistsTableViewController: UITableViewController, UISearchResultsUpdat
     }
     
     func onUserChange(change: DatabaseChange, user: User) {
-        //
+        // Do nothing
     }
 
 }

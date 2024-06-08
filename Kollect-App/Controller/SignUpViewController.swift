@@ -17,6 +17,7 @@ class SignUpViewController: UIViewController {
     var authController = Auth.auth()
     var authHandle: AuthStateDidChangeListenerHandle?
     weak var databaseController: DatabaseProtocol?
+    var indicator = UIActivityIndicatorView()
     
     @IBAction func signUp(_ sender: Any) {
         guard let email = emailTextField.text, let username = usernameTextField.text, let password = passwordTextField.text else {
@@ -39,11 +40,13 @@ class SignUpViewController: UIViewController {
         }
         
         Task {
+            indicator.startAnimating()
             if let result = await databaseController?.createAccount(email: email, username: username, password: password) {
+                indicator.stopAnimating()
                 if result == false {
                     displayMessage(title: "Sign Up Error", message: "User creation failed")
                 } else {
-                    navigationController?.popViewController(animated: true)
+                    navigationController?.popToRootViewController(animated: true)
                 }
             }
         }
@@ -62,6 +65,16 @@ class SignUpViewController: UIViewController {
         navigationItem.backAction = UIAction() { action in
             self.navigationController?.popToRootViewController(animated: true)
         }
+        
+        // Add a loading indicator view
+        indicator.style = UIActivityIndicatorView.Style.large
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(indicator)
+        
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
+        ])
     }
     
     override func viewWillAppear(_ animated: Bool) {

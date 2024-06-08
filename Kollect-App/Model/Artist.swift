@@ -8,15 +8,11 @@
 import Foundation
 import FirebaseFirestoreSwift
 
-class Artist: NSObject, Codable {
+class Artist: NSObject {
     @DocumentID var id: String?
     var name: String?
     var members = [Idol]()
     var image: String?
     var albums = [Album]()
     var isSolo: Bool?
-//    var debutDate: Date?
-//    var company: String?
-//    var isActive: Bool?
-//    var fanclubName: String?
 }

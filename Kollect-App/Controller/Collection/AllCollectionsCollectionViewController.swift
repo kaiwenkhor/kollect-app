@@ -194,7 +194,9 @@ class AllCollectionsCollectionViewController: UICollectionViewController, UISear
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CELL_PHOTOCARD, for: indexPath) as! AllCollectionsCollectionViewCell
     
         let photocard = filteredPhotocards[indexPath.row]
-        cell.photocardImageView.image = UIImage(named: photocard.image ?? DEFAULT_IMAGE)
+        if let image = databaseController?.getImage(imageData: photocard.image!) {
+            cell.photocardImageView.image = image
+        }
         
         if favouritePhotocards.contains(photocard) {
             cell.favouriteImageView.isHidden = false
@@ -216,7 +218,6 @@ class AllCollectionsCollectionViewController: UICollectionViewController, UISear
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let photocard = filteredPhotocards[indexPath.row]
-        print("PHOTOCARD \(photocard.image ?? DEFAULT_IMAGE) SELECTED")
         if isEditingMode {
             collectionView.cellForItem(at: indexPath)?.alpha = 0.5
             selectedPhotocards.append(photocard)
@@ -260,7 +261,6 @@ class AllCollectionsCollectionViewController: UICollectionViewController, UISear
         if isEditingMode {
             collectionView.cellForItem(at: indexPath)?.alpha = 1
             let photocard = filteredPhotocards[indexPath.row]
-            print("PHOTOCARD \(photocard.image ?? DEFAULT_IMAGE) DESELECTED")
             selectedPhotocards.removeAll { selectedPhotocard in
                 return selectedPhotocard == photocard
             }

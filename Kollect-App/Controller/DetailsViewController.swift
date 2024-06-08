@@ -9,7 +9,7 @@ import UIKit
 
 class DetailsViewController: UIViewController, DatabaseListener {
     
-    @IBOutlet weak var actionButton: UIButton!
+    @IBOutlet weak var addToBarButton: UIBarButtonItem!
     @IBOutlet weak var findInMarketButton: UIButton!
     
     @IBOutlet weak var photocardImageView: UIImageView!
@@ -38,31 +38,33 @@ class DetailsViewController: UIViewController, DatabaseListener {
         }
         
         // Setup photocard details
-        photocardImageView.image = UIImage(named: photocard.image ?? DEFAULT_IMAGE)
+        if let image = databaseController?.getImage(imageData: photocard.image!) {
+            photocardImageView.image = image
+        }
         photocardImageView.layer.cornerRadius = 18
         idolLabel.text = photocard.idol?.name
         albumLabel.text = photocard.album?.name
         artistLabel.text = photocard.artist?.name
-        
-        // Check if is favourite/wishlist
-        if isWishlist {
-            if currentUser.wishlist.contains(photocard) {
-                actionButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
-            } else {
-                actionButton.setImage(UIImage(systemName: "star"), for: .normal)
-            }
-        } else {
-            if currentUser.favourites.contains(photocard) {
-                actionButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-            } else {
-                actionButton.setImage(UIImage(systemName: "heart"), for: .normal)
-            }
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         databaseController?.addListener(listener: self)
+        
+        // Check if is favourite/wishlist
+        if isWishlist {
+            if currentUser.wishlist.contains(photocard) {
+                addToBarButton.image = UIImage(systemName: "star.fill")
+            } else {
+                addToBarButton.image = UIImage(systemName: "star")
+            }
+        } else {
+            if currentUser.favourites.contains(photocard) {
+                addToBarButton.image = UIImage(systemName: "heart.fill")
+            } else {
+                addToBarButton.image = UIImage(systemName: "heart")
+            }
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -72,27 +74,27 @@ class DetailsViewController: UIViewController, DatabaseListener {
     
     @IBAction func addToFavouritesOrWishlist(_ sender: Any) {
         if isWishlist {
-            if actionButton.currentImage == UIImage(systemName: "star.fill") {
+            if addToBarButton.image == UIImage(systemName: "star.fill") {
                 // Remove from wishlist
                 databaseController?.removePhotocardFromWishlist(photocard: photocard, user: currentUser)
-                actionButton.setImage(UIImage(systemName: "star"), for: .normal)
+                addToBarButton.image = UIImage(systemName: "star")
             } else {
                 // Add to wishlist
                 let result = databaseController?.addPhotocardToWishlist(photocard: photocard, user: currentUser)
                 if result == true {
-                    actionButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+                    addToBarButton.image = UIImage(systemName: "star.fill")
                 }
             }
         } else {
-            if actionButton.currentImage == UIImage(systemName: "heart.fill") {
+            if addToBarButton.image == UIImage(systemName: "heart.fill") {
                 // Remove from favourites
                 databaseController?.removePhotocardFromFavourites(photocard: photocard, user: currentUser)
-                actionButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                addToBarButton.image = UIImage(systemName: "heart")
             } else {
                 // Add to favourites
                 let result = databaseController?.addPhotocardToFavourites(photocard: photocard, user: currentUser)
                 if result == true {
-                    actionButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                    addToBarButton.image = UIImage(systemName: "heart.fill")
                 }
             }
         }
@@ -104,11 +106,6 @@ class DetailsViewController: UIViewController, DatabaseListener {
         performSegue(withIdentifier: "photocardListingsFromPhotocardDetailsSegue", sender: self)
     }
     
-    @IBAction func sharePhotocard(_ sender: Any) {
-        // Create a link to the current page
-        // Deep linking
-    }
-
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation

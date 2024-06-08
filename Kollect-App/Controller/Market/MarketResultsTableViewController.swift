@@ -164,7 +164,6 @@ class MarketResultsTableViewController: UITableViewController, UISearchBarDelega
             
             return searchArtist || searchIdol || searchAlbum
         })
-        print("Did Select Row \(keyword!)!")
         if recentSearches.contains(keyword!) {
             recentSearches.removeAll { text in
                 return text == keyword
@@ -195,7 +194,6 @@ class MarketResultsTableViewController: UITableViewController, UISearchBarDelega
             
             // Show photocards
             keyword = searchText
-            print("Search Button Clicked \(keyword!)!")
             performSegue(withIdentifier: "photocardResultsSegue", sender: self)
         }
     }
@@ -210,16 +208,12 @@ class MarketResultsTableViewController: UITableViewController, UISearchBarDelega
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        print("Did Begin Editing!!")
         guard let searchText = searchBar.text?.lowercased(), searchText.isEmpty == false else { return }
-        print("Did Begin Editing!! ---------- Got text!!")
-        
         searchHelper(searchText: searchText)
     }
     
     func searchHelper(searchText: String) {
         if searchText.count > 0 {
-            print("Text Did Change!")
             var resultSet = Set<String>()
             
             filteredPhotocards = allPhotocards.filter({ (photocard: Photocard) -> Bool in
@@ -242,7 +236,6 @@ class MarketResultsTableViewController: UITableViewController, UISearchBarDelega
             })
             
             resultList = Array(resultSet)
-            print(resultList)
             // Try to sort with relevance to searchText
             var scoreList = [String: Double]()
             for result in resultList {
@@ -255,7 +248,6 @@ class MarketResultsTableViewController: UITableViewController, UISearchBarDelega
                 newResultList.append(result)
             }
             resultList = newResultList
-            print(resultList)
         }
         
         tableView.reloadData()
@@ -351,8 +343,20 @@ class MarketResultsTableViewController: UITableViewController, UISearchBarDelega
 }
 
 extension String {
-    // TODO: Reference
-    // https://stackoverflow.com/a/54651172
+    /// Calculates the Levenshtein distance score between two strings.
+    ///
+    /// The Levenshtein distance is a metric for measuring the difference between two sequences.
+    /// It represents the minimum number of edits (insertions, deletions, or substitutions) required to transform one sequence into the other.
+    /// This function calculates a score based on the Levenshtein distance, where a higher score indicates greater similarity.
+    ///
+    /// - Parameters:
+    ///   - string: The string to compare against.
+    ///   - ignoreCase: Whether to ignore case sensitivity during comparison. Defaults to `true`.
+    ///   - trimWhiteSpacesAndNewLines: Whether to trim leading and trailing whitespace and newlines from the strings before comparison. Defaults to `true`.
+    /// - Returns: A `Double` value representing the Levenshtein distance score, where a higher score indicates greater similarity.
+    ///
+    /// **Reference:**
+    /// [https://stackoverflow.com/a/54651172](https://stackoverflow.com/a/54651172)
     func levenshteinDistanceScore(to string: String, ignoreCase: Bool = true, trimWhiteSpacesAndNewLines: Bool = true) -> Double {
 
         var firstString = String(self.prefix(string.count))

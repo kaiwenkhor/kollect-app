@@ -105,7 +105,9 @@ class AddToWishlistCollectionViewController: UICollectionViewController, UISearc
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CELL_PHOTOCARD, for: indexPath) as! AddToWishlistCollectionViewCell
     
         let photocard = filteredPhotocards[indexPath.row]
-        cell.photocardImageView.image = UIImage(named: photocard.image ?? DEFAULT_IMAGE)
+        if let image = databaseController?.getImage(imageData: photocard.image!) {
+            cell.photocardImageView.image = image
+        }
         cell.layer.cornerRadius = 10
     
         return cell
@@ -116,14 +118,12 @@ class AddToWishlistCollectionViewController: UICollectionViewController, UISearc
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.cellForItem(at: indexPath)?.alpha = 0.5
         let photocard = filteredPhotocards[indexPath.row]
-        print("PHOTOCARD \(photocard.image ?? DEFAULT_IMAGE) SELECTED")
         selectedPhotocards.append(photocard)
     }
     
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         collectionView.cellForItem(at: indexPath)?.alpha = 1
         let photocard = filteredPhotocards[indexPath.row]
-        print("PHOTOCARD \(photocard.image ?? DEFAULT_IMAGE) DESELECTED")
         selectedPhotocards.removeAll { selectedPhotocard in
             return selectedPhotocard == photocard
         }

@@ -11,8 +11,9 @@ class SettingsTableViewController: UITableViewController {
     
     let SECTION_SETTING = 0
     let CELL_SETTING = "settingCell"
-    let settingsList = ["About", "Help"]
-    let iconList = ["info.circle", "questionmark.circle"]
+    let ITEM_ABOUT = "About"
+    let settingsList = ["About"]
+    let iconList = ["info.circle"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,8 +38,6 @@ class SettingsTableViewController: UITableViewController {
         let settingItem = settingsList[indexPath.row]
         content.text = settingItem
         content.image = UIImage(systemName: iconList[indexPath.row])
-        // Set icon colour
-//        content.imageProperties.tintColor = UIColor.systemPink
         
         settingCell.contentConfiguration = content
         
@@ -46,7 +45,12 @@ class SettingsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //
+        let selectedItem = settingsList[indexPath.row]
+        
+        if selectedItem == ITEM_ABOUT {
+            performSegue(withIdentifier: "aboutSegue", sender: self)
+        }
+        
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

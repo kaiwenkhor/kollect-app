@@ -8,12 +8,8 @@
 import Foundation
 import FirebaseFirestoreSwift
 
-class Album: NSObject, Codable {
+class Album: NSObject {
     @DocumentID var id: String?
     var name: String?
-    var image: String?
     var artist: Artist?
-//    var photocards = [Photocard]()
-    // Future: Sort by date
-//    var dateReleased: Date?
 }

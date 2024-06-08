@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum DatabaseChange {
     case add
@@ -30,7 +31,6 @@ protocol DatabaseListener: AnyObject {
     func onAllIdolsChange(change: DatabaseChange, idols: [Idol])
     
     // Artist
-//    func onArtistMemberChange(change: DatabaseChange, artistMembers: [Idol])
     func onAllArtistsChange(change: DatabaseChange, artists: [Artist])
     
     // Album
@@ -65,7 +65,7 @@ protocol DatabaseProtocol: AnyObject {
     func removeAlbumFromArtist(album: Album, artist: Artist)
     
     // Album
-    func addAlbum(albumName: String, albumImage: String, artist: Artist) -> Album
+    func addAlbum(albumName: String, artist: Artist) -> Album
     func deleteAlbum(album: Album)
     
     // Photocard
@@ -73,8 +73,7 @@ protocol DatabaseProtocol: AnyObject {
     func deletePhotocard(photocard: Photocard)
     
     // Listing
-    func addListing(photocard: Photocard, price: Double, seller: User, images: [String]) -> Listing
-//    func setListingPrice(listing: Listing, newPrice: Double)
+    func addListing(photocard: Photocard, price: Double, seller: User, images: [String], descriptionText: String) -> Listing
     func deleteListing(listing: Listing)
     
     // User
@@ -95,4 +94,10 @@ protocol DatabaseProtocol: AnyObject {
     func createAccount(email: String, username: String, password: String) async -> Bool
     func signInAnonymous() async
     func signOutAccount() async -> Bool
+    
+    // File Storage
+    func loadImageData(filename: String) -> UIImage?
+    func getImage(imageData: (String, String)) -> UIImage?
+    
+    var defaultUserImage: UIImage? {get set}
 }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseStorage
 
 class MyCollectionViewController: UIViewController, DatabaseListener, SetHeaderButtonActionDelegate {
 
@@ -13,10 +14,11 @@ class MyCollectionViewController: UIViewController, DatabaseListener, SetHeaderB
     let SECTION_FAVOURITES = 1
     let CELL_PHOTOCARD = "photocardCell"
     let CELL_ADD = "addCell"
-    let PLACEHOLDER_IMAGE = "Photocard_Placeholder"
+    let VIEW_HEADER = "headerView"
     
     var listenerType: ListenerType = .user
     weak var databaseController: DatabaseProtocol?
+    var storageReference = Storage.storage()
     
     var allList = [Photocard]()
     var favouritesList = [Photocard]()
@@ -28,6 +30,8 @@ class MyCollectionViewController: UIViewController, DatabaseListener, SetHeaderB
     var favArtist: Artist?
     
     var photocard = Photocard()
+    
+    var currentUser = User()
     
     @IBOutlet weak var myCollectionsCollectionView: UICollectionView!
     
@@ -50,8 +54,6 @@ class MyCollectionViewController: UIViewController, DatabaseListener, SetHeaderB
         myCollectionsCollectionView.dataSource = self
         myCollectionsCollectionView.delegate = self
         
-//        myCollectionsCollectionView.isScrollEnabled = false
-        
         // Set layout
         myCollectionsCollectionView.setCollectionViewLayout(createLayout(), animated: false)
         
@@ -60,6 +62,7 @@ class MyCollectionViewController: UIViewController, DatabaseListener, SetHeaderB
         
         // Navigation bar
         navigationItem.title = "My Collection"
+        navigationItem.setHidesBackButton(true, animated: false)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -72,7 +75,36 @@ class MyCollectionViewController: UIViewController, DatabaseListener, SetHeaderB
         databaseController?.removeListener(listener: self)
     }
     
-    // Get data from the user's collection
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        guard currentUser.isAnonymous == true else { return }
+        
+        // Display log in message
+        let alertController = UIAlertController(title: "Authentication Required", message: "Log in to access user collection", preferredStyle: .alert)
+        
+        alertController.addAction(UIAlertAction(title: "Back", style: .cancel) { action in
+            self.tabBarController?.selectedIndex = 0
+        })
+        
+        alertController.addAction(UIAlertAction(title: "Log in", style: .default) { action in
+            self.performSegue(withIdentifier: "logInFromMyCollectionSegue", sender: self)
+        })
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    /// Sets up overview data for the user's collection based on the provided photocards.
+    ///
+    /// This function calculates and sets various overview data points, including:
+    /// - Total number of photocards
+    /// - Total number of unique artists
+    /// - Favourite idol (the idol with the most photocards in the collection)
+    /// - Favourite artist (the artist with the most photocards in the collection)
+    ///
+    /// It then updates the labels on the overview buttons with the calculated data.
+    ///
+    /// - Parameter photocards: An array of `Photocard` objects representing the user's collection.
     func setupOverviewData(photocards: [Photocard]) {
         // Get data
         // Total photocards
@@ -192,19 +224,19 @@ class MyCollectionViewController: UIViewController, DatabaseListener, SetHeaderB
     // MARK: - DatabaseListener
     
     func onAllIdolsChange(change: DatabaseChange, idols: [Idol]) {
-        //
+        // Do nothing
     }
     
     func onAllArtistsChange(change: DatabaseChange, artists: [Artist]) {
-        //
+        // Do nothing
     }
     
     func onAllAlbumsChange(change: DatabaseChange, albums: [Album]) {
-        //
+        // Do nothing
     }
     
     func onAllPhotocardsChange(change: DatabaseChange, photocards: [Photocard]) {
-        //
+        // Do nothing
     }
     
     func onAllListingsChange(change: DatabaseChange, listings: [Listing]) {
@@ -212,6 +244,8 @@ class MyCollectionViewController: UIViewController, DatabaseListener, SetHeaderB
     }
     
     func onUserChange(change: DatabaseChange, user: User) {
+        currentUser = user
+        
         // Update collection
         allList = user.all
         favouritesList = user.favourites
@@ -263,8 +297,10 @@ extension MyCollectionViewController: UICollectionViewDataSource {
             var reversedList = allList
             reversedList.reverse()
             
-            if let imageName = reversedList[indexPath.row - 1].image {
-                allCell.photocardImageView.image = UIImage(named: imageName)
+            if let imageData = reversedList[indexPath.row - 1].image {
+                if let image = databaseController?.getImage(imageData: imageData) {
+                    allCell.photocardImageView.image = image
+                }
             }
             allCell.layer.cornerRadius = 10
             return allCell
@@ -274,8 +310,10 @@ extension MyCollectionViewController: UICollectionViewDataSource {
             var reversedList = favouritesList
             reversedList.reverse()
             
-            if let imageName = reversedList[indexPath.row].image {
-                favouriteCell.photocardImageView.image = UIImage(named: imageName)
+            if let imageData = reversedList[indexPath.row].image {
+                if let image = databaseController?.getImage(imageData: imageData) {
+                    favouriteCell.photocardImageView.image = image
+                }
             }
             favouriteCell.layer.cornerRadius = 10
             return favouriteCell
@@ -308,7 +346,7 @@ extension MyCollectionViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerView", for: indexPath) as? HeaderCollectionReusableView {
+        if let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: VIEW_HEADER, for: indexPath) as? HeaderCollectionReusableView {
             sectionHeader.headerButtonDelegate = self
             sectionHeader.section = indexPath.section
             

@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         databaseController = FirebaseController()
         
-        persistentContainer = NSPersistentContainer(name: "UserImageModel")
+        persistentContainer = NSPersistentContainer(name: "DataModel")
         persistentContainer?.loadPersistentStores() { (description, error) in
             if let error = error {
                 fatalError("Failed to load CoreData stack with error: \(error)")

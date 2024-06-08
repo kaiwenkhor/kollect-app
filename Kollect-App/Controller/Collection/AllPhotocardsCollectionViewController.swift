@@ -127,7 +127,9 @@ class AllPhotocardsCollectionViewController: UICollectionViewController, UISearc
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CELL_PHOTOCARD, for: indexPath) as! AllPhotocardsCollectionViewCell
     
         let photocard = filteredPhotocards[indexPath.row]
-        cell.photocardImageView.image = UIImage(named: photocard.image ?? DEFAULT_IMAGE)
+        if let image = databaseController?.getImage(imageData: photocard.image!) {
+            cell.photocardImageView.image = image
+        }
         cell.layer.cornerRadius = 10
         
         if databaseController?.currentUser.all.contains(photocard) == true {
@@ -148,7 +150,6 @@ class AllPhotocardsCollectionViewController: UICollectionViewController, UISearc
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let photocard = filteredPhotocards[indexPath.row]
-        print("PHOTOCARD \(photocard.image ?? DEFAULT_IMAGE) SELECTED")
         
         // Display as selected
         collectionView.cellForItem(at: indexPath)?.layer.opacity = 0.5
@@ -163,7 +164,6 @@ class AllPhotocardsCollectionViewController: UICollectionViewController, UISearc
     
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let photocard = filteredPhotocards[indexPath.row]
-        print("PHOTOCARD \(photocard.image ?? DEFAULT_IMAGE) DESELECTED")
         
         // Display as deselected
         collectionView.cellForItem(at: indexPath)?.layer.opacity = 1

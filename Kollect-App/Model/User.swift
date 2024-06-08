@@ -8,14 +8,13 @@
 import Foundation
 import FirebaseFirestoreSwift
 
-class User: NSObject, Codable {
+class User: NSObject {
     @DocumentID var id: String?
     var name: String?
     var all = [Photocard]()
     var favourites = [Photocard]()
     var wishlist = [Photocard]()
     var isAnonymous: Bool?
-    var image: String?
+    var image: (String, String)?
     var email: String?
-//    var transactions = [Transaction]()
 }

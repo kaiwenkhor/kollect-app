@@ -16,8 +16,13 @@ class PhotocardListingsViewController: UIViewController, DatabaseListener {
     var filteredListings = [Listing]()
     var selectedListing = Listing()
     
+    var currentUser = User()
+    
     var listenerType: ListenerType = .listing
     weak var databaseController: DatabaseProtocol?
+    
+    var wishlistBarButton: UIBarButtonItem!
+    var sellBarButton: UIBarButtonItem!
     
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var photocardImageView: UIImageView!
@@ -34,13 +39,44 @@ class PhotocardListingsViewController: UIViewController, DatabaseListener {
         databaseController = appDelegate?.databaseController
 
         navigationItem.title = "Photocard"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sell", primaryAction: UIAction { action in
-            // Go to sell page where user can fill in listing details and post listing.
+        
+        currentUser = databaseController!.currentUser
+        
+        // Setup navigation bar buttons
+        wishlistBarButton = UIBarButtonItem(image: UIImage(systemName: "star"), primaryAction: UIAction { action in
+            if self.currentUser.isAnonymous == true {
+                self.performSegue(withIdentifier: "logInFromPhotocardListingsSegue", sender: self)
+                return
+            }
+            if self.wishlistBarButton.image == UIImage(systemName: "star.fill") {
+                // Remove from wishlist
+                self.databaseController?.removePhotocardFromWishlist(photocard: self.photocard, user: self.currentUser)
+                self.wishlistBarButton.image = UIImage(systemName: "star")
+            } else {
+                // Add to wishlist
+                let result = self.databaseController?.addPhotocardToWishlist(photocard: self.photocard, user: self.currentUser)
+                if result == true {
+                    self.wishlistBarButton.image = UIImage(systemName: "star.fill")
+                }
+            }
         })
+        
+        sellBarButton = UIBarButtonItem(title: "Sell", primaryAction: UIAction { action in
+            if self.currentUser.isAnonymous == true {
+                self.performSegue(withIdentifier: "logInFromPhotocardListingsSegue", sender: self)
+                return
+            }
+            // Create listing -> go to create listing screen
+            self.performSegue(withIdentifier: "addListingSegue", sender: self)
+        })
+        
+        navigationItem.rightBarButtonItems = [sellBarButton, wishlistBarButton]
         
         // Setup photocard and photocard details
         backgroundView.layer.cornerRadius = 20
-        photocardImageView.image = UIImage(named: photocard.image ?? "Default_Photocard_Image")
+        if let image = databaseController?.getImage(imageData: photocard.image!) {
+            photocardImageView.image = image
+        }
         photocardImageView.layer.cornerRadius = 8
         idolLabel.text = photocard.idol?.name
         artistLabel.text = photocard.artist?.name
@@ -55,6 +91,13 @@ class PhotocardListingsViewController: UIViewController, DatabaseListener {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         databaseController?.addListener(listener: self)
+        currentUser = databaseController!.currentUser
+        // Setup bar button items
+        if currentUser.wishlist.contains(photocard) {
+            wishlistBarButton.image = UIImage(systemName: "star.fill")
+        } else {
+            wishlistBarButton.image = UIImage(systemName: "star")
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -67,8 +110,11 @@ class PhotocardListingsViewController: UIViewController, DatabaseListener {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "photocardListingDetailsSegue" {
-            let destination = segue.destination as! PhotocardListingDetailsViewController
-//            destination.listing = selectedListing
+            let destination = segue.destination as! PhotocardListingDetailsTableViewController
+            destination.listing = selectedListing
+        } else if segue.identifier == "addListingSegue" {
+            let destination = segue.destination as! AddListingViewController
+            destination.photocard = self.photocard
         }
     }
     
@@ -92,7 +138,6 @@ class PhotocardListingsViewController: UIViewController, DatabaseListener {
     
     func onAllListingsChange(change: DatabaseChange, listings: [Listing]) {
         allListings = listings
-        print(listings)
         getPhotocardListings()
         listingsTableView.reloadData()
     }
@@ -108,13 +153,12 @@ class PhotocardListingsViewController: UIViewController, DatabaseListener {
             let matchingListing = (listing.photocard == self.photocard)
             return matchingListing
         })
-        print(filteredListings)
     }
 
 }
 
 // MARK: - UITableViewDataSource
-
+// FIXME: Something wrong with the constraints in cell
 extension PhotocardListingsViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -129,27 +173,39 @@ extension PhotocardListingsViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: CELL_LISTING, for: indexPath) as! PhotocardListingsTableViewCell
         
         let listing = filteredListings[indexPath.row]
-//        cell.photocardImageView.image = listing.images.first!
-        cell.photocardImageView.image = .defaultPhotocard
+        
+        // Load image
+        if let firstImage = listing.images.first {
+            if let image = databaseController?.getImage(imageData: firstImage) {
+                cell.photocardImageView.image = image
+            }
+        } else {
+            print("Image not found")
+        }
+        
         // Format Price
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .currency
+        numberFormatter.locale = Locale(identifier: "en_AU")
         numberFormatter.formatterBehavior = .default
-        cell.priceLabel.text = numberFormatter.string(from: listing.price! as NSNumber)
+        cell.priceLabel.text = numberFormatter.string(for: listing.price)
+        
         // Format Date
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
-        if let stringToDate = dateFormatter.date(from: "2024-05-22 02:01:43 +0000") {
+        if let listDate = listing.listDate, let stringToDate = dateFormatter.date(from: listDate) {
+            dateFormatter.timeZone = TimeZone(abbreviation: TimeZone.current.abbreviation()!)
             dateFormatter.dateFormat = "yyyy-MM-dd"
             let dateToString = dateFormatter.string(from: stringToDate)
             cell.dateLabel.text = dateToString
         }
-//        cell.dateLabel.text = dateFormatter.string(from: listing.listDate)
-//        cell.userImageView.image = listing.seller?.image
-        cell.userImageView.image = .defaultProfile
+        
+        if let image = databaseController?.getImage(imageData: listing.seller!.image!) {
+            cell.userImageView.image = image
+        }
         cell.userImageView.layer.cornerRadius = cell.userImageView.frame.width / 2
-//        cell.userLabel.text = listing.seller?.name
-        cell.userLabel.text = "john_doe"
+        
+        cell.userLabel.text = listing.seller?.name
         
         return cell
     }

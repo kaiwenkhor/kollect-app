@@ -17,8 +17,8 @@
 		471E175D2BFCF98A008ECF5C /* ResultCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471E175C2BFCF98A008ECF5C /* ResultCollectionViewCell.swift */; };
 		471E175F2BFD5D72008ECF5C /* PhotocardListingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471E175E2BFD5D72008ECF5C /* PhotocardListingsViewController.swift */; };
 		471E17612BFD5D9D008ECF5C /* PhotocardListingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471E17602BFD5D9D008ECF5C /* PhotocardListingsTableViewCell.swift */; };
-		471E17632BFD5DC4008ECF5C /* PhotocardListingDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 471E17622BFD5DC4008ECF5C /* PhotocardListingDetailsViewController.swift */; };
 		4724D7AD2BE183890021647C /* MyCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4724D7AC2BE183890021647C /* MyCollectionViewController.swift */; };
+		472D6D3B2C0ED89200AA175B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 472D6D3A2C0ED89200AA175B /* FirebaseStorage */; };
 		4733127C2BD9233E00BB9070 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4733127B2BD9233E00BB9070 /* SettingsTableViewController.swift */; };
 		4733127E2BDA504300BB9070 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4733127D2BDA504200BB9070 /* SignUpViewController.swift */; };
 		4737A8E42BD4CA3B003D23BA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4737A8E32BD4CA3B003D23BA /* AppDelegate.swift */; };
@@ -43,6 +43,8 @@
 		47466B9B2BE7867B00C3CC6B /* HeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47466B9A2BE7867B00C3CC6B /* HeaderCollectionReusableView.swift */; };
 		47466B9D2BE7A0F000C3CC6B /* AllCollectionsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47466B9C2BE7A0F000C3CC6B /* AllCollectionsCollectionViewController.swift */; };
 		47466BA12BE7E18700C3CC6B /* AllCollectionsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47466BA02BE7E18700C3CC6B /* AllCollectionsCollectionViewCell.swift */; };
+		47686DA82C14681D0051D8BD /* MarketPhotocardsHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47686DA72C14681D0051D8BD /* MarketPhotocardsHeaderCollectionReusableView.swift */; };
+		47686DAA2C146F6B0051D8BD /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47686DA92C146F6B0051D8BD /* AboutViewController.swift */; };
 		4772BB052BE4F12900C4E6A8 /* SelectArtistDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4772BB042BE4F12900C4E6A8 /* SelectArtistDelegate.swift */; };
 		4772BB072BE4F3E700C4E6A8 /* SelectAlbumDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4772BB062BE4F3E700C4E6A8 /* SelectAlbumDelegate.swift */; };
 		4772BB092BE4F3F500C4E6A8 /* SelectMemberDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4772BB082BE4F3F500C4E6A8 /* SelectMemberDelegate.swift */; };
@@ -61,16 +63,21 @@
 		47B079822BD8DA7200E79EB4 /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B079812BD8DA7200E79EB4 /* MenuTableViewController.swift */; };
 		47B416BF2BF62B5600F9978B /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B416BE2BF62B5600F9978B /* UserViewController.swift */; };
 		47B416C32BF636C800F9978B /* NameTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47B416C22BF636C800F9978B /* NameTableViewCell.swift */; };
+		47BEC2DE2C12FDDC001AFDA5 /* AddListingAddImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BEC2DD2C12FDDC001AFDA5 /* AddListingAddImageCollectionViewCell.swift */; };
+		47BEC2E22C145950001AFDA5 /* MarketPhotocardsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47BEC2E12C145950001AFDA5 /* MarketPhotocardsCollectionViewCell.swift */; };
+		47C2A26B2C010019007B1481 /* AddListingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C2A26A2C010019007B1481 /* AddListingViewController.swift */; };
+		47C2A26D2C01F8EB007B1481 /* AddListingImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C2A26C2C01F8EB007B1481 /* AddListingImageCollectionViewCell.swift */; };
+		47C2A26F2C022085007B1481 /* FooterCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C2A26E2C022085007B1481 /* FooterCollectionReusableView.swift */; };
 		47CACB482BFE68D800B3DC53 /* SearchData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CACB462BFE68D800B3DC53 /* SearchData+CoreDataClass.swift */; };
 		47CACB492BFE68D800B3DC53 /* SearchData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CACB472BFE68D800B3DC53 /* SearchData+CoreDataProperties.swift */; };
-		47CEB4202BF92CE300EF6E28 /* UserImageModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 47CEB41E2BF92CE300EF6E28 /* UserImageModel.xcdatamodeld */; };
-		47CEB4232BF92D0D00EF6E28 /* UserImageMetaData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CEB4212BF92D0D00EF6E28 /* UserImageMetaData+CoreDataClass.swift */; };
-		47CEB4242BF92D0D00EF6E28 /* UserImageMetaData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CEB4222BF92D0D00EF6E28 /* UserImageMetaData+CoreDataProperties.swift */; };
+		47CEB4202BF92CE300EF6E28 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 47CEB41E2BF92CE300EF6E28 /* DataModel.xcdatamodeld */; };
 		47CEB4262BF9F5A800EF6E28 /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47CEB4252BF9F5A800EF6E28 /* UserTableViewCell.swift */; };
+		47D4A99F2C0D7CBF00863C4D /* PhotocardListingDetailsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47D4A99E2C0D7CBF00863C4D /* PhotocardListingDetailsTableViewController.swift */; };
+		47D4A9A12C0D7D7900863C4D /* ListingDetailsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47D4A9A02C0D7D7900863C4D /* ListingDetailsTableViewCell.swift */; };
+		47D4A9A32C0D8BD500863C4D /* ListingInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47D4A9A22C0D8BD500863C4D /* ListingInfoTableViewCell.swift */; };
+		47D4A9A52C0DC15300863C4D /* ListingImagesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47D4A9A42C0DC15300863C4D /* ListingImagesTableViewCell.swift */; };
 		47DE26E52BDCCC00008D3D4E /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47DE26E42BDCCC00008D3D4E /* DetailsViewController.swift */; };
 		47FA17E42BF51CE50000C992 /* ComebackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FA17E32BF51CE50000C992 /* ComebackTableViewCell.swift */; };
-		47FCB2DB2BFA4DDF00D8FE7E /* SelectArtistCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FCB2DA2BFA4DDF00D8FE7E /* SelectArtistCollectionViewController.swift */; };
-		47FCB2DD2BFA4E2400D8FE7E /* SelectArtistCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FCB2DC2BFA4E2400D8FE7E /* SelectArtistCollectionViewCell.swift */; };
 		47FCB2DF2BFA6B4400D8FE7E /* Listing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47FCB2DE2BFA6B4400D8FE7E /* Listing.swift */; };
 /* End PBXBuildFile section */
 
@@ -85,7 +92,6 @@
 		471E175C2BFCF98A008ECF5C /* ResultCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCollectionViewCell.swift; sourceTree = "<group>"; };
 		471E175E2BFD5D72008ECF5C /* PhotocardListingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotocardListingsViewController.swift; sourceTree = "<group>"; };
 		471E17602BFD5D9D008ECF5C /* PhotocardListingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotocardListingsTableViewCell.swift; sourceTree = "<group>"; };
-		471E17622BFD5DC4008ECF5C /* PhotocardListingDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotocardListingDetailsViewController.swift; sourceTree = "<group>"; };
 		4724D7AC2BE183890021647C /* MyCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCollectionViewController.swift; sourceTree = "<group>"; };
 		4733127B2BD9233E00BB9070 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		4733127D2BDA504200BB9070 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -110,6 +116,8 @@
 		47466B9A2BE7867B00C3CC6B /* HeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		47466B9C2BE7A0F000C3CC6B /* AllCollectionsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCollectionsCollectionViewController.swift; sourceTree = "<group>"; };
 		47466BA02BE7E18700C3CC6B /* AllCollectionsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCollectionsCollectionViewCell.swift; sourceTree = "<group>"; };
+		47686DA72C14681D0051D8BD /* MarketPhotocardsHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketPhotocardsHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
+		47686DA92C146F6B0051D8BD /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		4772BB042BE4F12900C4E6A8 /* SelectArtistDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectArtistDelegate.swift; sourceTree = "<group>"; };
 		4772BB062BE4F3E700C4E6A8 /* SelectAlbumDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectAlbumDelegate.swift; sourceTree = "<group>"; };
 		4772BB082BE4F3F500C4E6A8 /* SelectMemberDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectMemberDelegate.swift; sourceTree = "<group>"; };
@@ -128,16 +136,21 @@
 		47B079812BD8DA7200E79EB4 /* MenuTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewController.swift; sourceTree = "<group>"; };
 		47B416BE2BF62B5600F9978B /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 		47B416C22BF636C800F9978B /* NameTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameTableViewCell.swift; sourceTree = "<group>"; };
+		47BEC2DD2C12FDDC001AFDA5 /* AddListingAddImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddListingAddImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		47BEC2E12C145950001AFDA5 /* MarketPhotocardsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketPhotocardsCollectionViewCell.swift; sourceTree = "<group>"; };
+		47C2A26A2C010019007B1481 /* AddListingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddListingViewController.swift; sourceTree = "<group>"; };
+		47C2A26C2C01F8EB007B1481 /* AddListingImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddListingImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		47C2A26E2C022085007B1481 /* FooterCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterCollectionReusableView.swift; sourceTree = "<group>"; };
 		47CACB462BFE68D800B3DC53 /* SearchData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		47CACB472BFE68D800B3DC53 /* SearchData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		47CEB41F2BF92CE300EF6E28 /* UserImageModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UserImageModel.xcdatamodel; sourceTree = "<group>"; };
-		47CEB4212BF92D0D00EF6E28 /* UserImageMetaData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserImageMetaData+CoreDataClass.swift"; sourceTree = "<group>"; };
-		47CEB4222BF92D0D00EF6E28 /* UserImageMetaData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserImageMetaData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		47CEB4252BF9F5A800EF6E28 /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
+		47D4A99E2C0D7CBF00863C4D /* PhotocardListingDetailsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotocardListingDetailsTableViewController.swift; sourceTree = "<group>"; };
+		47D4A9A02C0D7D7900863C4D /* ListingDetailsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingDetailsTableViewCell.swift; sourceTree = "<group>"; };
+		47D4A9A22C0D8BD500863C4D /* ListingInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingInfoTableViewCell.swift; sourceTree = "<group>"; };
+		47D4A9A42C0DC15300863C4D /* ListingImagesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingImagesTableViewCell.swift; sourceTree = "<group>"; };
 		47DE26E42BDCCC00008D3D4E /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		47FA17E32BF51CE50000C992 /* ComebackTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComebackTableViewCell.swift; sourceTree = "<group>"; };
-		47FCB2DA2BFA4DDF00D8FE7E /* SelectArtistCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectArtistCollectionViewController.swift; sourceTree = "<group>"; };
-		47FCB2DC2BFA4E2400D8FE7E /* SelectArtistCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectArtistCollectionViewCell.swift; sourceTree = "<group>"; };
 		47FCB2DE2BFA6B4400D8FE7E /* Listing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Listing.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -147,6 +160,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4737A8F92BD4CF3F003D23BA /* FirebaseAuth in Frameworks */,
+				472D6D3B2C0ED89200AA175B /* FirebaseStorage in Frameworks */,
 				4737A8FB2BD4CF3F003D23BA /* FirebaseFirestore in Frameworks */,
 				4737A8FD2BD4CF3F003D23BA /* FirebaseFirestoreSwift in Frameworks */,
 			);
@@ -155,11 +169,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		472D6D392C0ED89200AA175B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		4737A8D72BD4CA3B003D23BA = {
 			isa = PBXGroup;
 			children = (
 				4737A8E22BD4CA3B003D23BA /* Kollect-App */,
 				4737A8E12BD4CA3B003D23BA /* Products */,
+				472D6D392C0ED89200AA175B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -244,13 +266,20 @@
 				471E17562BFC9428008ECF5C /* MarketResultsTableViewController.swift */,
 				4712D2FE2BF4289400408157 /* ComebacksTableViewController.swift */,
 				47FA17E32BF51CE50000C992 /* ComebackTableViewCell.swift */,
-				47FCB2DA2BFA4DDF00D8FE7E /* SelectArtistCollectionViewController.swift */,
-				47FCB2DC2BFA4E2400D8FE7E /* SelectArtistCollectionViewCell.swift */,
+				47686DA72C14681D0051D8BD /* MarketPhotocardsHeaderCollectionReusableView.swift */,
+				47BEC2E12C145950001AFDA5 /* MarketPhotocardsCollectionViewCell.swift */,
 				471E175A2BFCF974008ECF5C /* ResultCollectionViewController.swift */,
 				471E175C2BFCF98A008ECF5C /* ResultCollectionViewCell.swift */,
 				471E175E2BFD5D72008ECF5C /* PhotocardListingsViewController.swift */,
 				471E17602BFD5D9D008ECF5C /* PhotocardListingsTableViewCell.swift */,
-				471E17622BFD5DC4008ECF5C /* PhotocardListingDetailsViewController.swift */,
+				47D4A99E2C0D7CBF00863C4D /* PhotocardListingDetailsTableViewController.swift */,
+				47D4A9A42C0DC15300863C4D /* ListingImagesTableViewCell.swift */,
+				47D4A9A02C0D7D7900863C4D /* ListingDetailsTableViewCell.swift */,
+				47D4A9A22C0D8BD500863C4D /* ListingInfoTableViewCell.swift */,
+				47C2A26A2C010019007B1481 /* AddListingViewController.swift */,
+				47BEC2DD2C12FDDC001AFDA5 /* AddListingAddImageCollectionViewCell.swift */,
+				47C2A26C2C01F8EB007B1481 /* AddListingImageCollectionViewCell.swift */,
+				47C2A26E2C022085007B1481 /* FooterCollectionReusableView.swift */,
 			);
 			path = Market;
 			sourceTree = "<group>";
@@ -261,6 +290,7 @@
 				47B079812BD8DA7200E79EB4 /* MenuTableViewController.swift */,
 				47CEB4252BF9F5A800EF6E28 /* UserTableViewCell.swift */,
 				4733127B2BD9233E00BB9070 /* SettingsTableViewController.swift */,
+				47686DA92C146F6B0051D8BD /* AboutViewController.swift */,
 				47955AB52BDBC55C0048F38F /* WishlistCollectionViewController.swift */,
 				47955AB72BDBC5DB0048F38F /* WishlistCollectionViewCell.swift */,
 				47B416BE2BF62B5600F9978B /* UserViewController.swift */,
@@ -280,9 +310,7 @@
 				4772BB062BE4F3E700C4E6A8 /* SelectAlbumDelegate.swift */,
 				4772BB082BE4F3F500C4E6A8 /* SelectMemberDelegate.swift */,
 				47AF19DA2BF26B8E00EC6879 /* SetHeaderButtonActionDelegate.swift */,
-				47CEB41E2BF92CE300EF6E28 /* UserImageModel.xcdatamodeld */,
-				47CEB4212BF92D0D00EF6E28 /* UserImageMetaData+CoreDataClass.swift */,
-				47CEB4222BF92D0D00EF6E28 /* UserImageMetaData+CoreDataProperties.swift */,
+				47CEB41E2BF92CE300EF6E28 /* DataModel.xcdatamodeld */,
 				47CACB462BFE68D800B3DC53 /* SearchData+CoreDataClass.swift */,
 				47CACB472BFE68D800B3DC53 /* SearchData+CoreDataProperties.swift */,
 			);
@@ -309,6 +337,7 @@
 				4737A8F82BD4CF3F003D23BA /* FirebaseAuth */,
 				4737A8FA2BD4CF3F003D23BA /* FirebaseFirestore */,
 				4737A8FC2BD4CF3F003D23BA /* FirebaseFirestoreSwift */,
+				472D6D3A2C0ED89200AA175B /* FirebaseStorage */,
 			);
 			productName = "Kollect-App";
 			productReference = 4737A8E02BD4CA3B003D23BA /* Kollect-App.app */;
@@ -374,52 +403,58 @@
 				47ADCD122BEB3CC200DED866 /* FavouritesCollectionViewCell.swift in Sources */,
 				471E17612BFD5D9D008ECF5C /* PhotocardListingsTableViewCell.swift in Sources */,
 				4772BB0D2BE4F47300C4E6A8 /* AllMembersTableViewController.swift in Sources */,
+				47BEC2DE2C12FDDC001AFDA5 /* AddListingAddImageCollectionViewCell.swift in Sources */,
 				4772BB072BE4F3E700C4E6A8 /* SelectAlbumDelegate.swift in Sources */,
 				47466B9D2BE7A0F000C3CC6B /* AllCollectionsCollectionViewController.swift in Sources */,
 				4737A90A2BD4EF18003D23BA /* FirebaseController.swift in Sources */,
-				47CEB4202BF92CE300EF6E28 /* UserImageModel.xcdatamodeld in Sources */,
+				47CEB4202BF92CE300EF6E28 /* DataModel.xcdatamodeld in Sources */,
 				47B416BF2BF62B5600F9978B /* UserViewController.swift in Sources */,
-				47FCB2DD2BFA4E2400D8FE7E /* SelectArtistCollectionViewCell.swift in Sources */,
 				4733127C2BD9233E00BB9070 /* SettingsTableViewController.swift in Sources */,
 				473CDD8F2BDE872700E6F7BD /* FindPhotocardViewController.swift in Sources */,
 				4743DEE52BD7CF83000B3E45 /* LogInViewController.swift in Sources */,
+				47C2A26F2C022085007B1481 /* FooterCollectionReusableView.swift in Sources */,
 				47ADCD0C2BEB3BC200DED866 /* FavouritesCollectionViewController.swift in Sources */,
 				4712D2FD2BF4236C00408157 /* ComebackData.swift in Sources */,
+				47D4A9A32C0D8BD500863C4D /* ListingInfoTableViewCell.swift in Sources */,
 				47AF19DB2BF26B8E00EC6879 /* SetHeaderButtonActionDelegate.swift in Sources */,
 				4724D7AD2BE183890021647C /* MyCollectionViewController.swift in Sources */,
 				47955ABA2BDBCB440048F38F /* Album.swift in Sources */,
 				4772BB0B2BE4F46500C4E6A8 /* AllAlbumsTableViewController.swift in Sources */,
 				4737A8E42BD4CA3B003D23BA /* AppDelegate.swift in Sources */,
 				4712D2FF2BF4289400408157 /* ComebacksTableViewController.swift in Sources */,
+				47686DAA2C146F6B0051D8BD /* AboutViewController.swift in Sources */,
 				47CACB482BFE68D800B3DC53 /* SearchData+CoreDataClass.swift in Sources */,
 				47CACB492BFE68D800B3DC53 /* SearchData+CoreDataProperties.swift in Sources */,
 				4737A9012BD4D553003D23BA /* Idol.swift in Sources */,
 				47955AB82BDBC5DB0048F38F /* WishlistCollectionViewCell.swift in Sources */,
+				47D4A9A52C0DC15300863C4D /* ListingImagesTableViewCell.swift in Sources */,
 				47ADCD102BEB3CB300DED866 /* AddToWishlistCollectionViewCell.swift in Sources */,
 				4737A9042BD4D600003D23BA /* Artist.swift in Sources */,
 				47AA1CE92BE3A60A00E312A9 /* AllArtistsTableViewController.swift in Sources */,
 				473CDD8D2BDE7B9700E6F7BD /* MyCollectionCollectionViewCell.swift in Sources */,
-				471E17632BFD5DC4008ECF5C /* PhotocardListingDetailsViewController.swift in Sources */,
 				471E17572BFC9428008ECF5C /* MarketResultsTableViewController.swift in Sources */,
-				47CEB4232BF92D0D00EF6E28 /* UserImageMetaData+CoreDataClass.swift in Sources */,
-				47CEB4242BF92D0D00EF6E28 /* UserImageMetaData+CoreDataProperties.swift in Sources */,
 				4737A90F2BD4EFDA003D23BA /* DatabaseController.swift in Sources */,
+				47BEC2E22C145950001AFDA5 /* MarketPhotocardsCollectionViewCell.swift in Sources */,
 				4737A9062BD4DF00003D23BA /* Photocard.swift in Sources */,
 				47CEB4262BF9F5A800EF6E28 /* UserTableViewCell.swift in Sources */,
 				4733127E2BDA504300BB9070 /* SignUpViewController.swift in Sources */,
 				47DE26E52BDCCC00008D3D4E /* DetailsViewController.swift in Sources */,
+				47C2A26D2C01F8EB007B1481 /* AddListingImageCollectionViewCell.swift in Sources */,
 				4737A9112BD4FCA9003D23BA /* MulticastDelegate.swift in Sources */,
 				47B079822BD8DA7200E79EB4 /* MenuTableViewController.swift in Sources */,
 				4772BB052BE4F12900C4E6A8 /* SelectArtistDelegate.swift in Sources */,
 				471E17532BFBF177008ECF5C /* MarketViewController.swift in Sources */,
+				47686DA82C14681D0051D8BD /* MarketPhotocardsHeaderCollectionReusableView.swift in Sources */,
 				470CBEE82BE5242A00D0FADD /* AllPhotocardsCollectionViewCell.swift in Sources */,
 				4737A8E62BD4CA3B003D23BA /* SceneDelegate.swift in Sources */,
 				47955AB62BDBC55C0048F38F /* WishlistCollectionViewController.swift in Sources */,
-				47FCB2DB2BFA4DDF00D8FE7E /* SelectArtistCollectionViewController.swift in Sources */,
+				47D4A9A12C0D7D7900863C4D /* ListingDetailsTableViewCell.swift in Sources */,
 				471E175B2BFCF974008ECF5C /* ResultCollectionViewController.swift in Sources */,
 				4772BB092BE4F3F500C4E6A8 /* SelectMemberDelegate.swift in Sources */,
 				47FCB2DF2BFA6B4400D8FE7E /* Listing.swift in Sources */,
+				47D4A99F2C0D7CBF00863C4D /* PhotocardListingDetailsTableViewController.swift in Sources */,
 				47FA17E42BF51CE50000C992 /* ComebackTableViewCell.swift in Sources */,
+				47C2A26B2C010019007B1481 /* AddListingViewController.swift in Sources */,
 				470CBEE42BE51E5800D0FADD /* AllPhotocardsCollectionViewController.swift in Sources */,
 				471E175F2BFD5D72008ECF5C /* PhotocardListingsViewController.swift in Sources */,
 				47B416C32BF636C800F9978B /* NameTableViewCell.swift in Sources */,
@@ -581,11 +616,14 @@
 				DEVELOPMENT_TEAM = 5YF5JS4FH6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Kollect-App/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "This application requires the camera to take photos for storage in the application";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This application requires the use of the photo library to get photos on the simulator";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -609,11 +647,14 @@
 				DEVELOPMENT_TEAM = 5YF5JS4FH6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Kollect-App/Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "This application requires the camera to take photos for storage in the application";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This application requires the use of the photo library to get photos on the simulator";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -662,6 +703,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		472D6D3A2C0ED89200AA175B /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4737A8F72BD4CF3F003D23BA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
 		4737A8F82BD4CF3F003D23BA /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4737A8F72BD4CF3F003D23BA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
@@ -680,14 +726,13 @@
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
-		47CEB41E2BF92CE300EF6E28 /* UserImageModel.xcdatamodeld */ = {
+		47CEB41E2BF92CE300EF6E28 /* DataModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
 				47CEB41F2BF92CE300EF6E28 /* UserImageModel.xcdatamodel */,
 			);
 			currentVersion = 47CEB41F2BF92CE300EF6E28 /* UserImageModel.xcdatamodel */;
-			name = UserImageModel.xcdatamodeld;
-			path = "/Users/wdkkdw/Documents/Monash/FIT3178 - iOS app development/Assessment/Kollect-App/Kollect-App/Database/UserImageModel.xcdatamodeld";
+			path = DataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
